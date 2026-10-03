@@ -1,323 +1,271 @@
 import Link from "next/link";
-import { AREAS, COVENANTS, JOURNAL, LISTINGS, OFFICES, OWNERSHIP, PILLARS, TRACK } from "@/lib/data";
-import { href } from "@/lib/routes";
-import { Reveal } from "@/components/Reveal";
-import { HomeHero } from "@/components/HomeHero";
-import { SiteIntelBar } from "@/components/IntelBar";
-import { ListingCard } from "@/components/ListingCard";
-import { Marquee } from "@/components/Marquee";
-import { EnquireButton } from "@/components/SiteShell";
+import { LISTINGS, OWNERSHIP, PILLARS, TRACK } from "@/lib/data";
+import { money } from "@/lib/parse";
+import { href, propertyHref } from "@/lib/routes";
+import { ImageFrame } from "@/components/ImageFrame";
+import { HomeMotion } from "@/components/HomeMotion";
+import s from "./Home.module.css";
+
+/* Home is five chapters on two temperature cuts: forest, then cream for three
+   chapters, then forest-deep running straight into the footer. The footer is
+   chrome and does not count as a cut. Everything below is server HTML; HomeMotion
+   adds the motion afterwards, and only for visitors who have not asked it not to. */
+
+type Tone = "cream" | "forest" | "deep";
+
+const FEATURED = ["bronte-harbour", "namron-gate", "keele-wilson", "bridle-path"];
+const RECORD = ["t3", "t5", "t1", "t8", "t2", "t7"];
+const PRACTICE_ROUTES = ["management", "investments", "collection", "leasing"];
+
+const GRID = "grid grid-cols-12 gap-x-4 md:gap-x-8";
+const HEAD = "font-display font-medium text-[clamp(2.1rem,4.8vw,3.75rem)] leading-[1] tracking-[-.01em]";
+const delay = (i: number) => ({ ["--d" as string]: `${Math.min(i, 3) * 120}ms` }) as React.CSSProperties;
+
+const GROUND: Record<Tone, string> = {
+  cream: "bg-paper text-ink",
+  forest: "bg-forest text-paper",
+  deep: "bg-forest-deep text-paper",
+};
+
+/** The drawn 12-column grid. Column lines run the full height of the chapter. */
+function GridLines({ tone }: { tone: Tone }) {
+  const rule = tone === "cream" ? "border-forest/10" : "border-paper/8";
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-y-0 left-4 right-4 z-0 md:left-12 md:right-12">
+      <div className={`${GRID} h-full border-r ${rule}`}>
+        {Array.from({ length: 12 }, (_, i) => <div key={i} className={`border-l ${rule}`} />)}
+      </div>
+    </div>
+  );
+}
+
+/** A heading set one authored line per mask box, so each line can rise on its own. */
+function Lines({ lines, as = "h2", className = "" }: { lines: string[]; as?: "h2" | "h3" | "p"; className?: string }) {
+  const Tag = as;
+  return (
+    <Tag className={`${s.mask} ${className}`} data-reveal>
+      {lines.map((line, i) => (
+        <span key={line} className={s.line}>
+          <span style={{ ["--i" as string]: i } as React.CSSProperties}>{line}</span>
+        </span>
+      ))}
+    </Tag>
+  );
+}
+
+function Chapter({ tone, wipeFrom, className = "", inner = "", children }: {
+  tone: Tone; wipeFrom?: Tone; className?: string; inner?: string; children: React.ReactNode;
+}) {
+  return (
+    <section className={`${s.chapter} ${GROUND[tone]} ${tone === "cream" ? "" : s.dark} ${className}`}>
+      <div className="relative mx-auto max-w-[1440px]">
+        <GridLines tone={tone} />
+        <div className={`relative z-10 px-4 py-24 md:px-12 lg:py-40 ${GRID} ${inner}`}>{children}</div>
+      </div>
+      {wipeFrom && <div aria-hidden data-wipe className={`${s.wipe} ${wipeFrom === "cream" ? "bg-paper" : "bg-forest"}`} />}
+    </section>
+  );
+}
 
 export function Home() {
-  const leases = LISTINGS.filter((l) => l.intent === "lease" && l.useClass === "residential").slice(0, 3);
-  const commercial = LISTINGS.filter((l) => l.useClass === "investment" && l.intent === "sale").slice(0, 3);
+  const featured = FEATURED.map((id) => LISTINGS.find((l) => l.id === id)!);
+  const record = RECORD.map((id) => TRACK.find((t) => t.id === id)!);
 
   return (
-    <div>
-      <HomeHero />
+    <div id="home">
+      <HomeMotion rootId="home" />
 
-      {/* ───────── The number */}
-      <section className="relative z-10 overflow-hidden bg-forest-deep py-24 text-paper md:py-36">
-        <div className="grain absolute inset-0" />
-        <div className="relative mx-auto max-w-[1520px] px-6 md:px-12">
-          <Reveal>
-            <div className="meta mb-8 text-brass-light">Since 2016</div>
-            <div className="fig font-medium leading-[.84] tracking-[-.02em]"
-                 style={{ fontSize: "clamp(5rem,20vw,17rem)" }}>
-              $1B+
-            </div>
-            <div className="mt-10 grid gap-10 border-t border-paper/20 pt-10 md:grid-cols-[1fr_auto] md:items-end">
-              <p className="max-w-[34ch] font-display text-[clamp(1.4rem,2.8vw,2.2rem)] leading-[1.2]">
-                In real estate transacted. Family owned, and still counting.
+      {/* ───────── 1. Hero: forest. The headline is the LCP element and never animates. */}
+      <section className={`${s.chapter} ${s.dark} bg-forest text-paper`}>
+        <div className="relative mx-auto flex min-h-[100svh] max-w-[1440px] flex-col">
+          <GridLines tone="forest" />
+          <div className="relative z-10 flex flex-1 flex-col px-4 pb-16 pt-28 md:px-12 md:pb-20 md:pt-36">
+            <div className={GRID}>
+              <p className="meta col-span-12 text-paper/60 md:col-span-6">
+                <span className="block md:inline">Oakville <span className="mx-2 opacity-50">·</span> King City <span className="mx-2 opacity-50">·</span> Toronto</span>
+                <span className="mx-3 hidden opacity-40 md:inline">/</span>
+                <span className="mt-1 block md:mt-0 md:inline">Est. 2016</span>
               </p>
-              <dl className="grid grid-cols-3 gap-x-10 gap-y-2 md:gap-x-16">
-                {([["$12,000+", "Avg. lease"], ["$10M–$250M", "Mandates"], ["2", "Offices"]] as [string, string][]).map(([v, k]) => (
-                  <div key={k}>
-                    <dd className="fig text-[clamp(1rem,2vw,1.6rem)] font-medium leading-none text-brass-light">{v}</dd>
-                    <dt className="meta mt-3 text-paper/55">{k}</dt>
-                  </div>
-                ))}
-              </dl>
             </div>
-            <p className="mt-8 max-w-[92ch] text-[11.5px] leading-[1.8] text-paper/45">
-              Aggregate list value of sale and lease transactions in which the firm acted for a party, 2016 to date.
-              Methodology on request.
-            </p>
-          </Reveal>
+
+            <div className={`${GRID} flex-1 content-center py-16 ${s.lift}`} data-hero-lift>
+              <h1 className="col-span-12 font-display text-[clamp(2.75rem,7.5vw,6.5rem)] font-medium leading-[0.98] tracking-[-.015em] lg:col-span-11">
+                Lawyer-led real estate.
+              </h1>
+              <p className="col-span-12 mt-5 font-display text-[clamp(1.5rem,3vw,2.75rem)] italic leading-[1.1] text-brass-light lg:col-span-11">
+                Our own capital in the markets we advise on.
+              </p>
+              <p className="col-span-12 mt-10 max-w-[46ch] text-[16px] leading-[1.75] text-paper/80 md:col-span-7 md:text-[18px] lg:col-span-5">
+                Private portfolios from $10M to $250M. Executive leases from $10,000 a month.
+                Commercial and investment across Ontario.
+              </p>
+            </div>
+
+            <div className={`${GRID} items-end`}>
+              <div className="col-span-6 flex items-center gap-4" data-cue>
+                <span aria-hidden className="block h-10 w-px bg-paper/40" />
+                <span className="meta text-paper/70">Scroll</span>
+              </div>
+              <div className="col-span-6 flex justify-end lg:col-span-3 lg:col-start-10">
+                <img src="/marks/seal-cream.svg" alt="" width={160} height={160} decoding="async" className="h-[88px] w-[88px] md:h-[160px] md:w-[160px]" />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ───────── Brief bar */}
-      <section className="bg-paper">
-        <div className="mx-auto max-w-[1520px] px-6 py-14 md:px-12 md:py-20">
-          <SiteIntelBar />
-          <p className="meta mt-4 text-mute">Bedrooms, budget, city, covenant. Your words.</p>
+      {/* ───────── 2. Ownership: first cut, forest to cream. */}
+      <Chapter tone="cream" wipeFrom="forest" className="lg:min-h-[100svh]">
+        <div className="col-span-12 lg:sticky lg:top-32 lg:col-span-5 lg:self-start">
+          <Lines lines={["We have owned", "the mistake."]} className={HEAD} />
+          <Lines as="p" lines={["On our own account."]} className="mt-3 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass" />
+          <blockquote data-reveal className={`${s.reveal} mt-12 max-w-[26ch] border-t border-forest/14 pt-6 font-display text-[clamp(1.2rem,1.8vw,1.5rem)] font-medium leading-[1.3] text-forest`}>
+            {OWNERSHIP.pull}
+          </blockquote>
         </div>
-      </section>
+        <div className="col-span-12 mt-12 space-y-7 lg:col-span-6 lg:col-start-7 lg:mt-0">
+          {OWNERSHIP.body.map((para, i) => (
+            <p key={i} data-reveal className={`${s.reveal} max-w-[60ch] text-[16px] leading-[1.85] text-ink/80`} style={delay(i)}>{para}</p>
+          ))}
+        </div>
+        <div className="col-span-12 mt-20 lg:mt-32">
+          {OWNERSHIP.proof.map(([k, v], i) => (
+            <div key={k} data-reveal className={`${s.reveal} ${GRID} border-t border-forest/14 py-7 last:border-b`} style={delay(i)}>
+              <h3 className="col-span-12 font-display text-[1.5rem] font-medium leading-[1.1] md:col-span-5">{k}</h3>
+              <p className="col-span-12 mt-2 text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-7 md:mt-0">{v}</p>
+            </div>
+          ))}
+        </div>
+      </Chapter>
 
-      {/* ───────── Practices */}
-      <section className="mx-auto max-w-[1520px] px-6 pb-24 md:px-12 md:pb-32">
-        <Reveal className="mb-14">
-          <div className="meta mb-6 text-brass">Four practices</div>
-          <h2 className="max-w-[20ch] font-display text-[clamp(2.1rem,4.8vw,3.6rem)] leading-[1.06]">
-            One set of books. One standard of diligence.
-          </h2>
-        </Reveal>
-        <div className="divide-y divide-forest/14 border-y border-forest/14">
-          {PILLARS.map((p, i) => (
-            <Reveal key={p.n} delay={i * 70}>
-              <div className="grid gap-7 py-12 md:grid-cols-[auto_1fr_1fr] md:gap-14">
-                <div className="meta pt-3 text-brass">{p.n}</div>
-                <div>
-                  <h3 className="font-display text-[clamp(1.6rem,3vw,2.35rem)] leading-[1.1]">{p.title}</h3>
-                  <p className="mt-5 max-w-[34ch] text-[15px] leading-[1.8] text-ink/75">{p.line}</p>
+      {/* ───────── 3. The Collection: cream continues. Own listings as rows. */}
+      <Chapter tone="cream" className="lg:min-h-[100svh]">
+        <div className="col-span-12 lg:col-span-7">
+          <Lines lines={["Our own listings,", "and nothing else."]} className={HEAD} />
+        </div>
+        <div className="col-span-12 mt-6 lg:col-span-4 lg:col-start-9 lg:mt-0 lg:self-end">
+          <p data-reveal className={`${s.reveal} max-w-[40ch] text-[15px] leading-[1.8] text-ink/75`}>
+            Held by the brokerage, underwritten and written by us before they were priced.
+            Nothing is republished from the board.
+          </p>
+          <Link href={href("collection")} className={`${s.tlink} meta mt-5 inline-block text-forest`}>The collection</Link>
+        </div>
+        <div className="col-span-12 mt-16 lg:mt-24">
+          {featured.map((l, i) => {
+            const lease = l.intent === "lease";
+            return (
+              <Link key={l.id} href={propertyHref(l.id)} data-reveal
+                className={`${s.reveal} ${s.rowlink} group ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`}
+                style={delay(i)}>
+                {/* alternate rows take the taller frame and step one column in, so the
+                    list reads as offset portrait frames rather than an even stack */}
+                <div className={`col-span-5 self-center md:col-span-3 md:row-span-2 ${i % 2 ? "md:col-start-2" : ""}`}>
+                  <div className="overflow-hidden">
+                    <div className={s.plx} data-parallax>
+                      <ImageFrame src={`/photos/${l.id}.jpg`} hue={l.hue} ratio={i % 2 ? "3/4" : "4/5"} alt={l.name} fallback="flat" />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <p className="max-w-[50ch] text-[14.5px] leading-[1.9] text-mute">{p.detail}</p>
-                  <dl className="mt-8 border-t border-forest/14">
-                    {p.stats.map(([k, v]) => (
-                      <div key={k} className="flex items-baseline justify-between gap-6 border-b border-forest/14 py-3">
-                        <dt className="meta text-mute">{k}</dt>
+                <div className="col-span-7 self-center md:col-span-6 md:col-start-5 md:self-end md:pb-2">
+                  <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1] transition-colors duration-200 ease-[cubic-bezier(.25,1,.5,1)] group-hover:text-forest-mid">
+                    {l.name}
+                  </h3>
+                  <p className="meta mt-3 text-ink/70">
+                    {l.address} <span className="mx-1.5 opacity-40">/</span> {l.region}, {l.city}
+                  </p>
+                </div>
+                <p className="col-span-12 mt-4 max-w-[52ch] text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-5 md:mt-0 md:self-start md:pt-2">{l.standfirst}</p>
+                <div className="col-span-12 mt-5 flex items-baseline justify-between md:col-span-2 md:col-start-11 md:row-span-2 md:row-start-1 md:mt-0 md:block md:self-center md:text-right">
+                  <span className="fig block text-[clamp(1.5rem,1.8vw,1.7rem)] text-brass">{money(l.price, lease)}</span>
+                  <span className="meta mt-2 block text-ink/70">{lease ? "To lease" : "For sale"} · {l.kind}</span>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </Chapter>
+
+      {/* ───────── 4. Track record and practices: cream continues. */}
+      <Chapter tone="cream" className="lg:min-h-[100svh]">
+        <div className="col-span-12 lg:col-span-5 lg:self-end">
+          <p data-reveal className={`${s.reveal} fig text-[clamp(3.25rem,7.5vw,6.5rem)] leading-[0.9] tracking-[-.02em] text-brass`}>$1B+</p>
+        </div>
+        <div className="col-span-12 mt-12 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:self-end">
+          <Lines lines={["The number, and", "the properties behind it."]} className={HEAD} />
+          <p data-reveal className={`${s.reveal} mt-6 max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/80`}>
+            Most firms publish a total. These are some of the properties, with what they were asking,
+            published only with the parties' written consent.
+          </p>
+        </div>
+        <p data-reveal className={`${s.reveal} meta col-span-12 mt-5 leading-[1.9] text-ink/70 lg:col-span-5`} style={delay(1)}>
+          Aggregate list value of transactions the firm acted in, sale and lease, 2016 to date. Methodology on request.
+        </p>
+
+        <div className="col-span-12 mt-16 lg:mt-24">
+          {record.map((t, i) => (
+            <div key={t.id} data-reveal className={`${s.reveal} ${GRID} items-baseline border-t border-forest/14 py-5 last:border-b md:py-6`} style={delay(i)}>
+              <h3 className="col-span-8 font-display text-[1.25rem] font-medium leading-[1.15] md:col-span-4">{t.place}</h3>
+              <p className="fig col-span-4 text-right text-[14px] text-forest md:order-last md:col-span-2 md:col-start-11">
+                {t.kind === "Leased" ? `$${t.list.toLocaleString("en-CA")}/mo` : money(t.list)}
+              </p>
+              <p className="meta col-span-8 mt-2 text-ink/70 md:col-span-4 md:col-start-5 md:mt-0">
+                {t.city} <span className="mx-1.5 opacity-40">/</span> {t.type}
+              </p>
+              <p className="meta col-span-4 mt-2 text-right text-ink/70 md:col-span-2 md:col-start-9 md:mt-0 md:text-left">{t.kind} {t.year}</p>
+            </div>
+          ))}
+          <div className="mt-6 flex flex-wrap items-baseline justify-between gap-x-10 gap-y-3">
+            <p className="meta max-w-[70ch] leading-[1.9] text-ink/70">List prices at the time of the transaction, not sale prices.</p>
+            <Link href={href("track")} className={`${s.tlink} meta text-forest`}>The full record</Link>
+          </div>
+        </div>
+
+        <div className="col-span-12 mt-32 lg:mt-40">
+          <Lines lines={["One set of books.", "One standard of diligence."]} className={`${HEAD} max-w-[20ch]`} />
+          <div className="mt-12 lg:mt-16">
+            {PILLARS.map((p, i) => (
+              <div key={p.title} data-reveal className={`${s.reveal} ${GRID} border-t border-forest/14 py-9 last:border-b md:py-12`} style={delay(i)}>
+                <div className="col-span-12 md:col-span-5">
+                  <h3 className="font-display text-[clamp(1.5rem,2.4vw,2.1rem)] font-medium leading-[1.1]">{p.title}</h3>
+                  <p className="mt-4 max-w-[34ch] text-[15px] leading-[1.8] text-ink/75">{p.line}</p>
+                  <Link href={href(PRACTICE_ROUTES[i])} className={`${s.tlink} meta mt-6 inline-block text-forest`}>The practice</Link>
+                </div>
+                <div className="col-span-12 mt-6 md:col-span-6 md:col-start-7 md:mt-0">
+                  <p className="max-w-[52ch] text-[14.5px] leading-[1.9] text-ink/70">{p.detail}</p>
+                  <dl className="mt-7 grid grid-cols-1 gap-y-4 border-t border-forest/14 pt-4 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-0">
+                    {p.stats.filter(([k]) => k !== "Furnishing").map(([k, v]) => (
+                      <div key={k} className="flex flex-col-reverse">
+                        <dt className="meta mt-1.5 text-ink/70">{k}</dt>
                         <dd className="fig text-[13px] text-forest">{v}</dd>
                       </div>
                     ))}
                   </dl>
                 </div>
               </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* ───────── The ownership argument. Our sharpest differentiator: the only way
-                    to copy it is to buy the houses. Framed as judgment, not wealth. */}
-      <section className="border-t border-forest/14 bg-paper-deep">
-        <div className="mx-auto max-w-[1520px] px-6 py-24 md:px-12 md:py-32">
-          <div className="grid items-start gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-24">
-            <Reveal className="lg:sticky lg:top-32 lg:self-start">
-              <div className="meta mb-6 text-brass">{OWNERSHIP.eyebrow}</div>
-              <h2 className="max-w-[14ch] font-display text-[clamp(2.3rem,5.4vw,4.1rem)] leading-[1.02]">
-                {OWNERSHIP.head}
-              </h2>
-              <figure className="mt-12 border-l border-brass/50 pl-7">
-                <blockquote className="max-w-[26ch] font-display text-[clamp(1.25rem,2.2vw,1.72rem)] italic leading-[1.35] text-forest">
-                  {OWNERSHIP.pull}
-                </blockquote>
-              </figure>
-            </Reveal>
-
-            <Reveal delay={80}>
-              <div className="space-y-7 lg:pt-3">
-                {OWNERSHIP.body.map((para, i) => (
-                  <p key={i} className="max-w-[54ch] text-[15.5px] leading-[1.92] text-ink/80">{para}</p>
-                ))}
-              </div>
-              <dl className="mt-12 border-t border-forest/14">
-                {OWNERSHIP.proof.map(([k, v]) => (
-                  <div key={k} className="grid gap-2 border-b border-forest/14 py-5 sm:grid-cols-[13rem_1fr] sm:gap-8">
-                    <dt className="meta pt-[3px] text-forest">{k}</dt>
-                    <dd className="text-[14.5px] leading-[1.75] text-mute">{v}</dd>
-                  </div>
-                ))}
-              </dl>
-              <Link href={href("firm")}
-                className="meta mt-10 inline-flex items-center gap-3 border-b border-forest/30 pb-2 text-forest transition-colors hover:border-brass hover:text-brass">
-                The principals
-                <svg width="22" height="8" viewBox="0 0 22 8" fill="none" aria-hidden>
-                  <path d="M0 4h20M17 1l3.4 3-3.4 3" stroke="currentColor" strokeWidth="1" />
-                </svg>
-              </Link>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ───────── Track record, horizontally */}
-      <section className="bg-forest py-24 text-paper md:py-32">
-        <div className="mx-auto max-w-[1520px] px-6 md:px-12">
-          <Reveal className="mb-12 flex flex-wrap items-end justify-between gap-8">
-            <div>
-              <div className="meta mb-6 text-brass-light">Sold &amp; leased</div>
-              <h2 className="max-w-[18ch] font-display text-[clamp(2.1rem,4.8vw,3.6rem)] leading-[1.06]">
-                The houses, and what they were asking.
-              </h2>
-            </div>
-            <p className="max-w-[30ch] text-[14px] leading-[1.85] text-paper/70">
-              Every competitor publishes a total. None publish the properties.
-            </p>
-          </Reveal>
-          <Reveal delay={90}><Marquee items={TRACK} href={href("track")} /></Reveal>
-        </div>
-      </section>
-
-      {/* ───────── Available now */}
-      <section className="mx-auto max-w-[1520px] px-6 py-24 md:px-12 md:py-32">
-        <Reveal className="mb-14 flex flex-wrap items-end justify-between gap-8">
-          <div>
-            <div className="meta mb-6 text-brass">Available now</div>
-            <h2 className="max-w-[20ch] font-display text-[clamp(2.1rem,4.8vw,3.6rem)] leading-[1.06]">
-              Executive leases and commercial.
-            </h2>
-          </div>
-          <Link href={href("collection")} className="meta link-u text-ink/70 hover:text-forest">The collection →</Link>
-        </Reveal>
-
-        <div className="mb-16">
-          <div className="meta mb-7 border-b border-forest/14 pb-4 text-mute">Executive leasing · $10,000+ per month</div>
-          <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {leases.map((l, i) => (
-              <Reveal key={l.id} delay={(i % 3) * 70}>
-                <ListingCard l={l} ratio="4/5" />
-              </Reveal>
             ))}
           </div>
         </div>
+      </Chapter>
 
-        <div>
-          <div className="meta mb-7 border-b border-forest/14 pb-4 text-mute">Commercial &amp; investment</div>
-          <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {commercial.map((l, i) => (
-              <Reveal key={l.id} delay={(i % 3) * 70}>
-                <ListingCard l={l} ratio="4/5" />
-              </Reveal>
-            ))}
+      {/* ───────── 5. Close: second cut, cream to forest-deep, running into the footer. */}
+      <Chapter tone="deep" wipeFrom="cream" inner="lg:min-h-[100svh] lg:content-center">
+        <div className="col-span-12 lg:col-span-6">
+          <Lines lines={["Tell us what you", "are trying to do."]} className={HEAD} />
+        </div>
+        <div className="col-span-12 mt-10 lg:col-span-5 lg:col-start-8 lg:mt-0 lg:self-end">
+          <p data-reveal className={`${s.reveal} max-w-[46ch] text-[16px] leading-[1.85] text-paper/80`}>
+            A purchase, a sale, a lease, or a portfolio that needs a second pair of eyes. Someone from the desk
+            will be in touch inside one business day. We do not sell or share what you send, and we do not add
+            you to a list without asking.
+          </p>
+          <div className="mt-10 flex flex-col items-start gap-5">
+            <Link href="/contact" className={`${s.tlink} font-display text-[1.35rem] font-medium leading-tight text-paper`}>Start a conversation</Link>
+            <Link href={href("relocating")} className={`${s.tlink} text-[15px] text-paper/70`}>
+              Relocating to the Toronto area? Begin with the questions everyone asks
+            </Link>
           </div>
         </div>
-      </section>
-
-      {/* ───────── Statement */}
-      <section className="border-y border-forest/14 bg-paper-deep py-24 md:py-32">
-        <div className="mx-auto max-w-[1520px] px-6 md:px-12">
-          <Reveal>
-            <h2 className="max-w-[22ch] font-display text-[clamp(2.2rem,5.6vw,4.4rem)] leading-[1.04]">
-              Most brokerages sell you a house. We underwrite a decision.
-            </h2>
-            <div className="mt-12 grid gap-12 border-t border-forest/14 pt-12 md:grid-cols-3">
-              {([
-                ["Led by a lawyer", "Barrister & Solicitor (Ontario). Attorney at Law (NY, MN)."],
-                ["Underwritten in-house", "Covenant, title, zoning, tax and downside, before price."],
-                ["Family owned", "The people who answer for the advice own the firm."],
-              ] as [string, string][]).map(([t, d], i) => (
-                <Reveal key={t} delay={i * 80}>
-                  <h3 className="font-display text-[22px] leading-tight">{t}</h3>
-                  <p className="mt-4 max-w-[34ch] text-[14.5px] leading-[1.9] text-mute">{d}</p>
-                </Reveal>
-              ))}
-            </div>
-            <p className="meta mt-12 max-w-[86ch] leading-[1.9] text-mute/80">
-              Danmar Empire Real Estate Corp., Brokerage does not provide legal services. Daniel Sheikhan acts for
-              clients of the firm as a real estate broker, not as their solicitor.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ───────── Areas */}
-      <section className="mx-auto max-w-[1520px] px-6 py-24 md:px-12 md:py-32">
-        <Reveal className="mb-14 flex flex-wrap items-end justify-between gap-8">
-          <div>
-            <div className="meta mb-6 text-brass">Where we act</div>
-            <h2 className="max-w-[22ch] font-display text-[clamp(2.1rem,4.8vw,3.6rem)] leading-[1.06]">
-              Oakville, King City, Toronto. Licensed Ontario-wide.
-            </h2>
-          </div>
-          <Link href={href("areas")} className="meta link-u text-ink/70 hover:text-forest">All areas →</Link>
-        </Reveal>
-        <div className="grid gap-x-10 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
-          {AREAS.slice(0, 8).map((a, i) => (
-            <Reveal key={a.slug} delay={(i % 4) * 60}>
-              <Link href={href("areas")} className="group block w-full border-t border-forest/14 pt-5 text-left">
-                <div className="flex items-baseline justify-between gap-3">
-                  <h3 className="font-display text-[22px] transition-colors group-hover:text-brass">{a.name}</h3>
-                  <span className="meta text-mute/70">{a.region}</span>
-                </div>
-                <p className="meta mt-3 leading-[1.9] text-mute">{a.pockets.slice(0, 3).join(" · ")}</p>
-              </Link>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* ───────── Leasing + furnishing */}
-      <section className="bg-forest py-24 text-paper md:py-32">
-        <div className="mx-auto grid max-w-[1520px] gap-16 px-6 md:px-12 lg:grid-cols-[1.1fr_1fr] lg:gap-24">
-          <Reveal>
-            <div className="meta mb-6 text-brass-light">Executive leasing</div>
-            <h2 className="max-w-[18ch] font-display text-[clamp(2rem,4.4vw,3.4rem)] leading-[1.08]">
-              Landlords buy a covenant, not a tenant.
-            </h2>
-            <p className="mt-8 max-w-[44ch] text-[16px] leading-[1.85] text-paper/85">
-              Corporate and diplomatic relocation from $10,000+ per month. We qualify the guarantee, not a credit file.
-            </p>
-            <div className="mt-12 flex flex-wrap items-baseline gap-x-12 gap-y-6 border-t border-paper/20 pt-10">
-              <div>
-                <div className="fig text-[clamp(2rem,4vw,3rem)] font-medium leading-none text-brass-light">+30–45%</div>
-                <div className="meta mt-3 max-w-[22ch] leading-[1.8] text-paper/60">of base rent, fully furnished and installed</div>
-              </div>
-              <p className="max-w-[34ch] text-[14px] leading-[1.9] text-paper/70">
-                Specified and installed by us through CB2, Crate &amp; Barrel, Anthropologie and RH. Not affiliated with any of them.
-              </p>
-            </div>
-            <div className="mt-12 flex flex-wrap gap-5">
-              <Link href={href("leasing")} className="meta border border-paper/40 px-8 py-4 transition-colors hover:bg-paper hover:text-forest">
-                The leasing practice
-              </Link>
-              <EnquireButton className="meta px-2 py-4 text-paper/75 link-u hover:text-paper">Brief the desk →</EnquireButton>
-            </div>
-          </Reveal>
-          <Reveal delay={110}>
-            <div className="meta mb-7 text-paper/50">Covenants we place against</div>
-            <ul className="border-t border-paper/20">
-              {COVENANTS.map((c) => (
-                <li key={c} className="flex items-baseline gap-5 border-b border-paper/20 py-5 text-[15px] text-paper/85">
-                  <span className="mt-[8px] h-[5px] w-[5px] shrink-0 rounded-full bg-brass-light" />{c}
-                </li>
-              ))}
-            </ul>
-            <p className="meta mt-7 leading-[1.9] text-paper/50">
-              We describe the covenant, never the client.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ───────── Journal */}
-      <section className="mx-auto max-w-[1520px] px-6 py-24 md:px-12 md:py-32">
-        <Reveal className="mb-12 flex flex-wrap items-end justify-between gap-8">
-          <div>
-            <div className="meta mb-6 text-brass">Journal</div>
-            <h2 className="max-w-[20ch] font-display text-[clamp(2.1rem,4.8vw,3.6rem)] leading-[1.06]">
-              What we publish is what we think.
-            </h2>
-          </div>
-          <Link href={href("journal")} className="meta link-u text-ink/70 hover:text-forest">All writing →</Link>
-        </Reveal>
-        <div className="grid gap-px border border-forest/14 bg-forest/14 md:grid-cols-2">
-          {JOURNAL.map((j, i) => (
-            <Reveal key={j.id} delay={i * 60} className="bg-paper">
-              <Link href={href("journal")} className="group block h-full w-full p-9 text-left transition-colors hover:bg-paper-deep md:p-12">
-                <div className="meta flex items-center gap-3 text-brass">{j.kind}<span className="text-mute">{j.date}</span></div>
-                <h3 className="mt-5 max-w-[24ch] font-display text-[23px] leading-[1.2] md:text-[27px]">{j.title}</h3>
-                <div className="meta mt-7 text-mute transition-colors group-hover:text-forest">Read · {j.read}</div>
-              </Link>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* ───────── Offices */}
-      <section className="border-t border-forest/14 bg-paper-deep py-20 md:py-24">
-        <div className="mx-auto grid max-w-[1520px] gap-12 px-6 md:grid-cols-3 md:px-12">
-          {OFFICES.map((o, i) => (
-            <Reveal key={o.city} delay={i * 70}>
-              <div className="meta mb-5 text-brass">{o.city}</div>
-              <p className="font-display text-[21px] leading-snug">{o.addr}</p>
-              <p className="mt-2 text-[14px] text-mute">{o.post}</p>
-              <p className="meta mt-5 text-mute">{o.tel}</p>
-            </Reveal>
-          ))}
-        </div>
-      </section>
+      </Chapter>
     </div>
   );
 }

@@ -8,13 +8,17 @@ import { useEffect, useId, useRef, useState } from "react";
  * architectural field rather than a grey box, so the page never looks broken.
  */
 export function ImageFrame({
-  src, hue = 30, ratio = "4/3", className = "", alt = "", tone = "dark", children,
+  src, hue = 30, ratio = "4/3", className = "", alt = "", tone = "dark", fallback = "art", children,
 }: {
   src?: string; hue?: number; ratio?: string; className?: string; alt?: string;
-  tone?: "dark" | "light"; children?: React.ReactNode;
+  tone?: "dark" | "light";
+  /** `flat` reserves the aspect ratio as a plain forest/10 block, with no generated art. */
+  fallback?: "art" | "flat";
+  children?: React.ReactNode;
 }) {
   const [ok, setOk] = useState(false);
   const dark = tone === "dark";
+  const flat = fallback === "flat";
   // pull every seed toward the forest family so placeholder art reads as one palette
   const h = 148 + ((hue % 72) - 36) * 1.15;       // forest family, with real spread
   const lift = (hue % 5) * 3;                      // per-seed lightness variation
@@ -29,22 +33,24 @@ export function ImageFrame({
   useEffect(() => { const el = img.current; if (el?.complete && el.naturalWidth) setOk(true); }, [src]);
 
   return (
-    <div className={`relative overflow-hidden bg-forest-deep grain ${className}`} style={{ aspectRatio: ratio }}>
-      <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
-        <defs>
-          <linearGradient id={uid} x1="0" y1="0" x2="0.6" y2="1">
-            <stop offset="0%" stopColor={c} /><stop offset="52%" stopColor={b} /><stop offset="100%" stopColor={a} />
-          </linearGradient>
-        </defs>
-        <rect width="400" height="300" fill={`url(#${uid})`} />
-        <g stroke={dark ? "rgba(255,255,255,.13)" : "rgba(20,22,28,.12)"} fill="none" strokeWidth="1">
-          {Array.from({ length: 9 }).map((_, i) => (
-            <line key={i} x1={(hue * 3 + i * 47) % 400} y1="0" x2={(hue * 3 + i * 47) % 400} y2="300" />
-          ))}
-          <path d={`M0 ${210 + (hue % 40)} L ${120 + (hue % 60)} ${150 + (hue % 30)} L ${250 + (hue % 40)} ${190 + (hue % 25)} L400 ${140 + (hue % 50)}`} strokeWidth="1.2" />
-          <rect x={(hue * 5) % 220} y={110 + (hue % 40)} width={120 + (hue % 70)} height={170} />
-        </g>
-      </svg>
+    <div className={`relative overflow-hidden ${flat ? "bg-forest/10" : "bg-forest-deep grain"} ${className}`} style={{ aspectRatio: ratio }}>
+      {!flat && (
+        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
+          <defs>
+            <linearGradient id={uid} x1="0" y1="0" x2="0.6" y2="1">
+              <stop offset="0%" stopColor={c} /><stop offset="52%" stopColor={b} /><stop offset="100%" stopColor={a} />
+            </linearGradient>
+          </defs>
+          <rect width="400" height="300" fill={`url(#${uid})`} />
+          <g stroke={dark ? "rgba(255,255,255,.13)" : "rgba(20,22,28,.12)"} fill="none" strokeWidth="1">
+            {Array.from({ length: 9 }).map((_, i) => (
+              <line key={i} x1={(hue * 3 + i * 47) % 400} y1="0" x2={(hue * 3 + i * 47) % 400} y2="300" />
+            ))}
+            <path d={`M0 ${210 + (hue % 40)} L ${120 + (hue % 60)} ${150 + (hue % 30)} L ${250 + (hue % 40)} ${190 + (hue % 25)} L400 ${140 + (hue % 50)}`} strokeWidth="1.2" />
+            <rect x={(hue * 5) % 220} y={110 + (hue % 40)} width={120 + (hue % 70)} height={170} />
+          </g>
+        </svg>
+      )}
       {src && (
         <img
           ref={img} src={src} alt={alt} loading="lazy" decoding="async"
