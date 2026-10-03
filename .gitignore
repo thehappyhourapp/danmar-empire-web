@@ -1,0 +1,14 @@
+node_modules/
+dist/
+pdist/
+.parcel-cache/
+.vercel/
+*.local
+.DS_Store
+
+# Single-file prototype bundles and the throwaway screenshot scripts used
+# while reviewing the design. Vercel builds from source, not from these.
+bundle.html
+shot*.mjs
+dbg.mjs
+verify.mjs

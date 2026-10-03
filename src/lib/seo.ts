@@ -1,0 +1,86 @@
+/* Per-page SEO. This is the source of truth for titles, descriptions and the
+   H1 that should sit on each route; the production build should read the same
+   map rather than re-inventing it.
+
+   A note on "ultra-high-net-worth". Daniel asked for it spelled out for search,
+   and it is worth ranking for: the phrase is searched by relocation consultants,
+   family-office staff and wealth managers, which is exactly who refers this
+   kind of file. It is NOT worth saying in brand voice. People with that much
+   money do not describe themselves that way, and a brokerage that does sounds
+   like it is auditioning. So the phrase lives in <title>, meta description and
+   the occasional sub-heading on the pages where it is literally true
+   (asset management, relocation, $5M+ private sales) and nowhere else. */
+
+export interface Meta { title: string; description: string; canonical: string; }
+
+const SUFFIX = "Danmar Empire Real Estate Corp., Brokerage";
+
+export const SEO: Record<string, Meta> = {
+  home: {
+    title: `Lawyer-Led Real Estate & Investment Group | Oakville, King City & Toronto | ${SUFFIX}`,
+    description:
+      "Lawyer-led real estate brokerage and investment group. Over $1 billion transacted since 2016. Private sales, executive leasing from $10,000/month, income property and portfolio management across Oakville, King City, Toronto and the GTA.",
+    canonical: "/",
+  },
+  management: {
+    title: `Real Estate Asset & Portfolio Management for Ultra-High-Net-Worth Families | ${SUFFIX}`,
+    description:
+      "Discretionary and advisory management of private real estate portfolios from $10 million to $250 million, domestic and international. Built for high-net-worth and ultra-high-net-worth (UHNW) families and their advisors.",
+    canonical: "/asset-management",
+  },
+  investments: {
+    title: `Income Property, Land & Net Lease Investment Sales, Ontario | ${SUFFIX}`,
+    description:
+      "Underwriting and execution on income property, land with approvals and net-leased assets across the Greater Toronto Area and Ontario. Going-in yield, capital plan and exit modelled before we recommend a bid.",
+    canonical: "/investments",
+  },
+  leasing: {
+    title: `Executive & Luxury Home Leasing from $10,000/Month | Oakville, Toronto, King City | ${SUFFIX}`,
+    description:
+      "Executive leasing for corporate and diplomatic relocation, $10,000 per month and up. Fully furnished for an additional 30% to 45% of base rent. Covenant-qualified tenants placed across Oakville, King City and Toronto.",
+    canonical: "/executive-leasing",
+  },
+  relocating: {
+    title: `Relocating to Toronto & the GTA | Private Client Relocation for UHNW Families | ${SUFFIX}`,
+    description:
+      "Advising high-net-worth and ultra-high-net-worth (UHNW) families relocating to Oakville, King City and Toronto from the UK, South Africa, the United States, Asia, Europe and the Gulf. Areas, leasing, lenders, schools and carrying costs, answered before you commit.",
+    canonical: "/relocating",
+  },
+  collection: {
+    title: `Luxury Homes & Estates for Sale and Lease | Oakville, King City, Toronto | ${SUFFIX}`,
+    description:
+      "A curated collection of freehold and estate residential from $1.5 million, executive leases and commercial investment currently available through the firm.",
+    canonical: "/collection",
+  },
+  areas: {
+    title: `Luxury Real Estate Areas: Oakville, King City, Toronto & Ontario | ${SUFFIX}`,
+    description:
+      "The high-end Ontario markets we work in, pocket by pocket: Oakville, King City, central Toronto, Muskoka, Niagara-on-the-Lake and Prince Edward County, with what actually drives value in each.",
+    canonical: "/areas",
+  },
+  track: {
+    title: `Track Record: Over $1 Billion in Ontario Real Estate Sold & Leased | ${SUFFIX}`,
+    description:
+      "Selected residential, commercial and land transactions completed by the firm since 2016, with locations and list prices, published with client consent.",
+    canonical: "/track-record",
+  },
+  firm: {
+    title: `The Firm: Lawyer-Led, Family-Owned Since 2016 | ${SUFFIX}`,
+    description:
+      "A boutique investment and real estate group in Oakville and Vaughan, led by a principal called to the bar in Ontario, New York and Minnesota. Family-owned since 2016.",
+    canonical: "/firm",
+  },
+  journal: {
+    title: `Journal: Ontario Real Estate Analysis & Market Notes | ${SUFFIX}`,
+    description:
+      "What the firm actually thinks about Ontario real estate: yields, lending conditions, lease covenants and the high-end market in Oakville, King City and Toronto.",
+    canonical: "/journal",
+  },
+  dataroom: {
+    title: `Client Data Room | ${SUFFIX}`, description: "Secure document access for active mandates.", canonical: "/data-room",
+  },
+};
+
+export function metaFor(page: string): Meta {
+  return SEO[page] ?? SEO.home;
+}
