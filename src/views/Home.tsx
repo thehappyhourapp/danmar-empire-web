@@ -117,7 +117,7 @@ export function Home() {
       {/* ───────── 2. Ownership: first cut, forest to cream. */}
       <Chapter tone="cream" wipeFrom="forest" className="lg:min-h-[100svh]">
         <div className="col-span-12 lg:sticky lg:top-32 lg:col-span-5 lg:self-start">
-          <Lines lines={["We have owned", "the mistake."]} className={HEAD} />
+          <Lines lines={["We own what", "we advise on."]} className={HEAD} />
           <Lines as="p" lines={["On our own account."]} className="mt-3 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass" />
           <blockquote data-reveal className={`${s.reveal} mt-12 max-w-[26ch] border-t border-forest/14 pt-6 font-display text-[clamp(1.2rem,1.8vw,1.5rem)] font-medium leading-[1.3] text-forest`}>
             {OWNERSHIP.pull}

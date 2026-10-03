@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 /** Prototype-only control. Lets Daniel see each display face on the real site
  *  rather than on a specimen sheet. Not shipped to production. */
 const FACES: { id: string; label: string; stack: string; note: string }[] = [
-  { id: "bodoni", label: "Bodoni Moda", stack: "'Bodoni Moda', Didot, Georgia, serif", note: "Bauer Bodoni lineage" },
+  { id: "bodoni", label: "Bodoni Moda", stack: "'Bodoni Moda', 'Bodoni Moda Fallback', Georgia, serif", note: "Bauer Bodoni lineage" },
   { id: "gilda", label: "Gilda Display", stack: "'Gilda Display', Georgia, serif", note: "Warmer, sturdier hairlines" },
   { id: "cinzel", label: "Cinzel", stack: "'Cinzel', Georgia, serif", note: "Roman inscriptional" },
   { id: "marcellus", label: "Marcellus", stack: "'Marcellus', Georgia, serif", note: "Inscriptional with lowercase" },

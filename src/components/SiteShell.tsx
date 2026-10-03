@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LISTINGS } from "@/lib/data";
@@ -10,7 +10,6 @@ import { pageFor, propertyHref } from "@/lib/routes";
 import { Nav } from "./Nav";
 import { Footer } from "./Footer";
 import { ImageFrame } from "./ImageFrame";
-import { Splash } from "./Splash";
 import { TypeSwitch } from "./TypeSwitch";
 
 /* Visit-level state that used to live in App.tsx. It sits in the root layout, so it
@@ -152,47 +151,35 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   const [enq, setEnq] = useState(false);
   const [savedOpen, setSavedOpen] = useState(false);
   const [notice, setNotice] = useState(true);
-  const [splash, setSplash] = useState(true);
-
-  const noticeRef = useRef<HTMLDivElement>(null);
-  const [noticeH, setNoticeH] = useState(0);
-
-  useLayoutEffect(() => {
-    if (!notice) { setNoticeH(0); return; }
-    const el = noticeRef.current; if (!el) return;
-    const measure = () => setNoticeH(el.offsetHeight);
-    measure();
-    const ro = new ResizeObserver(measure); ro.observe(el);
-    window.addEventListener("resize", measure);
-    return () => { ro.disconnect(); window.removeEventListener("resize", measure); };
-  }, [notice]);
+  /* The notice bar sits in the flow at a fixed 36px, so its height is in the server
+     HTML and nothing shifts after hydration. Hiding it is a user action. */
+  const noticeH = notice ? 36 : 0;
 
   const toggleSave = (id: string) =>
     setSaved((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const search = (nq: Query, t: string) => { setQ(nq); setText(t); router.push("/collection"); };
   const enquire = () => setEnq(true);
-  const endSplash = useCallback(() => setSplash(false), []);
 
   return (
     <Ctx.Provider value={{ saved, toggleSave, enquire, q, setQ, text, setText, search }}>
       <div className="min-h-screen bg-paper antialiased">
         {notice && (
-          <div ref={noticeRef} className="fixed inset-x-0 top-0 z-[80] flex items-center gap-3 bg-forest-soft px-4 py-2 text-paper sm:gap-4 sm:px-5">
+          <div className="sticky top-0 z-[80] flex h-9 items-center gap-3 bg-forest-soft px-4 text-paper sm:gap-4 sm:px-5">
             <span className="meta shrink-0">Prototype</span>
-            <span className="text-[11.5px] leading-[1.35] text-paper/90 sm:text-[12px]">
-              Design prototype. Listings, transactions and figures are placeholder content pending the PropTx feed and your sign-off. Do not publish as-is.
+            <span className="min-w-0 truncate text-[11.5px] leading-none text-paper/90 sm:text-[12px]">
+              <span className="sm:hidden">Placeholder content. Do not publish as-is.</span>
+              <span className="hidden sm:inline">Design prototype. Listings, transactions and figures are placeholder content pending the PropTx feed and your sign-off. Do not publish as-is.</span>
             </span>
             <button onClick={() => setNotice(false)} className="meta ml-auto shrink-0 text-paper/80 hover:text-paper">Hide</button>
           </div>
         )}
 
-        <div style={{ paddingTop: noticeH, ["--stick" as string]: `${noticeH + 74}px` } as React.CSSProperties}>
+        <div style={{ ["--stick" as string]: `${noticeH + 74}px` } as React.CSSProperties}>
           <Nav page={pageFor(pathname)} saved={saved.size} onSaved={() => setSavedOpen(true)} onEnquire={enquire} offset={noticeH} />
           <main>{children}</main>
           <Footer onEnquire={enquire} />
         </div>
 
-        {splash && <Splash onDone={endSplash} />}
         <TypeSwitch />
         <Enquire open={enq} close={() => setEnq(false)} />
         <Saved open={savedOpen} close={() => setSavedOpen(false)} ids={saved} toggle={toggleSave} />

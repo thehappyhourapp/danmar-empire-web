@@ -25,12 +25,12 @@ module.exports = {
         card: { DEFAULT: "hsl(var(--card))", foreground: "hsl(var(--card-foreground))" },
       },
       fontFamily: {
-        display: ['var(--display-face)', '"Bodoni Moda"', 'Didot', 'Georgia', 'serif'],
+        display: ['var(--display-face)', '"Bodoni Moda"', '"Bodoni Moda Fallback"', 'Georgia', 'serif'],
         seal: ['"Gilda Display"', 'Georgia', 'serif'],
-        sans: ['"Libre Franklin"', 'ui-sans-serif', 'system-ui', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        sans: ['"Libre Franklin"', '"Libre Franklin Fallback"', 'ui-sans-serif', 'system-ui', 'Helvetica Neue', 'Arial', 'sans-serif'],
         /* figures ride the display serif with lining tabular numerals — never a monospace,
            which reads as a spreadsheet rather than a private-client report */
-        mono: ['"Bodoni Moda"', 'Didot', 'Georgia', 'serif'],
+        mono: ['"Bodoni Moda"', '"Bodoni Moda Fallback"', 'Georgia', 'serif'],
       },
       letterSpacing: { meta: '0.16em', wide2: '0.28em' },
       /* Tailwind's default alpha scale only has 5% steps, so bg-paper/94,
