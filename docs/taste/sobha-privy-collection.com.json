@@ -1,0 +1,166 @@
+{
+  "source": "https://sobha-privy-collection.com/",
+  "tokens": {
+    "spacing": {
+      "scale": [
+        8,
+        10,
+        30,
+        60,
+        180
+      ],
+      "base_unit": 10,
+      "page_margin": "30px",
+      "section_gap": "180px"
+    },
+    "typography": {
+      "families": [
+        "TT Ramillas",
+        "altesse-std-64pt",
+        "TT Commons Pro"
+      ],
+      "scale": [
+        {
+          "role": "script overlay",
+          "size": "100-114px",
+          "weight": "400",
+          "family": "altesse-std-64pt"
+        },
+        {
+          "role": "h1 display caps",
+          "size": "80px / 85px",
+          "weight": "300",
+          "family": "TT Ramillas",
+          "tracking": "0.02em"
+        },
+        {
+          "role": "h2",
+          "size": "50px / 50px",
+          "weight": "300",
+          "family": "TT Ramillas",
+          "tracking": "0.02em"
+        },
+        {
+          "role": "h3",
+          "size": "28px / 35px",
+          "weight": "300",
+          "family": "TT Ramillas"
+        },
+        {
+          "role": "nav / UI",
+          "size": "13px",
+          "weight": "500",
+          "family": "TT Commons Pro"
+        },
+        {
+          "role": "label caps",
+          "size": "11px / 15px",
+          "weight": "600",
+          "family": "TT Commons Pro"
+        }
+      ]
+    },
+    "colors": [
+      {
+        "role": "dark band",
+        "value": "#1A1919"
+      },
+      {
+        "role": "hero / video ground",
+        "value": "#000000"
+      },
+      {
+        "role": "light band",
+        "value": "#FFFFFF"
+      },
+      {
+        "role": "secondary text",
+        "value": "#717170"
+      },
+      {
+        "role": "accent",
+        "value": "none (colour comes only from photography)"
+      }
+    ],
+    "radius": [
+      "0px (layout)",
+      "15px (cookie bar, map widget only)"
+    ],
+    "shadows": [
+      "none perceptible"
+    ],
+    "image_ratios": [
+      {
+        "usage": "full-bleed band",
+        "ratio": "1.85:1 and 16:9 at 1440px"
+      },
+      {
+        "usage": "collage portrait",
+        "ratio": "0.70-0.80:1 at 360-720px"
+      }
+    ],
+    "grid": {
+      "max_width": "none (1440 full-bleed)",
+      "columns": "none: absolute/flex collage, 30px side margins",
+      "gutter": "~10px between collage frames"
+    },
+    "motion": {
+      "primary_curve": "cubic-bezier(0.7, 0, 0.3, 1) (29 uses)",
+      "durations": "0.4s UI, 1s fades, 1.6s reveals",
+      "reveals": "line-wrap clip-path mask polygon(0 -17%, 105% -17%, 105% 110%, 0 110%); text starts at opacity 0.005",
+      "parallax": "translateY -68 to -300px on images",
+      "scroll": "virtual (custom) scroller",
+      "preloader": "yes (logo on #1A1919)",
+      "webgl": "no (hero is video, 14 video files)",
+      "reduced_motion_css": false,
+      "focus_visible": true
+    }
+  },
+  "taste": [
+    {
+      "name": "Achromatic house, colour on loan from the photographs",
+      "trigger": "When choosing a palette for a luxury residential brand that needs to feel rarefied",
+      "decision": "Chose black #000, near-black #1A1919, white and one grey #717170 with no accent hue over a signature brand colour (gold, navy) applied to type and buttons",
+      "reason": "Interiors carry warm marble, brass and greenery; an accent colour in the chrome would compete with the product instead of framing it",
+      "evidence": [
+        "3 background colours cover 100% of surface: #1A1919 83.3%, #FFFFFF 14%, #000 2.7%",
+        "text colours: #1A1919, #FFF, #717170 only",
+        "buttons: 0px radius, no fill colour"
+      ]
+    },
+    {
+      "name": "Two voices in one headline",
+      "trigger": "When a headline has to say both what and how it feels",
+      "decision": "Chose light (300) display capitals overlapped by a calligraphic script line over a stacked headline plus a separate subheading",
+      "reason": "The overlap reads as a single gesture, like an engraved card with a signature across it; a subheading under the headline reads as marketing copy",
+      "evidence": [
+        "'The art' script over 'OF THE SUBLIME' caps",
+        "'of fine living' script crossing 'CONNOISSEURS'",
+        "TT Ramillas 300 at 80px/85px, altesse script at 100-114px"
+      ]
+    },
+    {
+      "name": "One curve for every reveal",
+      "trigger": "When choosing easing for fades, masks and colour changes",
+      "decision": "Chose a single symmetric in-out curve cubic-bezier(0.7,0,0.3,1) at 1s-1.6s over per-component easings",
+      "reason": "A slow start and slow settle makes every reveal feel like the same hand drawing a curtain, which is what makes long scroll feel paced rather than busy",
+      "evidence": [
+        "cubic-bezier(0.7,0,0.3,1) used 29 times, next curve 7 times",
+        "durations: 0.4s x14, 1s x10, 1.6s x7",
+        "line masks via clip-path polygon"
+      ]
+    },
+    {
+      "name": "Asymmetric collage over a grid",
+      "trigger": "When showing several interiors in sequence",
+      "decision": "Chose portrait frames of different sizes offset vertically around a centred tall image, with 180px of white between groups, over an even card grid",
+      "reason": "Offset frames make the eye travel like walking through rooms; a grid of equal cards reads as inventory",
+      "evidence": [
+        "portrait ratios 0.70-0.80:1 at 360, 410, 600 and 720px wide",
+        "no CSS grid on the page (gridCount 0)",
+        "180px spacing value x7",
+        "full-bleed 1.85:1 bands between collages"
+      ]
+    }
+  ]
+}

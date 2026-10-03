@@ -1,5 +1,7 @@
 # Danmar Empire — Website Rebuild: Data, Hosting and Cutover Plan
 
+**Superseded 3 Oct 2026: own listings only via PropTx DLA, no IDX, no map.** Where this plan says otherwise, PRODUCT.md and CLAUDE.md govern.
+
 Prepared 12 September 2026. Read the three sections in order; they are sequenced, not parallel.
 
 ---
@@ -13,10 +15,10 @@ There are three separate agreements and you need different ones for different fe
 | Agreement | What it unlocks | Needed for |
 |---|---|---|
 | **DLA** (Data License) | *Your own* listings, including agent information | Company listings with Danmar branding |
-| **IDX** | *All* active TRREB listings, reciprocal pool. No sold data, no open houses, **no listing-agent or office IDs** | The public map and full search |
+| **IDX** | *All* active TRREB listings, reciprocal pool. No sold data, no open houses, **no listing-agent or office IDs** | Not pursued. Own listings only: no public map, no board-wide search |
 | **VOW** | Sold prices, days on market, history — behind a consumer registration wall | The sold-data room, which is the real lead engine |
 
-**Sequence:** DLA + IDX first (they get you a working site), VOW second (it needs a display-compliance review of the live site).
+**Sequence:** DLA only. It is the one agreement the site needs. IDX is not pursued. VOW (sold data behind a registration wall) is a separate, undecided question and is not part of v2; the sold-data room is not routed.
 
 **Timeline:** best case 24 hours, realistically one to three weeks. The pipeline is Incomplete → Pending Review → Licensing In Progress → Ready For Implementation → **Pending Display Compliance** → Completed. That second-to-last stage is a human reviewing your live site.
 
@@ -24,18 +26,18 @@ There are three separate agreements and you need different ones for different fe
 
 ### Vendor decision
 
-**Recommended: Repliers.** Toronto-based, Ontario-native, $199–$399/month with no setup fee and no contract. Native GeoJSON polygon search out of the box, which is what the map needs. They have already solved the TRREB enumeration quirks (the RETS → RESO migration broke hundreds of field values) and the archive gating. Add-ons: archived data $149/mo, AI estimates $149/mo.
+**Recommended: Repliers.** Toronto-based, Ontario-native, $199–$399/month with no setup fee and no contract. Native GeoJSON polygon search out of the box, which was the reason for recommending it: that served the map, which is no longer planned. Revisit this vendor choice against a DLA-only feed. They have already solved the TRREB enumeration quirks (the RETS → RESO migration broke hundreds of field values) and the archive gating. Add-ons: archived data $149/mo, AI estimates $149/mo.
 
 **Alternative: PropTx/Ampre direct.** Data costs $0. You then build replication, the photo pipeline, geocoding, a spatial index (the OData API has no native polygon query), VOW authentication and the consumer audit trail yourself. Worth it only if MLS data becomes product IP rather than marketing. It is not, yet.
 
-**Not recommended: CREA DDF alone.** Free and self-service, but it is consent-based and carries only 60–65% of national listings. Your Oakville and Vaughan map would silently omit a third of inventory and every photo carries a REALTOR® watermark. Fine as a top-up for listings outside TRREB; useless as the primary source.
+**Not recommended: CREA DDF alone.** Free and self-service, but it is consent-based and carries only 60–65% of national listings. A board-wide search (no longer planned) would silently omit a third of inventory and every photo carries a REALTOR® watermark. Fine as a top-up for listings outside TRREB; useless as the primary source.
 
-**Coverage note:** TRREB alone misses parts of Ontario. ITSO adds roughly 9,100 listings; its IDX is free and its VOW is $1,500/year. TRREB + ITSO is about 95% of the province.
+**Coverage note:** TRREB alone misses parts of Ontario. ITSO adds roughly 9,100 listings; its IDX is free and its VOW is $1,500/year. TRREB + ITSO is about 95% of the province. Relevant only to board-wide IDX, which is not pursued.
 
 ### Compliance rules that are now built into the site
 
 - **Sold prices cannot appear on an open page.** RECO treats that as advertising a sold property, which requires written consent from the parties. The same data behind a registration wall is a Virtual Office Website and is permitted. This is why the sold-data page is gated — it is a legal boundary, not a growth tactic.
-- **Every IDX listing must credit the listing brokerage**, including in thumbnails. The IDX feed carries brokerage name as raw text only, no agent or office ID, so brokerage name is both all you get and exactly what you must show.
+- **Every IDX listing must credit the listing brokerage** (applies only if IDX is ever added), including in thumbnails. The IDX feed carries brokerage name as raw text only, no agent or office ID, so brokerage name is both all you get and exactly what you must show.
 - **Honour the withhold-from-internet flag.** Where a seller directed the listing brokerage to suppress the address, the record still arrives in the feed and you must not display it. That is a code path, not a policy note.
 - **VOW caps responses at 100 listings per query**, requires a bona-fide-interest confirmation, a 24-hour refresh floor, no alteration of content, and a consumer audit trail.
 - **MLS® cannot appear in a domain name, email address or social handle.** REALTOR® takes the ® on first use, always capitalised.

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { href } from "@/lib/routes";
-import { wreathCream, wreathForest } from "@/lib/marks";
+import { sealCream, sealForest } from "@/lib/marks";
 
 export const NAV = [
   { id: "management", label: "Asset Management" },
@@ -15,26 +15,30 @@ export const NAV = [
   { id: "firm", label: "The Firm" },
 ];
 
-/** Daniel's mark, drawn in Canva and exported as outlined SVG. Two colourways so
- *  it never sits on a background rectangle of its own. */
+/** Daniel's seal, drawn in Canva and exported as outlined SVG. Two colourways so
+ *  it never sits on a background rectangle of its own: forest on light, cream on dark. */
 export function Seal({ size = 34, className = "", light = false }: { size?: number; className?: string; light?: boolean }) {
   return (
-    <img src={light ? wreathCream : wreathForest} alt="" aria-hidden
+    <img src={light ? sealCream : sealForest} alt="" aria-hidden
       width={size} height={size} className={className} style={{ width: size, height: size, objectFit: "contain" }} />
   );
 }
 export const Monogram = Seal;
 
-export function Wordmark({ light = false, className = "", stacked = false }: { light?: boolean; className?: string; stacked?: boolean }) {
+/** `registered` adds the full registered name beneath. The header never shows it;
+ *  the footer carries it on every page, which is where RECO identification lives. */
+export function Wordmark({ light = false, className = "", stacked = false, registered = true }: { light?: boolean; className?: string; stacked?: boolean; registered?: boolean }) {
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       <div className="leading-none">
         <div className={`font-display font-medium tracking-[.085em] ${stacked ? "text-[21px]" : "text-[16.5px]"} ${light ? "text-paper" : "text-forest"}`}>
           DANMAR EMPIRE
         </div>
-        <div className={`meta mt-[6px] ${light ? "text-paper/85" : "text-mute"}`}>
-          Real Estate Corp., Brokerage
-        </div>
+        {registered && (
+          <div className={`meta mt-[6px] ${light ? "text-paper/85" : "text-mute"}`}>
+            Real Estate Corp., Brokerage
+          </div>
+        )}
       </div>
     </div>
   );
@@ -65,8 +69,9 @@ export function Nav({
         }`}
       >
         <div className="mx-auto flex max-w-[1560px] items-center gap-8 px-6 py-5 md:px-10">
-          <Link href="/" className="shrink-0 text-left">
-            <Wordmark light={light} />
+          <Link href="/" aria-label="Danmar Empire, home" className="flex shrink-0 items-center gap-3 text-left">
+            <Seal size={38} light={light} />
+            <Wordmark light={light} registered={false} />
           </Link>
 
           <nav className="ml-auto hidden items-center gap-7 xl:flex">
@@ -109,9 +114,12 @@ export function Nav({
       </header>
 
       {open && (
-        <div className="fixed inset-0 z-[60] bg-forest-deep text-paper animate-fadeIn">
+        <div className="fixed inset-0 z-[90] bg-forest-deep text-paper animate-fadeIn">
           <div className="flex items-center justify-between px-6 py-5 md:px-10">
-            <Wordmark light />
+            <div className="flex items-center gap-3">
+              <Seal size={38} light />
+              <Wordmark light registered={false} />
+            </div>
             <button onClick={() => setOpen(false)} aria-label="Close" className="text-paper">
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M1 1l20 20M21 1L1 21" stroke="currentColor" strokeWidth="1.2"/></svg>
             </button>

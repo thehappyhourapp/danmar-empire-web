@@ -1,0 +1,165 @@
+{
+  "source": "https://residences.loamhouse.com.au/",
+  "tokens": {
+    "spacing": {
+      "scale": [
+        8,
+        10,
+        14,
+        22,
+        26,
+        40,
+        63
+      ],
+      "base_unit": "none strict (mixed 2px steps)",
+      "chapter_height": "900px (one viewport)"
+    },
+    "typography": {
+      "families": [
+        "Cormorant Garamond",
+        "DM Sans"
+      ],
+      "scale": [
+        {
+          "role": "h1 display",
+          "size": "122.4px / 0.74",
+          "weight": "300",
+          "family": "Cormorant Garamond",
+          "tracking": "-0.045em"
+        },
+        {
+          "role": "h2 display",
+          "size": "100.8px / 0.85",
+          "weight": "400",
+          "family": "Cormorant Garamond",
+          "tracking": "-0.03em"
+        },
+        {
+          "role": "figure",
+          "size": "69.12px",
+          "weight": "300",
+          "family": "Cormorant Garamond"
+        },
+        {
+          "role": "second line",
+          "size": "same as headline",
+          "weight": "300 italic",
+          "family": "Cormorant Garamond",
+          "colour": "gold ~#C9A46A (screenshot estimate)"
+        },
+        {
+          "role": "lead",
+          "size": "18.72px",
+          "weight": "400",
+          "family": "DM Sans"
+        },
+        {
+          "role": "label caps",
+          "size": "10-11px",
+          "weight": "600",
+          "family": "DM Sans",
+          "tracking": "0.16em"
+        }
+      ]
+    },
+    "colors": [
+      {
+        "role": "cream ground / nav",
+        "value": "#F1EEE7"
+      },
+      {
+        "role": "ink chapters",
+        "value": "#1E211D"
+      },
+      {
+        "role": "map chapter",
+        "value": "#B9CDD0"
+      },
+      {
+        "role": "text on dark",
+        "value": "#FFFFFF at 0.5 / 0.6 / 0.72 / 0.9"
+      },
+      {
+        "role": "italic accent",
+        "value": "~#C9A46A (approx, from screenshot)"
+      }
+    ],
+    "radius": [
+      "999px (pill CTAs only)",
+      "0px elsewhere"
+    ],
+    "shadows": [
+      "none"
+    ],
+    "image_ratios": [
+      {
+        "usage": "full-bleed chapter",
+        "ratio": "2.17:1, 2.04:1, 1.78:1, 1.38:1 at 1440px"
+      }
+    ],
+    "grid": {
+      "max_width": "none (full-bleed)",
+      "columns": "3-col hero (671 / 400 / 80px), text inset 86px",
+      "gutter": "57.6px"
+    },
+    "motion": {
+      "blur_reveal": "filter blur(8-16px) to 0, power1.out, 1.6-4.5s",
+      "rise": "y / opacity, power3.out, 1.4-2.6s",
+      "stagger": "0.12-0.15s",
+      "chapters": "12 ScrollTriggers, one per 900px section, scrub 2.5",
+      "ui": "0.3-0.5s, cubic-bezier(0.65,0,0.35,1)",
+      "nav_hover": "blur(3px) over 0.35s",
+      "overlay": "scanlines at opacity 0.2",
+      "preloader": "yes (wordmark + percentage on #1E211D)",
+      "webgl": "no",
+      "reduced_motion_css": true,
+      "focus_visible": false,
+      "lcp": "532ms, H1 text (server-rendered)"
+    }
+  },
+  "taste": [
+    {
+      "name": "Focus arrives after position",
+      "trigger": "When revealing a headline or image as it enters the viewport",
+      "decision": "Chose to run the blur-to-sharp filter on a slower, gentler curve (power1.out, 1.6-4.5s) than the rise and fade (power3.out, 1.4-2.6s) over animating all properties on one tween",
+      "reason": "The element lands, then comes into focus, the way a camera racks focus after the frame settles; one combined tween reads as a fade",
+      "evidence": [
+        "filter tweens: blur(8-16px) to 0 on power1.out at 1.6, 2.2, 2.9, 3.05, 4.5s",
+        "paired y/opacity tweens on power3.out at 1.4-2.6s",
+        "stagger 0.12-0.15s"
+      ]
+    },
+    {
+      "name": "One chapter, one viewport",
+      "trigger": "When sequencing proposition, size, storage, finishes, precinct, place and contact",
+      "decision": "Chose ten equal 900px chapters, each with its own scrubbed ScrollTrigger, over sections sized to their content",
+      "reason": "Equal-length chapters give the scroll a metronome; the reader learns that one flick of the wheel equals one idea",
+      "evidence": [
+        "ScrollTrigger start/end pairs: 450-1350, 1350-2250, 2250-3150 ... 7650-8550",
+        "scrub 2.5 on every chapter",
+        "document height 9000px = 10 x 900"
+      ]
+    },
+    {
+      "name": "Temperature as the section break",
+      "trigger": "When separating chapters without rules or headers",
+      "decision": "Chose to change ground temperature (cream #F1EEE7 to ink #1E211D to map blue #B9CDD0 and back to cream) over dividers or repeated section titles",
+      "reason": "A shift from warm light to dark is felt before it is read, so the reader knows a new chapter has started without being told",
+      "evidence": [
+        "background sequence while scrolling: #F1EEE7 at 450px, #1E211D from 900px, #B9CDD0 at 6300px, #1E211D at 7200px, #F1EEE7 at 8100px",
+        "0 box-shadows on the page"
+      ]
+    },
+    {
+      "name": "No surfaces, only photographs and type",
+      "trigger": "When presenting specifications and amenities",
+      "decision": "Chose full-bleed imagery with type set directly on it, zero shadows and no cards, over boxed feature tiles",
+      "reason": "Cards would turn a residence into a product listing; type on the photograph keeps it a place",
+      "evidence": [
+        "shadows: none",
+        "radii: 999px pills only (8 uses)",
+        "images rendered at 1440px wide in every chapter"
+      ]
+    }
+  ]
+}

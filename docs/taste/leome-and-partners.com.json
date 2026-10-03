@@ -1,0 +1,164 @@
+{
+  "source": "https://leome-and-partners.com/",
+  "tokens": {
+    "spacing": {
+      "scale": [
+        8,
+        12,
+        16,
+        24,
+        28,
+        32,
+        48,
+        72,
+        112
+      ],
+      "base_unit": 8,
+      "section_padding": "112px",
+      "grid_gap": "48px row / 32px column"
+    },
+    "typography": {
+      "families": [
+        "Brockmann"
+      ],
+      "scale": [
+        {
+          "role": "h1",
+          "size": "88px / 1.05",
+          "weight": "500",
+          "family": "Brockmann",
+          "tracking": "-0.02em"
+        },
+        {
+          "role": "h2",
+          "size": "48-64px / 1.05",
+          "weight": "500",
+          "family": "Brockmann",
+          "tracking": "-0.02em"
+        },
+        {
+          "role": "h3 / row title",
+          "size": "32px / 1.15",
+          "weight": "500",
+          "family": "Brockmann",
+          "tracking": "-0.02em"
+        },
+        {
+          "role": "lead",
+          "size": "24-28px / 1.4",
+          "weight": "400",
+          "family": "Brockmann"
+        },
+        {
+          "role": "body",
+          "size": "16-19.2px / 1.5",
+          "weight": "400",
+          "family": "Brockmann"
+        },
+        {
+          "role": "meta",
+          "size": "12px",
+          "weight": "500",
+          "family": "Brockmann"
+        }
+      ]
+    },
+    "colors": [
+      {
+        "role": "page field",
+        "value": "#052824"
+      },
+      {
+        "role": "footer / deep field",
+        "value": "#021D1A"
+      },
+      {
+        "role": "text + accent",
+        "value": "#B1F9E1"
+      },
+      {
+        "role": "secondary text",
+        "value": "#FFFFFF"
+      },
+      {
+        "role": "rare block (about page only)",
+        "value": "#FF5D2B"
+      }
+    ],
+    "radius": [
+      "0px"
+    ],
+    "shadows": [
+      "none"
+    ],
+    "image_ratios": [
+      {
+        "usage": "team portrait",
+        "ratio": "~0.8:1 at 421px"
+      },
+      {
+        "usage": "full-bleed parallax",
+        "ratio": "1.33-1.41:1 at 1440px"
+      }
+    ],
+    "grid": {
+      "max_width": "1360px inside 40px margins",
+      "columns": 12,
+      "gutter": "32px (48px row gap)"
+    },
+    "motion": {
+      "line_reveal": "SplitText lines from translateY 39-67px, transform 0.6s cubic-bezier(0.625, 0.05, 0, 1)",
+      "stagger": "transition-delay 0.01s steps",
+      "menu": "clip-path 1s cubic-bezier(0.9, 0, 0.1, 1)",
+      "parallax": "scrub 1 on background images",
+      "scroll": "Lenis",
+      "preloader": "yes (landing)",
+      "lcp": "212ms, text",
+      "reduced_motion_css": false,
+      "focus_visible": false
+    }
+  },
+  "taste": [
+    {
+      "name": "Rows, not cards",
+      "trigger": "When listing practice areas and services on an inner page",
+      "decision": "Chose full-width rows separated by a 1px rule, title in the left half and description from column 7, over a grid of service cards",
+      "reason": "A legal client compares areas by reading down a list; cards break that into tiles to scan and make each area look like a product",
+      "evidence": [
+        "services page: 1px divider above each row at x=40 to 1400",
+        "12-col grid, 48px row gap / 32px column gap",
+        "radius 0, no shadows on all three pages"
+      ]
+    },
+    {
+      "name": "One field colour per page",
+      "trigger": "When separating sections on interior pages",
+      "decision": "Chose a single deep green #052824 field for the whole page, with hierarchy from mint #B1F9E1 vs white text, over alternating section backgrounds",
+      "reason": "Interior pages are for reading; holding one ground lets type do the work and keeps the eye on the content rather than on the transitions",
+      "evidence": [
+        "#052824 covers 66.8-71.2% of surface on every page",
+        "text: #B1F9E1 148-164 nodes, #FFF 10-27 nodes"
+      ]
+    },
+    {
+      "name": "One family, one heading weight",
+      "trigger": "When building heading hierarchy",
+      "decision": "Chose Brockmann at 500 for every heading with size and -0.02em tracking as the only variables, over weight contrast",
+      "reason": "Weight changes add noise; a steady weight reads as composed, which suits a firm selling judgement",
+      "evidence": [
+        "one family on all 3 pages (400-436 nodes)",
+        "h1 88px, h2 48-64px, h3 24-32px, all weight 500, all -0.02em"
+      ]
+    },
+    {
+      "name": "Short, front-loaded line rises",
+      "trigger": "When revealing paragraphs and headings on inner pages",
+      "decision": "Chose a 0.6s rise per split line on cubic-bezier(0.625, 0.05, 0, 1) over long fades or blur",
+      "reason": "Interior text has to be readable quickly; a short rise acknowledges arrival without making the reader wait",
+      "evidence": [
+        "gsap_split_line spans start at translateY 39.2px and 67.2px",
+        "transform 0.6s cubic-bezier(0.625,0.05,0,1) with 0.01s step delays"
+      ]
+    }
+  ]
+}

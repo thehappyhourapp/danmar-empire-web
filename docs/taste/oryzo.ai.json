@@ -1,0 +1,157 @@
+{
+  "source": "https://oryzo.ai/",
+  "tokens": {
+    "spacing": {
+      "scale": [
+        7.5,
+        14.4,
+        18,
+        22.5,
+        24,
+        30.6,
+        40.5,
+        48,
+        204
+      ],
+      "base_unit": 4.5,
+      "page_margin": "45px",
+      "gutter": "18px"
+    },
+    "typography": {
+      "families": [
+        "halyard-display-variable"
+      ],
+      "scale": [
+        {
+          "role": "wordmark",
+          "size": "409.5px",
+          "weight": "500",
+          "family": "halyard-display-variable"
+        },
+        {
+          "role": "h2",
+          "size": "51px / 0.9",
+          "weight": "500",
+          "family": "halyard-display-variable"
+        },
+        {
+          "role": "h3",
+          "size": "33.75px / 1",
+          "weight": "500",
+          "family": "halyard-display-variable"
+        },
+        {
+          "role": "lead",
+          "size": "18px",
+          "weight": "500",
+          "family": "halyard-display-variable"
+        },
+        {
+          "role": "body / nav",
+          "size": "13.5px and 12px",
+          "weight": "500 / 400",
+          "family": "halyard-display-variable"
+        }
+      ]
+    },
+    "colors": [
+      {
+        "role": "cream ground",
+        "value": "#F6E0C6"
+      },
+      {
+        "role": "olive mat",
+        "value": "#445231"
+      },
+      {
+        "role": "brown dark",
+        "value": "#382416"
+      },
+      {
+        "role": "text light",
+        "value": "#FFEDD7"
+      },
+      {
+        "role": "text dark",
+        "value": "#100904"
+      },
+      {
+        "role": "accent",
+        "value": "#DC5000"
+      }
+    ],
+    "radius": [
+      "0px",
+      "22.5px (pill buttons)",
+      "36px (one panel)"
+    ],
+    "shadows": [
+      "none"
+    ],
+    "image_ratios": [
+      {
+        "usage": "gallery",
+        "ratio": "0.77:1 at 195px, centre frame ~0.77:1 at 556px"
+      }
+    ],
+    "grid": {
+      "max_width": "1440px",
+      "columns": 16,
+      "gutter": "18px"
+    },
+    "motion": {
+      "reveal_curve": "exponentialOut: 1 - 2^(-10t)",
+      "follow": "frame-rate independent damping: lerp(a, b, 1 - exp(-dt * k))",
+      "text": "split per character, each resolving from blur and offset",
+      "ui": "0.18s, 0.2s, 0.25s, 0.3s",
+      "narrative": "1s",
+      "webgl": "yes, WebGL2 full-viewport canvas + Rive canvases",
+      "preloader": "yes (canvas)",
+      "lcp": "7,096ms at 1440 desktop",
+      "reduced_motion_css": false,
+      "focus_visible": false
+    }
+  },
+  "taste": [
+    {
+      "name": "Two clocks and nothing between",
+      "trigger": "When timing hover feedback against story-telling motion",
+      "decision": "Chose two separated duration bands, 0.18-0.3s for interface feedback and ~1s for narrative reveals, over a continuous spread of 0.4-0.8s values",
+      "reason": "Feedback that answers inside 300ms feels like the object responded; story motion that takes a second feels intended; the middle band feels like lag",
+      "evidence": [
+        "durations: 0.18s x5, 0.3s x5, 0.2s x4, 0.25s x2, 1s x4, almost no values between 0.5s and 1s"
+      ]
+    },
+    {
+      "name": "Exponential settle, frame-rate independent",
+      "trigger": "When an element follows scroll or pointer",
+      "decision": "Chose exponential easing (1 - 2^(-10t)) for reveals and time-based damping lerp(a, b, 1 - exp(-dt * k)) for follow motion over fixed per-frame lerp factors",
+      "reason": "Exponential out gets most of the way at once and then settles, so content is legible early; time-based damping moves at the same speed on a 60Hz phone and a 120Hz laptop",
+      "evidence": [
+        "bundle: Math.pow(2,-10*e) x4, exponentialOut(v_showRatio)",
+        "bundle: lerp(n,e,1-Math.exp(-t*i))"
+      ]
+    },
+    {
+      "name": "The construction lines are left in",
+      "trigger": "When framing a product as designed",
+      "decision": "Chose visible drafting marks (dashed 1px guides, ruler ticks, bezier handles on the wordmark) over hiding the grid",
+      "reason": "Showing the measurement makes the claim of care checkable; it reads as engineering, not decoration",
+      "evidence": [
+        "dashed 1px outline around gallery frame",
+        "16-column grid, 18px gutter, 45px margins",
+        "wordmark drawn with anchor points and handles"
+      ]
+    },
+    {
+      "name": "One family for every role",
+      "trigger": "When setting display, body, labels and buttons",
+      "decision": "Chose halyard-display-variable at weight 500 for 265 of 354 text nodes over a display/body pairing",
+      "reason": "With motion and 3D carrying the spectacle, a single family keeps the page from feeling assembled from parts",
+      "evidence": [
+        "families on page: halyard-display-variable 559 nodes, Arial 26 (form defaults)",
+        "weights: 500 x265, 400 x89"
+      ]
+    }
+  ]
+}
