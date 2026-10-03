@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+"use client";
+
+import { useEffect, useId, useRef, useState } from "react";
 
 /**
  * Photography carries this design. Where a photograph has not loaded yet (or the
@@ -20,7 +22,11 @@ export function ImageFrame({
   const a = dark ? `hsl(${h} ${sat + 16}% ${7 + lift * 0.5}%)`  : `hsl(${h} ${sat}% ${78 + lift * 0.3}%)`;
   const b = dark ? `hsl(${h} ${sat + 8}% ${17 + lift}%)`        : `hsl(${h} ${sat - 2}% ${66 + lift * 0.4}%)`;
   const c = dark ? `hsl(${h + 16} ${sat}% ${30 + lift}%)`       : `hsl(${h + 12} ${sat - 4}% ${87 + lift * 0.2}%)`;
-  const uid = useRef("g" + Math.random().toString(36).slice(2, 8)).current;
+  // useId, not Math.random: the id has to match between the server render and hydration
+  const uid = "g" + useId().replace(/[^a-zA-Z0-9]/g, "");
+  const img = useRef<HTMLImageElement>(null);
+  // a photograph that finished loading before hydration never fires onLoad
+  useEffect(() => { const el = img.current; if (el?.complete && el.naturalWidth) setOk(true); }, [src]);
 
   return (
     <div className={`relative overflow-hidden bg-forest-deep grain ${className}`} style={{ aspectRatio: ratio }}>
@@ -41,7 +47,7 @@ export function ImageFrame({
       </svg>
       {src && (
         <img
-          src={src} alt={alt} loading="lazy" decoding="async"
+          ref={img} src={src} alt={alt} loading="lazy" decoding="async"
           onLoad={() => setOk(true)} onError={() => setOk(false)}
           className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms]"
           style={{ opacity: ok ? 1 : 0 }}

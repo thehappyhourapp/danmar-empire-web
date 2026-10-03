@@ -2,14 +2,15 @@
 
 Website for Danmar Empire Real Estate Corp., Brokerage.
 
-React 18 + TypeScript + Vite + Tailwind. Deployed on Vercel.
+Next.js 15 (App Router) + TypeScript + Tailwind. Deployed on Vercel. See CLAUDE.md for brand and copy rules.
 
 ## Running it
 
 ```bash
 npm install
 npm run dev      # local dev server
-npm run build    # production build to dist/
+npm run build    # production build
+npm start        # serve the production build
 ```
 
 ## Notes

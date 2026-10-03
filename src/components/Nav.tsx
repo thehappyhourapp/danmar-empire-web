@@ -1,4 +1,8 @@
+"use client";
+
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { href } from "@/lib/routes";
 import { wreathCream, wreathForest } from "@/lib/marks";
 
 export const NAV = [
@@ -37,8 +41,8 @@ export function Wordmark({ light = false, className = "", stacked = false }: { l
 }
 
 export function Nav({
-  page, go, saved, onSaved, onEnquire, offset = 0,
-}: { page: string; go: (p: string) => void; saved: number; onSaved: () => void; onEnquire: () => void; offset?: number }) {
+  page, saved, onSaved, onEnquire, offset = 0,
+}: { page: string; saved: number; onSaved: () => void; onEnquire: () => void; offset?: number }) {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
   const overHero = page === "home" && !solid;
@@ -61,20 +65,20 @@ export function Nav({
         }`}
       >
         <div className="mx-auto flex max-w-[1560px] items-center gap-8 px-6 py-5 md:px-10">
-          <button onClick={() => go("home")} className="shrink-0 text-left">
+          <Link href="/" className="shrink-0 text-left">
             <Wordmark light={light} />
-          </button>
+          </Link>
 
           <nav className="ml-auto hidden items-center gap-7 xl:flex">
             {NAV.map((n) => (
-              <button
-                key={n.id} onClick={() => go(n.id)}
+              <Link
+                key={n.id} href={href(n.id)}
                 className={`link-u text-[13px] tracking-[.01em] transition-colors ${
                   light ? "text-paper/80 hover:text-paper" : page === n.id ? "text-forest" : "text-forest/60 hover:text-forest"
                 }`}
               >
                 {n.label}
-              </button>
+              </Link>
             ))}
           </nav>
 
@@ -114,10 +118,10 @@ export function Nav({
           </div>
           <nav className="mt-10 px-6 md:px-10">
             {NAV.map((n, i) => (
-              <button key={n.id} onClick={() => go(n.id)}
+              <Link key={n.id} href={href(n.id)} onClick={() => setOpen(false)}
                 className="block w-full border-b border-paper/12 py-6 text-left font-display text-[34px] leading-none text-paper/90 hover:text-paper">
                 <span className="meta mr-4 align-middle text-paper/60">0{i + 1}</span>{n.label}
-              </button>
+              </Link>
             ))}
             <button onClick={() => { setOpen(false); onEnquire(); }}
               className="mt-10 w-full border border-paper/35 py-4 meta text-paper">Enquire</button>

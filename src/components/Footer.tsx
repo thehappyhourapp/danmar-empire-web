@@ -1,8 +1,12 @@
+"use client";
+
+import Link from "next/link";
 import { OFFICES } from "@/lib/data";
+import { href } from "@/lib/routes";
 import { NAV, Wordmark } from "./Nav";
 import { sealCream } from "@/lib/marks";
 
-export function Footer({ go, onEnquire }: { go: (p: string) => void; onEnquire: () => void }) {
+export function Footer({ onEnquire }: { onEnquire: () => void }) {
   return (
     <footer className="bg-forest-deep text-paper">
       <div className="mx-auto max-w-[1560px] px-6 py-20 md:px-10 md:py-28">
@@ -25,12 +29,12 @@ export function Footer({ go, onEnquire }: { go: (p: string) => void; onEnquire: 
             <ul className="space-y-3">
               {NAV.map((n) => (
                 <li key={n.id}>
-                  <button onClick={() => go(n.id)} className="link-u text-[13px] text-paper/80 hover:text-paper">{n.label}</button>
+                  <Link href={href(n.id)} className="link-u text-[13px] text-paper/80 hover:text-paper">{n.label}</Link>
                 </li>
               ))}
-              {[["areas", "Areas"], ["journal", "Journal"], ["dataroom", "Sold Data"]].map(([id, label]) => (
+              {[["areas", "Areas"], ["journal", "Journal"]].map(([id, label]) => (
                 <li key={id}>
-                  <button onClick={() => go(id)} className="link-u text-[13px] text-paper/80 hover:text-paper">{label}</button>
+                  <Link href={href(id)} className="link-u text-[13px] text-paper/80 hover:text-paper">{label}</Link>
                 </li>
               ))}
             </ul>

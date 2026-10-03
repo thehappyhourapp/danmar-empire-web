@@ -1,14 +1,14 @@
 node_modules/
-dist/
-pdist/
-.parcel-cache/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
 .vercel/
 *.local
+.env*.local
 .DS_Store
 
-# Single-file prototype bundles and the throwaway screenshot scripts used
-# while reviewing the design. Vercel builds from source, not from these.
-bundle.html
+# Throwaway screenshot scripts used while reviewing the design.
 shot*.mjs
 dbg.mjs
 verify.mjs

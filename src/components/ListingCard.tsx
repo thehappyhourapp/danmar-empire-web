@@ -1,4 +1,10 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { Listing } from "@/lib/data";
+import { propertyHref } from "@/lib/routes";
+import { useSite } from "./SiteShell";
 import { money } from "@/lib/parse";
 import { ImageFrame } from "./ImageFrame";
 
@@ -37,15 +43,18 @@ export function SaveBtn({ on, toggle }: { on: boolean; toggle: () => void }) {
  * No bed/bath/car icon row — that row is the template tell.
  */
 export function ListingCard({
-  l, go, saved, toggle, ratio = "4/5", size = "md",
+  l, ratio = "4/5", size = "md",
 }: {
-  l: Listing; go: (id: string) => void; saved: boolean; toggle: () => void;
-  ratio?: string; size?: "md" | "lg";
+  l: Listing; ratio?: string; size?: "md" | "lg";
 }) {
+  const router = useRouter();
+  const site = useSite();
+  const saved = site.saved.has(l.id);
+  const toggle = () => site.toggleSave(l.id);
   const lease = l.intent === "lease";
   const dim = l.status === "Sold" || l.status === "Leased";
   return (
-    <article className="group cursor-pointer" onClick={() => go(l.id)}>
+    <article className="group cursor-pointer" onClick={() => router.push(propertyHref(l.id))}>
       <div className="relative">
         <ImageFrame src={l.photo} hue={l.hue} ratio={ratio} alt={l.name}
           className="transition-[filter,transform] duration-[900ms] group-hover:brightness-[1.06]" />
@@ -60,7 +69,9 @@ export function ListingCard({
 
       <div className="pt-4">
         <div className="flex items-baseline justify-between gap-4">
-          <h3 className={`font-display leading-tight ${size === "lg" ? "text-[26px] md:text-[30px]" : "text-[20px]"}`}>{l.name}</h3>
+          <h3 className={`font-display leading-tight ${size === "lg" ? "text-[26px] md:text-[30px]" : "text-[20px]"}`}>
+            <Link href={propertyHref(l.id)} onClick={(e) => e.stopPropagation()}>{l.name}</Link>
+          </h3>
           <span className={`shrink-0 fig ${size === "lg" ? "text-[15px]" : "text-[13px]"}`}>
             {money(l.price, lease)}
           </span>

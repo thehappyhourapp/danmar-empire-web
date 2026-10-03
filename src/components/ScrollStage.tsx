@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 
 /** Scroll progress 0→1 across the first viewport. rAF-throttled, and it

@@ -1,4 +1,7 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import type { Record_ } from "@/lib/data";
 import { money } from "@/lib/parse";
 import { ImageFrame } from "./ImageFrame";
@@ -7,7 +10,7 @@ import { ImageFrame } from "./ImageFrame";
  * Horizontal band inside a vertical page. Drag, wheel or arrow through it.
  * Used once, for the track record, where the point is volume of proof.
  */
-export function Marquee({ items, onOpen }: { items: Record_[]; onOpen: () => void }) {
+export function Marquee({ items, href }: { items: Record_[]; href: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [atEnd, setAtEnd] = useState(false);
 
@@ -26,7 +29,7 @@ export function Marquee({ items, onOpen }: { items: Record_[]; onOpen: () => voi
         className="thin flex snap-x snap-mandatory gap-6 overflow-x-auto pb-6"
         style={{ scrollbarWidth: "thin" }}>
         {items.map((t) => (
-          <button key={t.id} onClick={onOpen}
+          <Link key={t.id} href={href}
             className="group w-[300px] shrink-0 snap-start text-left md:w-[420px]">
             <ImageFrame src={t.photo} hue={t.hue} ratio="4/5" alt={t.place}
               className="transition-[filter] duration-700 group-hover:brightness-110">
@@ -41,13 +44,13 @@ export function Marquee({ items, onOpen }: { items: Record_[]; onOpen: () => voi
               </span>
             </div>
             <p className="meta mt-2.5 text-paper/60">{t.city}</p>
-          </button>
+          </Link>
         ))}
-        <button onClick={onOpen}
+        <Link href={href}
           className="flex w-[240px] shrink-0 snap-start flex-col items-start justify-center border border-paper/25 p-8 text-left transition-colors hover:border-paper/60">
           <span className="font-display text-[26px] leading-tight text-paper">The full record</span>
           <span className="meta mt-4 text-brass-light">View all →</span>
-        </button>
+        </Link>
       </div>
 
       <div className="mt-2 flex items-center gap-4">

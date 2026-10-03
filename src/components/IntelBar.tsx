@@ -1,7 +1,10 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import { LISTINGS } from "@/lib/data";
 import { apply, EXAMPLES, isEmpty, parse, readback, suggestions, money } from "@/lib/parse";
 import type { Query } from "@/lib/parse";
+import { useSite } from "./SiteShell";
 
 /**
  * "What are you looking for?" — a natural-language brief bar.
@@ -124,4 +127,10 @@ export function IntelBar({
       )}
     </div>
   );
+}
+
+/** The bar as it sits on the homepage: a brief sends you to the collection. */
+export function SiteIntelBar() {
+  const { search } = useSite();
+  return <IntelBar tone="light" onOpen={search} />;
 }

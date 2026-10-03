@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
 /** Prototype-only control. Lets Daniel see each display face on the real site
@@ -11,9 +13,20 @@ const FACES: { id: string; label: string; stack: string; note: string }[] = [
   { id: "cormorant", label: "Cormorant", stack: "'Cormorant Garamond', Georgia, serif", note: "Refined old-style" },
 ];
 
+/* Only the prototype-only alternates come from a CDN. Bodoni Moda and Libre Franklin,
+   the brand faces, are embedded in src/fonts.css and never loaded this way. */
+const ALTERNATES = "https://fonts.googleapis.com/css2?family=Gilda+Display&family=Cinzel:wght@400;500;600&family=Marcellus&family=Prata&family=Cormorant+Garamond:wght@400;500;600&display=swap";
+
 export function TypeSwitch() {
   const [open, setOpen] = useState(false);
   const [face, setFace] = useState("bodoni");
+
+  useEffect(() => {
+    if (document.querySelector(`link[href="${ALTERNATES}"]`)) return;
+    const l = document.createElement("link");
+    l.rel = "stylesheet"; l.href = ALTERNATES;
+    document.head.appendChild(l);
+  }, []);
 
   useEffect(() => {
     const f = FACES.find((x) => x.id === face)!;
