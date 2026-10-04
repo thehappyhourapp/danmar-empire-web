@@ -22,7 +22,7 @@ export function Track() {
         {/* ── head */}
         <div className="col-span-12 lg:col-span-8">
           <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em]">Every figure has an address.</h1>
-          <p className="mt-4 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass">The houses, and what they were asking.</p>
+          <p className="mt-4 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass">Sold and leased, one address at a time.</p>
         </div>
 
         {/* ── the number, never hidden, never counted up */}
