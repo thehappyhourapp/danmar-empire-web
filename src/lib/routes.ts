@@ -13,6 +13,15 @@ export const ROUTES: Record<string, string> = {
   areas: "/areas",
 };
 
+/** Which pages hold a forest ground for the whole page. The nav takes the ground of
+ *  the page it sits on, so there is never a cream band over a forest page. Home is
+ *  not listed: its nav sits transparent over the forest hero and turns cream once
+ *  the cream chapters begin. Everything else is cream. */
+export const GROUND: Record<string, "forest" | "cream"> = {
+  management: "forest",
+  investments: "forest",
+};
+
 export const href = (id: string) => ROUTES[id] ?? "/";
 export const propertyHref = (id: string) => `/collection/${id}`;
 export const personHref = (slug: string) => `/firm/${slug}`;

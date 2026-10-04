@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { href } from "@/lib/routes";
+import { GROUND, href } from "@/lib/routes";
 import { emblemCream, emblemForest } from "@/lib/marks";
 
 export const NAV = [
@@ -59,14 +59,16 @@ export function Nav({
   }, []);
   useEffect(() => setOpen(false), [page]);
 
-  const light = overHero;
+  // the nav takes the ground of the page it is on
+  const forest = GROUND[page] === "forest";
+  const light = overHero || forest;
 
   return (
     <>
       <header
         style={{ top: offset }}
-        className={`fixed inset-x-0 z-50 transition-all duration-500 ${
-          overHero ? "bg-transparent" : "bg-paper/94 backdrop-blur-md border-b border-forest/12"
+        className={`fixed inset-x-0 z-50 transition-colors duration-200 ${
+          overHero ? "bg-transparent" : forest ? "bg-forest" : "bg-paper"
         }`}
       >
         <div className="mx-auto flex max-w-[1560px] items-center gap-8 px-6 py-5 md:px-10">
@@ -80,7 +82,7 @@ export function Nav({
               <Link
                 key={n.id} href={href(n.id)}
                 className={`link-u text-[13px] tracking-[.01em] transition-colors ${
-                  light ? "text-paper/80 hover:text-paper" : page === n.id ? "text-forest" : "text-forest/60 hover:text-forest"
+                  light ? (page === n.id ? "text-paper" : "text-paper/75 hover:text-paper") : page === n.id ? "text-forest" : "text-forest/60 hover:text-forest"
                 }`}
               >
                 {n.label}

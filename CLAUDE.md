@@ -30,6 +30,7 @@ Next.js 15 App Router, TypeScript, Tailwind 3. Deployed on Vercel. `npm run buil
 - The site header shows the building emblem at 30px (the seal's building alone, without the ring lettering), beside the wordmark "DANMAR EMPIRE" only, set in Bodoni Moda.
 - Use `emblemForest` on cream and `emblemCream` on forest (over the homepage hero, and in the mobile menu). Both come from `src/lib/marks.ts`.
 - The full seal (`sealForest`, `sealCream`) appears only at 120px or larger: the Home hero corner and the footer. Below that its lettering cannot resolve.
+- The nav takes the ground of the page it is on: forest nav with cream type and the cream emblem on whole-page forest pages (`GROUND` in `src/lib/routes.ts`), cream nav with forest type on cream pages, and transparent over the Home hero. No hairline seam between the nav and the page; a cream band over a forest page reads as a temperature cut.
 - Never put the full registered name "Danmar Empire Real Estate Corp., Brokerage" in the header.
 - The full registered name stays in the footer on every page. That satisfies the RECO requirement to identify the brokerage by its registered name.
 - In code: `<Emblem size={30} light={...} />` plus `<Wordmark registered={false} />` in `src/components/Nav.tsx`. The footer uses `<Wordmark />` with the default `registered` set to true.
