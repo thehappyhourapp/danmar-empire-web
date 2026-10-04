@@ -355,7 +355,7 @@ export const OWNERSHIP = {
   eyebrow: "Why our advice is different",
   head: "We own what we advise on.",
   body: [
-    "Most brokers have never owned the kind of property they are showing you. They can tell you what it costs. They cannot tell you what it costs to run, what a conservation designation does to the buildable envelope, which builder's mechanical fails in year six, or which of two identical-looking lots is worth more in a decade.",
+    "We can tell you what a property costs to run, what a conservation designation does to the buildable envelope, which builder's mechanical fails in year six, and which of two identical-looking lots is worth more in a decade. That knowledge comes from ownership.",
     "The principals of this firm own residential and commercial property in the same markets we broker. We have carried the financing, argued the assessments, replaced the roofs and timed the exits, on our own account. That is where judgment comes from, and it is why our advice does not sound like a listing presentation.",
   ],
   pull: "An opinion is worth roughly what the person giving it has at risk.",

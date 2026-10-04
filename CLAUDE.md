@@ -36,6 +36,7 @@ Next.js 15 App Router, TypeScript, Tailwind 3. Deployed on Vercel. `npm run buil
 ## Copy rules
 
 - Canadian spelling (colour, neighbourhood, centre, licence as a noun). No em dashes.
+- Nothing negative about other brokers, firms or advisors, anywhere on the site, ever. Say what we know and do, never what others do not. RECO reads disparagement of other registrants badly.
 - RECO: no unsubstantiated superlatives ("best", "top", "#1", "leading") and no sold prices without written consent. The track record shows list prices only.
 - "UHNW" / "ultra-high-net-worth" goes only in metadata (titles, descriptions) and the few sub-headings where it is literally true. Never use it in brand voice.
 - Own listings only. The firm signs the TRREB DLA, deliberately not IDX or VOW. No MLS search and no map, by design.

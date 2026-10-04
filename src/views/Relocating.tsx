@@ -29,8 +29,8 @@ export function Relocating() {
           <p className="mt-9 max-w-[60ch] text-[16px] leading-[1.9] text-paper/82">
             We advise high-net-worth and ultra-high-net-worth families relocating to the Greater Toronto Area
             from abroad: Oakville, King City, central Toronto and the surrounding high-end markets.
-            Most of them arrive with the same five questions, and almost nobody answers them honestly,
-            because the honest answer is often <span className="italic">lease first</span>.
+            Most of them arrive with the same five questions, and the honest answer to several of them
+            is <span className="italic">lease first</span>.
           </p>
           <div className="mt-12 flex flex-wrap gap-5">
             <EnquireButton className="meta border border-paper/35 px-8 py-4 transition-colors hover:bg-paper hover:text-forest">
@@ -127,7 +127,7 @@ export function Relocating() {
             <div className="space-y-7 lg:pt-3">
               <p className="max-w-[54ch] text-[15.5px] leading-[1.92] text-ink/80">
                 A relocating buyer is the most exposed client in this market. You cannot yet tell a good street
-                from a street that photographs well, and everyone you meet is paid on the transaction.
+                from a street that photographs well, which is when advice from someone with something at risk matters most.
               </p>
               <p className="max-w-[54ch] text-[15.5px] leading-[1.92] text-ink/80">{OWNERSHIP.body[1]}</p>
             </div>

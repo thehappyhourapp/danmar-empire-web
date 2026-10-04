@@ -118,7 +118,7 @@ export function Home() {
       <Chapter tone="cream" wipeFrom="forest" className="lg:min-h-[100svh]">
         <div className="col-span-12 lg:sticky lg:top-32 lg:col-span-5 lg:self-start">
           <Lines lines={["We own what", "we advise on."]} className={HEAD} />
-          <Lines as="p" lines={["On our own account."]} className="mt-3 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass" />
+          <Lines as="p" lines={["Financed, held and sold."]} className="mt-3 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass" />
           <blockquote data-reveal className={`${s.reveal} mt-12 max-w-[26ch] border-t border-forest/14 pt-6 font-display text-[clamp(1.2rem,1.8vw,1.5rem)] font-medium leading-[1.3] text-forest`}>
             {OWNERSHIP.pull}
           </blockquote>
@@ -141,7 +141,7 @@ export function Home() {
       {/* ───────── 3. The Collection: cream continues. Own listings as rows. */}
       <Chapter tone="cream" className="lg:min-h-[100svh]">
         <div className="col-span-12 lg:col-span-7">
-          <Lines lines={["Our own listings,", "and nothing else."]} className={HEAD} />
+          <Lines lines={["From the Collection."]} className={HEAD} />
         </div>
         <div className="col-span-12 mt-6 lg:col-span-4 lg:col-start-9 lg:mt-0 lg:self-end">
           <p data-reveal className={`${s.reveal} max-w-[40ch] text-[15px] leading-[1.8] text-ink/75`}>
@@ -193,7 +193,7 @@ export function Home() {
         <div className="col-span-12 mt-12 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:self-end">
           <Lines lines={["The number, and", "the properties behind it."]} className={HEAD} />
           <p data-reveal className={`${s.reveal} mt-6 max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/80`}>
-            Most firms publish a total. These are some of the properties, with what they were asking,
+            A total is easy to publish. These are some of the properties behind ours, with what they were asking,
             published only with the parties' written consent.
           </p>
         </div>
