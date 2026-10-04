@@ -1,149 +1,90 @@
-"use client";
-
-import { useMemo, useState } from "react";
+import Link from "next/link";
 import { TRACK } from "@/lib/data";
 import { money } from "@/lib/parse";
+import { href } from "@/lib/routes";
+import { Chapter, GRID, HEAD, Lines } from "@/components/Chapter";
 import { ImageFrame } from "@/components/ImageFrame";
-import { Reveal } from "@/components/Reveal";
-import { useSite } from "@/components/SiteShell";
+import { MotionController } from "@/components/MotionController";
+import { EnquireButton } from "@/components/SiteShell";
+import s from "@/components/motion.module.css";
 
+/* The proof page: the properties behind the number. Whole-page cream, line rise
+   on the headings only. Nothing that carries a figure is ever hidden by a reveal,
+   and nothing counts up. Figures come from TRACK and nowhere else. */
 
-type Filter = "all" | "Sold" | "Leased";
+const figure = (list: number, kind: "Sold" | "Leased") => (kind === "Leased" ? `$${list.toLocaleString("en-CA")}/mo` : money(list));
 
-/**
- * The proof page. Competitors publish a dollar total; this publishes the houses.
- * Every entry requires written consent from the parties before it goes live —
- * see the note at the foot of the page.
- */
 export function Track() {
-  const { enquire: onEnquire } = useSite();
-  const [f, setF] = useState<Filter>("all");
-  const rows = useMemo(() => (f === "all" ? TRACK : TRACK.filter((t) => t.kind === f)), [f]);
-  const sold = TRACK.filter((t) => t.kind === "Sold");
-  const leased = TRACK.filter((t) => t.kind === "Leased");
-
   return (
-    <div className="pt-[88px]">
-      <section className="mx-auto max-w-[1520px] px-6 pb-12 pt-12 md:px-12 md:pt-16">
-        <div className="meta mb-7 text-brass">Track Record</div>
-        <div className="flex flex-wrap items-end justify-between gap-10">
-          <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] leading-[1.04] tracking-[-.005em]">
-            Anyone can print a number. These are the houses.
-          </h1>
-          <p className="max-w-[42ch] text-[14.5px] font-normal leading-[1.9] text-mute">
-            Selected sale and lease transactions in which the firm acted for a party. Figures shown are list
-            prices at the time of the transaction, published with the written consent of the parties involved.
+    <div id="track">
+      <MotionController rootId="track" />
+      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-32">
+        {/* ── head */}
+        <div className="col-span-12 lg:col-span-8">
+          <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em]">Every figure has an address.</h1>
+          <p className="mt-4 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass">The houses, and what they were asking.</p>
+        </div>
+
+        {/* ── the number, never hidden, never counted up */}
+        <div className="col-span-12 mt-16 lg:col-span-5 lg:mt-24">
+          <p className="fig text-[clamp(3.25rem,7.5vw,6.5rem)] leading-[0.9] tracking-[-.02em] text-brass">$1B+</p>
+          <p className="meta mt-5 max-w-[60ch] leading-[1.9] text-ink/70">
+            Aggregate list value of transactions the firm acted in, sale and lease, 2016 to date. Methodology on request.
           </p>
         </div>
-      </section>
+        <p className="col-span-12 mt-8 max-w-[52ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-24 lg:self-end">
+          Selected sale and lease transactions in which the firm acted for a party. Figures shown are list
+          prices at the time of the transaction, published with the written consent of the parties involved.
+        </p>
 
-      <div className="sticky top-[var(--stick)] z-30 border-y border-forest/14 bg-paper/95 backdrop-blur-md">
-        <div className="mx-auto flex max-w-[1520px] flex-wrap items-center gap-x-8 gap-y-3 px-6 py-4 md:px-12">
-          {([["all", "Everything"], ["Sold", `Sold · ${sold.length}`], ["Leased", `Leased · ${leased.length}`]] as [Filter, string][]).map(([id, label]) => (
-            <button key={id} onClick={() => setF(id)}
-              className={`meta transition-colors ${f === id ? "text-forest" : "text-mute hover:text-forest"}`}>
-              {label}{f === id && <span className="mt-1 block h-px w-full bg-brass" />}
-            </button>
-          ))}
-          <span className="meta ml-auto text-mute">{rows.length} shown</span>
-        </div>
-      </div>
-
-      {/* the visual wall */}
-      <section className="mx-auto max-w-[1520px] px-6 py-16 md:px-12 md:py-24">
-        <div className="grid gap-x-8 gap-y-16 md:grid-cols-12">
-          {rows.map((t, i) => {
-            const pat = [
-              ["md:col-span-8", "16/9"], ["md:col-span-4 md:pt-24", "3/4"],
-              ["md:col-span-4", "3/4"], ["md:col-span-8 md:pt-16", "16/9"],
-              ["md:col-span-6", "5/4"], ["md:col-span-6 md:pt-14", "5/4"],
-            ][i % 6];
-            const lease = t.kind === "Leased";
+        {/* ── the gallery, as rows */}
+        <div className="col-span-12 mt-16 lg:mt-24">
+          {TRACK.map((t, i) => {
+            const odd = i % 2 === 1;
             return (
-              <Reveal key={t.id} className={pat[0]} delay={(i % 2) * 100}>
-                <article className="group">
-                  <ImageFrame src={t.photo} hue={t.hue} ratio={pat[1]} alt={t.place}
-                    className="transition-[filter] [transition-duration:900ms] group-hover:brightness-110">
-                    <span className="meta absolute left-5 top-5 border border-paper/50 bg-forest-deep/45 px-2.5 py-1 text-paper backdrop-blur-sm">
-                      {t.kind} {t.year}
-                    </span>
-                  </ImageFrame>
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 pt-6">
-                    <h2 className="font-display text-[clamp(1.35rem,2.4vw,1.95rem)] leading-tight">{t.place}</h2>
-                    <span className="shrink-0 fig text-[14px] tabular-nums text-forest">
-                      {lease ? `$${t.list.toLocaleString("en-CA")}/mo` : money(t.list)}
-                    </span>
-                  </div>
-                  <p className="meta mt-3 text-mute">
-                    {t.city} <span className="mx-1.5 opacity-40">/</span> {t.type}
-                    <span className="mx-1.5 opacity-40">/</span> List price
+              <div key={t.id} className={`${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`}>
+                <div aria-hidden className={`col-span-5 self-center md:col-span-3 md:row-span-2 ${odd ? "md:col-start-2" : ""}`}>
+                  <ImageFrame src={`/photos/track/${t.id}.jpg`} hue={t.hue} ratio={odd ? "3/4" : "4/5"} alt="" fallback="flat" />
+                </div>
+                <div className="col-span-7 self-center md:col-span-6 md:col-start-5 md:self-end md:pb-2">
+                  <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">{t.place}</h3>
+                  <p className="meta mt-3 text-ink/70">
+                    <span className="block md:inline">{t.city}</span>
+                    <span className="mx-1.5 hidden opacity-40 md:inline">/</span>
+                    <span className="block md:inline">{t.type}</span>
                   </p>
-                  <p className="mt-4 max-w-[44ch] text-[14px] font-normal leading-[1.9] text-mute">{t.note}</p>
-                </article>
-              </Reveal>
+                </div>
+                <p className="col-span-12 mt-4 max-w-[52ch] text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-5 md:mt-0 md:self-start md:pt-2">{t.note}</p>
+                <div className="col-span-12 mt-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 md:col-span-2 md:col-start-11 md:row-span-2 md:row-start-1 md:mt-0 md:block md:self-center md:text-right">
+                  <span className="fig block text-[clamp(1.5rem,1.8vw,1.7rem)] text-brass">{figure(t.list, t.kind)}</span>
+                  <span className="meta mt-2 block text-ink/70">{t.kind} {t.year}</span>
+                </div>
+              </div>
             );
           })}
+          <p className="meta mt-6 max-w-[104ch] leading-[2] text-ink/70">
+            Transactions are published with the written consent of the relevant party. Figures shown are list prices
+            at the time of the transaction and are not sale prices. Danmar Empire Real Estate Corp., Brokerage acted
+            for one or more parties in each transaction shown; acting for a party does not imply the firm acted for
+            all parties. Not intended to solicit properties currently under contract.
+          </p>
         </div>
-      </section>
 
-      {/* the table, for the reader who wants it dense */}
-      <section className="border-t border-forest/14 bg-paper-deep py-20 md:py-24">
-        <div className="mx-auto max-w-[1520px] px-6 md:px-12">
-          <div className="meta mb-8 text-brass">The same record, as a table</div>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[720px] border-collapse">
-              <thead>
-                <tr className="border-b border-forest/20">
-                  {["Property", "Market", "Type", "Transaction", "Year", "List price"].map((h) => (
-                    <th key={h} className="meta px-4 py-4 text-left text-mute first:pl-0">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((t) => (
-                  <tr key={t.id} className="border-b border-forest/12">
-                    <td className="px-4 py-4 font-display text-[17px] first:pl-0">{t.place}</td>
-                    <td className="meta px-4 py-4 text-mute">{t.city}</td>
-                    <td className="meta px-4 py-4 text-mute">{t.type}</td>
-                    <td className="meta px-4 py-4 text-forest">{t.kind}</td>
-                    <td className="meta px-4 py-4 text-mute">{t.year}</td>
-                    <td className="px-4 py-4 fig text-[12.5px] tabular-nums">
-                      {t.kind === "Leased" ? `$${t.list.toLocaleString("en-CA")}/mo` : money(t.list)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* ── close */}
+        <div className={`col-span-12 mt-20 ${GRID} border-t border-forest/14 pt-12 lg:mt-28 lg:pt-16`}>
+          <div className="col-span-12 lg:col-span-6">
+            <Lines lines={["Most of what we transact", "is never published at all."]} className={`${HEAD} max-w-[18ch]`} />
           </div>
-        </div>
-      </section>
-
-      <section className="bg-forest py-20 text-paper md:py-28">
-        <div className="mx-auto flex max-w-[1520px] flex-wrap items-end justify-between gap-10 px-6 md:px-12">
-          <div>
-            <h2 className="max-w-[24ch] font-display text-[clamp(1.7rem,3.4vw,2.7rem)] leading-[1.12]">
-              Most of what we transact is never published at all.
-            </h2>
-            <p className="mt-6 max-w-[54ch] text-[15px] font-normal leading-[1.9] text-paper/80">
-              Roughly one file in four is off-market, and those are not shown here at any price. If you are
-              buying or selling at this level and discretion matters more than exposure, that is the conversation
-              to have.
+          <div className="col-span-12 mt-8 flex flex-col items-start gap-5 lg:col-span-5 lg:col-start-7 lg:mt-2">
+            <p className="max-w-[46ch] text-[15px] leading-[1.8] text-ink/80">
+              Roughly one file in four is off-market, and those are not shown here at any price. If discretion
+              matters more than exposure, that is the conversation to have.
             </p>
+            <EnquireButton className={`${s.tlink} font-display text-[1.35rem] font-medium leading-tight text-forest`}>Speak privately</EnquireButton>
+            <Link href={href("collection")} className={`${s.tlink} meta text-ink/70`}>The Collection</Link>
           </div>
-          <button onClick={() => onEnquire()} className="meta border border-paper/35 px-8 py-4 transition-colors hover:bg-paper hover:text-forest">
-            Speak privately
-          </button>
         </div>
-      </section>
-
-      <section className="mx-auto max-w-[1520px] px-6 py-14 md:px-12">
-        <p className="meta max-w-[104ch] leading-[2] text-mute">
-          Transactions are published with the written consent of the relevant party. Figures shown are list prices
-          at the time of the transaction and are not sale prices. Danmar Empire Real Estate Corp., Brokerage acted
-          for one or more parties in each transaction shown; acting for a party does not imply the firm acted for
-          all parties. Not intended to solicit properties currently under contract.
-        </p>
-      </section>
+      </Chapter>
     </div>
   );
 }

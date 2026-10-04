@@ -1,154 +1,126 @@
-import Link from "next/link";
-import { href } from "@/lib/routes";
-import { Reveal } from "@/components/Reveal";
-import { EnquireButton } from "@/components/SiteShell";
 import { OWNERSHIP, RELOCATION } from "@/lib/data";
-import { ImageFrame } from "@/components/ImageFrame";
+import { href } from "@/lib/routes";
+import { SITE } from "@/lib/metadata";
+import { Chapter, GRID, HEAD, Lines, delay } from "@/components/Chapter";
+import { MotionController } from "@/components/MotionController";
+import { EnquireButton } from "@/components/SiteShell";
+import s from "@/components/motion.module.css";
+
+/* Relocating: whole-page cream, line rise only, no cuts. The five questions and
+   the arrival sequence as numbered rows; the ownership argument restated in the
+   Home chapter 2 pattern with OWNERSHIP's copy unchanged. */
+
+const BROKERAGE = "Danmar Empire Real Estate Corp., Brokerage";
 
 /* The arrival sequence. Relocating principals do not want a list of services,
    they want to know what happens first, second and third. */
-const SEQUENCE: [string, string, string][] = [
-  ["01", "Orientation, before you commit", "A half day on the ground, or an hour on a call if you are still abroad. We drive the three or four areas that plausibly fit, and we tell you which ones to stop considering. No property is shown. Nothing is signed."],
-  ["02", "A lease, usually", "Twelve to twenty-four months in the area you think you want, at a rent that buys you the right to be wrong. Executive tenancies from $10,000 per month, furnished where the family is arriving ahead of the container."],
-  ["03", "Banking, credit and counsel", "Introductions to a lender who writes against foreign income, an accountant who has filed a first Canadian return before, and, where the file needs it, counsel. Arranged before you are under contract."],
-  ["04", "The purchase", "By the time you buy you have lived a winter here, driven the commute, and seen the street in February. That is when a $3M to $15M decision should be made, and that is when our opinion is worth something."],
+const SEQUENCE: [string, string][] = [
+  ["Orientation, before you commit", "A half day on the ground, or an hour on a call if you are still abroad. We drive the three or four areas that plausibly fit, and we tell you which ones to stop considering. No property is shown. Nothing is signed."],
+  ["A lease, usually", "Twelve to twenty-four months in the area you think you want, at a rent that buys you the right to be wrong. Executive tenancies from $10,000 per month, furnished where the family is arriving ahead of the container."],
+  ["Banking, credit and counsel", "Introductions to a lender who writes against foreign income, an accountant who has filed a first Canadian return before, and, where the file needs it, counsel. Arranged before you are under contract."],
+  ["The purchase", "By the time you buy you have lived a winter here, driven the commute, and seen the street in February. That is when a $3M to $15M decision should be made, and that is when our opinion is worth something."],
 ];
 
-export function Relocating() {
+function Rows({ items, number }: { items: [string, string][]; number: boolean }) {
   return (
-    <div className="pt-[88px]">
-      {/* ───────── Hero */}
-      <section className="relative bg-forest-deep text-paper">
-        <ImageFrame hue={158} ratio="auto" className="!absolute inset-0 h-full w-full" alt="" />
-        <div className="absolute inset-0 bg-gradient-to-b from-forest-deep/95 via-forest-deep/80 to-forest-deep" />
-        <div className="relative mx-auto max-w-[1520px] px-6 py-24 md:px-12 md:py-36">
-          <div className="meta mb-7 text-brass-light">Relocation &amp; private client</div>
-          <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] leading-[1.04] tracking-[-.005em]">
-            You are moving a family, not buying a house.
-          </h1>
-          <p className="mt-9 max-w-[60ch] text-[16px] leading-[1.9] text-paper/82">
-            We advise high-net-worth and ultra-high-net-worth families relocating to the Greater Toronto Area
-            from abroad: Oakville, King City, central Toronto and the surrounding high-end markets.
-            Most of them arrive with the same five questions, and the honest answer to several of them
-            is <span className="italic">lease first</span>.
-          </p>
-          <div className="mt-12 flex flex-wrap gap-5">
-            <EnquireButton className="meta border border-paper/35 px-8 py-4 transition-colors hover:bg-paper hover:text-forest">
-              Arrange an orientation
-            </EnquireButton>
-            <Link href={href("areas")} className="meta border border-paper/20 px-8 py-4 text-paper/80 transition-colors hover:border-paper/50 hover:text-paper">
-              The areas
-            </Link>
-          </div>
+    <div>
+      {items.map(([title, text], i) => (
+        <div key={title} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`} style={delay(i)}>
+          {number && <span className="fig col-span-2 text-[13px] text-brass md:col-span-1">{String(i + 1).padStart(2, "0")}</span>}
+          <h3 className={`${number ? "col-span-10 md:col-span-4" : "col-span-12 md:col-span-5"} font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.15]`}>{title}</h3>
+          <p className="col-span-12 mt-4 max-w-[56ch] text-[15px] leading-[1.85] text-ink/80 md:col-span-6 md:col-start-7 md:mt-0">{text}</p>
         </div>
-      </section>
+      ))}
+    </div>
+  );
+}
 
-      {/* ───────── Where clients arrive from */}
-      <section className="border-b border-forest/14 bg-paper-deep">
-        <div className="mx-auto max-w-[1520px] px-6 py-16 md:px-12 md:py-20">
-          <div className="grid gap-10 lg:grid-cols-[22rem_1fr] lg:gap-20">
-            <Reveal>
-              <div className="meta text-brass">Arriving from</div>
-              <p className="mt-5 max-w-[30ch] text-[14.5px] leading-[1.85] text-mute">
-                The firm has acted for principals landing from each of these markets.
-                Different tax positions, different credit files, different expectations of what a house should be.
-              </p>
-            </Reveal>
-            <Reveal delay={80}>
-              <ul className="grid grid-cols-2 gap-px bg-forest/12 sm:grid-cols-3">
-                {RELOCATION.origins.map((o) => (
-                  <li key={o} className="bg-paper-deep px-5 py-7">
-                    <span className="font-display text-[clamp(1.05rem,1.7vw,1.35rem)] leading-tight text-forest">{o}</span>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          </div>
+export function Relocating() {
+  const service = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Private client relocation to Toronto and the GTA",
+    serviceType: "Relocation advisory",
+    description: "Advice for families relocating to Oakville, King City and Toronto from abroad: areas, leasing, lenders, schools and carrying costs, answered before you commit.",
+    url: `${SITE}${href("relocating")}`,
+    areaServed: { "@type": "AdministrativeArea", name: "Ontario" },
+    provider: { "@type": "RealEstateAgent", name: BROKERAGE, url: SITE },
+  };
+  const faq = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: RELOCATION.questions.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+  };
+  const ld = (o: unknown) => JSON.stringify(o).replace(/</g, "\\u003c");
+
+  return (
+    <div id="relocating">
+      <MotionController rootId="relocating" />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld(service) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld(faq) }} />
+
+      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-32">
+        {/* ── head */}
+        <div className="col-span-12 lg:col-span-8">
+          <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em]">You are moving a family, not buying a house.</h1>
+          <p className="mt-4 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass">Usually, that means a lease first.</p>
         </div>
-      </section>
+        <p data-reveal className={`${s.rise} col-span-12 mt-10 max-w-[58ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-16`}>
+          We advise high-net-worth and ultra-high-net-worth families relocating to the Greater Toronto Area
+          from abroad: Oakville, King City, central Toronto and the surrounding high-end markets.
+          Most of them arrive with the same five questions, and the honest answer to several of them
+          is lease first.
+        </p>
 
-      {/* ───────── The five questions */}
-      <section className="mx-auto max-w-[1520px] px-6 py-24 md:px-12 md:py-32">
-        <Reveal className="mb-14">
-          <div className="meta mb-6 text-brass">What everyone asks</div>
-          <h2 className="max-w-[22ch] font-display text-[clamp(2.1rem,4.8vw,3.6rem)] leading-[1.06]">
-            Five questions, answered the way we would answer them to a friend.
-          </h2>
-        </Reveal>
-        <div className="divide-y divide-forest/14 border-y border-forest/14">
-          {RELOCATION.questions.map(([q, a], i) => (
-            <Reveal key={q} delay={i * 60}>
-              <div className="grid gap-6 py-11 md:grid-cols-[auto_1fr_1.2fr] md:gap-14">
-                <div className="fig pt-2 text-[13px] text-brass">{String(i + 1).padStart(2, "0")}</div>
-                <h3 className="max-w-[20ch] font-display text-[clamp(1.4rem,2.6vw,2rem)] leading-[1.15]">{q}</h3>
-                <p className="max-w-[56ch] text-[15px] leading-[1.9] text-ink/78">{a}</p>
-              </div>
-            </Reveal>
+        {/* ── origins, one row */}
+        <p className="meta col-span-12 mt-14 border-y border-forest/14 py-5 leading-[2] text-ink/70 lg:mt-20">
+          <span className="text-brass">Arriving from</span>
+          {RELOCATION.origins.map((o) => (
+            <span key={o}><span className="mx-3 opacity-40">·</span>{o}</span>
           ))}
-        </div>
-      </section>
+        </p>
 
-      {/* ───────── The sequence */}
-      <section className="bg-forest py-24 text-paper md:py-32">
-        <div className="mx-auto max-w-[1520px] px-6 md:px-12">
-          <Reveal className="mb-14">
-            <div className="meta mb-6 text-brass-light">How it runs</div>
-            <h2 className="max-w-[20ch] font-display text-[clamp(2.1rem,4.8vw,3.6rem)] leading-[1.06]">
-              The order matters more than the effort.
-            </h2>
-          </Reveal>
-          <div className="grid gap-px bg-paper/14 md:grid-cols-2 xl:grid-cols-4">
-            {SEQUENCE.map(([n, t, d], i) => (
-              <Reveal key={n} delay={i * 70} className="bg-forest p-9 md:p-10">
-                <div className="fig text-[13px] text-brass-light">{n}</div>
-                <h3 className="mt-6 max-w-[16ch] font-display text-[clamp(1.25rem,2vw,1.6rem)] leading-[1.15]">{t}</h3>
-                <p className="mt-5 text-[14px] leading-[1.9] text-paper/72">{d}</p>
-              </Reveal>
+        {/* ── the five questions */}
+        <div className="col-span-12 mt-20 lg:mt-28">
+          <Lines lines={["Five questions, answered the way", "we would answer them to a friend."]} className={`${HEAD} mb-10 lg:mb-14`} />
+          <Rows items={RELOCATION.questions} number />
+        </div>
+
+        {/* ── the sequence */}
+        <div className="col-span-12 mt-20 lg:mt-28">
+          <Lines lines={["The order matters", "more than the effort."]} className={`${HEAD} mb-10 lg:mb-14`} />
+          <Rows items={SEQUENCE} number />
+        </div>
+
+        {/* ── ownership, the Home chapter 2 pattern */}
+        <div className={`col-span-12 mt-24 ${GRID} border-t border-forest/14 pt-16 lg:mt-32 lg:pt-20`}>
+          <div className="col-span-12 lg:sticky lg:top-32 lg:col-span-5 lg:self-start">
+            <Lines lines={["We own what", "we advise on."]} className={HEAD} />
+            <blockquote data-reveal className={`${s.rise} mt-12 max-w-[26ch] border-t border-forest/14 pt-6 font-display text-[clamp(1.2rem,1.8vw,1.5rem)] font-medium leading-[1.3] text-forest`}>
+              {OWNERSHIP.pull}
+            </blockquote>
+          </div>
+          <div className="col-span-12 mt-12 space-y-7 lg:col-span-6 lg:col-start-7 lg:mt-0">
+            {OWNERSHIP.body.map((para, i) => (
+              <p key={i} data-reveal className={`${s.rise} max-w-[60ch] text-[16px] leading-[1.85] text-ink/80`} style={delay(i)}>{para}</p>
             ))}
           </div>
+          <div className="col-span-12 mt-16 lg:mt-24">
+            <Rows items={OWNERSHIP.proof} number={false} />
+          </div>
         </div>
-      </section>
 
-      {/* ───────── Ownership, restated for the arriving principal */}
-      <section className="mx-auto max-w-[1520px] px-6 py-24 md:px-12 md:py-32">
-        <div className="grid items-start gap-14 lg:grid-cols-[1fr_1fr] lg:gap-24">
-          <Reveal className="lg:sticky lg:top-32 lg:self-start">
-            <div className="meta mb-6 text-brass">{OWNERSHIP.eyebrow}</div>
-            <h2 className="max-w-[16ch] font-display text-[clamp(2rem,4.4vw,3.2rem)] leading-[1.05]">
-              The person advising you should live in the market they are selling.
-            </h2>
-            <figure className="mt-11 border-l border-brass/50 pl-7">
-              <blockquote className="max-w-[26ch] font-display text-[clamp(1.2rem,2vw,1.6rem)] italic leading-[1.35] text-forest">
-                {OWNERSHIP.pull}
-              </blockquote>
-            </figure>
-          </Reveal>
-          <Reveal delay={80}>
-            <div className="space-y-7 lg:pt-3">
-              <p className="max-w-[54ch] text-[15.5px] leading-[1.92] text-ink/80">
-                A relocating buyer is the most exposed client in this market. You cannot yet tell a good street
-                from a street that photographs well, which is when advice from someone with something at risk matters most.
-              </p>
-              <p className="max-w-[54ch] text-[15.5px] leading-[1.92] text-ink/80">{OWNERSHIP.body[1]}</p>
-            </div>
-            <dl className="mt-12 border-t border-forest/14">
-              {OWNERSHIP.proof.map(([k, v]) => (
-                <div key={k} className="grid gap-2 border-b border-forest/14 py-5 sm:grid-cols-[13rem_1fr] sm:gap-8">
-                  <dt className="meta pt-[3px] text-forest">{k}</dt>
-                  <dd className="text-[14.5px] leading-[1.75] text-mute">{v}</dd>
-                </div>
-              ))}
-            </dl>
-            <EnquireButton
-              className="meta mt-10 inline-flex items-center gap-3 border-b border-forest/30 pb-2 text-forest transition-colors hover:border-brass hover:text-brass">
-              Start a conversation
-              <svg width="22" height="8" viewBox="0 0 22 8" fill="none" aria-hidden>
-                <path d="M0 4h20M17 1l3.4 3-3.4 3" stroke="currentColor" strokeWidth="1" />
-              </svg>
-            </EnquireButton>
-          </Reveal>
+        {/* ── close */}
+        <div className={`col-span-12 mt-20 ${GRID} border-t border-forest/14 pt-12 lg:mt-28 lg:pt-16`}>
+          <div className="col-span-12 lg:col-span-6">
+            <Lines lines={["Arrange an orientation."]} className={`${HEAD} max-w-[18ch]`} />
+          </div>
+          <div className="col-span-12 mt-8 flex flex-col items-start gap-5 lg:col-span-5 lg:col-start-7 lg:mt-2">
+            <p className="max-w-[46ch] text-[15px] leading-[1.8] text-ink/80">A half day on the ground, or an hour on a call if you are still abroad. Nothing is shown and nothing is signed.</p>
+            <EnquireButton className={`${s.tlink} font-display text-[1.35rem] font-medium leading-tight text-forest`}>Arrange an orientation</EnquireButton>
+          </div>
         </div>
-      </section>
+      </Chapter>
     </div>
   );
 }
