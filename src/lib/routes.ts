@@ -11,6 +11,7 @@ export const ROUTES: Record<string, string> = {
   firm: "/firm",
   journal: "/journal",
   areas: "/areas",
+  contact: "/contact",
 };
 
 /** Which pages hold a forest ground for the whole page. The nav takes the ground of
@@ -20,6 +21,7 @@ export const ROUTES: Record<string, string> = {
 export const GROUND: Record<string, "forest" | "cream"> = {
   management: "forest",
   investments: "forest",
+  firm: "forest",
 };
 
 export const href = (id: string) => ROUTES[id] ?? "/";

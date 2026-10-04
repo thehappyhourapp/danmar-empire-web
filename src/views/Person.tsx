@@ -1,85 +1,107 @@
 import Link from "next/link";
-import { href, personHref } from "@/lib/routes";
-import { EnquireButton } from "@/components/SiteShell";
 import { TEAM } from "@/lib/data";
 import type { Person as P } from "@/lib/data";
+import { SITE } from "@/lib/metadata";
+import { splitName } from "@/lib/people";
+import { href, personHref } from "@/lib/routes";
+import { Chapter, GRID, HEAD, Lines, delay } from "@/components/Chapter";
 import { ImageFrame } from "@/components/ImageFrame";
+import { MotionController } from "@/components/MotionController";
+import { EnquireButton } from "@/components/SiteShell";
+import s from "@/components/motion.module.css";
+
+const BROKERAGE = "Danmar Empire Real Estate Corp., Brokerage";
+
+/* A person: cream, the portrait frame flat until photography, the biography,
+   credentials and practice as rows, and a contact row of text links. */
 
 export function Person({ p }: { p: P }) {
+  const { name, designations } = splitName(p.name);
   const others = TEAM.filter((t) => t.slug !== p.slug);
+  const telHref = p.tel ? `tel:+1${p.tel.replace(/\D/g, "")}` : null;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name,
+    ...(designations ? { honorificSuffix: designations } : {}),
+    jobTitle: p.role,
+    url: `${SITE}${personHref(p.slug)}`,
+    ...(p.email ? { email: p.email } : {}),
+    ...(p.tel ? { telephone: `+1 ${p.tel}` } : {}),
+    worksFor: { "@type": "RealEstateAgent", name: BROKERAGE, url: SITE },
+  };
+
+  const rows: [string, React.ReactNode][] = [
+    ["Credentials", p.creds.join(" · ")],
+    ["Practice", p.focus.join(" · ")],
+    ["Areas", p.areas],
+  ];
+
   return (
-    <div className="pt-[88px]">
-      <div className="mx-auto max-w-[1520px] px-6 md:px-12">
-        <Link href={href("firm")} className="meta inline-block py-8 text-mute link-u hover:text-forest">← The Firm</Link>
+    <div id="person">
+      <MotionController rootId="person" />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-32">
+        <nav aria-label="Breadcrumb" className="col-span-12">
+          <Link href={href("firm")} className={`${s.tlink} meta text-ink/70 hover:text-forest`}>The Firm</Link>
+        </nav>
 
-        <div className="grid gap-14 lg:grid-cols-[420px_1fr] lg:gap-24">
-          <div>
-            <ImageFrame hue={(p.slug.length * 41) % 360} ratio="3/4" alt={p.name} />
-          </div>
-
-          <div className="pt-2">
-            <div className="meta mb-6 text-brass">{p.role}</div>
-            <h1 className="max-w-[16ch] font-display text-[clamp(2.1rem,4.6vw,3.6rem)] leading-[1.06]">{p.name}</h1>
-
-            <div className="mt-10 max-w-[60ch] space-y-6 text-[15.5px] leading-[1.95] text-ink/80">
-              {p.bio.map((b, i) => <p key={i}>{b}</p>)}
-            </div>
-
-            <div className="mt-12 grid gap-10 border-t border-forest/14 pt-10 sm:grid-cols-2">
-              <div>
-                <div className="meta mb-4 text-brass">Credentials</div>
-                <ul className="space-y-2.5">
-                  {p.creds.map((c) => (
-                    <li key={c} className="flex items-baseline gap-3 text-[14px] text-ink/80">
-                      <span className="mt-[7px] h-[4px] w-[4px] shrink-0 rounded-full bg-brass" />{c}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <div className="meta mb-4 text-brass">Practice</div>
-                <ul className="space-y-2.5">
-                  {p.focus.map((c) => (
-                    <li key={c} className="flex items-baseline gap-3 text-[14px] text-ink/80">
-                      <span className="mt-[7px] h-[4px] w-[4px] shrink-0 rounded-full bg-brass" />{c}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <dl className="mt-10 border-t border-forest/14">
-              {([["Areas", p.areas], ["Telephone", p.tel], ["Email", p.email]] as [string, string | undefined][])
-                .filter(([, v]) => v).map(([k, v]) => (
-                <div key={k} className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1 border-b border-forest/14 py-4">
-                  <dt className="meta text-mute">{k}</dt>
-                  <dd className="text-[13.5px] text-ink/85">{v}</dd>
-                </div>
-              ))}
-            </dl>
-
-            <EnquireButton
-              className="meta mt-10 border border-forest/25 px-8 py-4 transition-colors hover:bg-forest hover:text-paper">
-              Speak with {p.name.split(" ")[0]}
-            </EnquireButton>
-          </div>
+        <div className="col-span-12 mt-10 md:col-span-4 lg:col-span-3">
+          <ImageFrame ratio="4/5" alt={name} fallback="flat" />
         </div>
-      </div>
-
-      <section className="mt-20 border-t border-forest/14 bg-paper-deep py-20 md:py-24">
-        <div className="mx-auto max-w-[1520px] px-6 md:px-12">
-          <div className="meta mb-10 text-brass">The rest of the firm</div>
-          <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {others.map((o) => (
-              <Link key={o.slug} href={personHref(o.slug)} className="group border-t border-forest/14 pt-5 text-left">
-                <h3 className="font-display text-[20px] leading-tight transition-colors group-hover:text-brass">{o.name}</h3>
-                <p className="meta mt-2.5 text-brass">{o.role}</p>
-                <p className="mt-3 max-w-[38ch] text-[13.5px] leading-[1.85] text-mute">{o.line}</p>
-              </Link>
+        <header className="col-span-12 mt-8 md:col-span-7 md:col-start-6 md:mt-10 lg:col-span-6 lg:col-start-5">
+          <h1 className="max-w-[16ch] font-display text-[clamp(2.1rem,4.6vw,3.6rem)] font-medium leading-[1.04] tracking-[-.01em]">{name}</h1>
+          <p className="meta mt-4 text-ink/70">
+            <span className="block md:inline">{p.role}</span>
+            {designations && <><span className="mx-1.5 hidden opacity-40 md:inline">/</span><span className="block md:inline">{designations}</span></>}
+          </p>
+          <div className="mt-8 space-y-6">
+            {p.bio.map((b, i) => (
+              <p key={i} data-reveal className={`${s.rise} max-w-[60ch] text-[15.5px] leading-[1.9] text-ink/80`} style={delay(i)}>{b}</p>
             ))}
           </div>
+        </header>
+
+        {/* credentials, practice, areas as rows */}
+        <div className="col-span-12 mt-16 lg:mt-20">
+          {rows.map(([k, v], i) => (
+            <div key={k} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-6 last:border-b`} style={delay(i)}>
+              <h2 className="col-span-12 font-display text-[1.25rem] font-medium leading-[1.15] md:col-span-5">{k}</h2>
+              <p className="col-span-12 mt-2 text-[15px] leading-[1.8] text-ink/80 md:col-span-6 md:col-start-7 md:mt-0">{v}</p>
+            </div>
+          ))}
         </div>
-      </section>
+
+        {/* contact row */}
+        <div className={`col-span-12 mt-16 ${GRID} border-t border-forest/14 pt-12 lg:mt-20 lg:pt-16`}>
+          <div className="col-span-12 lg:col-span-6">
+            <Lines lines={[`Speak with ${name.split(" ")[0]}.`]} className={`${HEAD} max-w-[18ch]`} />
+          </div>
+          <div className="col-span-12 mt-8 flex flex-col items-start gap-4 lg:col-span-5 lg:col-start-7 lg:mt-2">
+            {p.email && <a href={`mailto:${p.email}`} className={`${s.tlink} font-display text-[1.3rem] font-medium leading-tight text-forest`}>{p.email}</a>}
+            {telHref && <a href={telHref} className={`${s.tlink} text-[15px] text-ink/80 hover:text-forest`}>{p.tel}</a>}
+            <EnquireButton className={`${s.tlink} meta text-ink/70 hover:text-forest`}>Enquire through the desk</EnquireButton>
+          </div>
+        </div>
+
+        {/* the rest of the firm */}
+        <div className="col-span-12 mt-20 lg:mt-28">
+          <p className="meta mb-6 text-brass">The rest of the firm</p>
+          <div>
+            {others.map((o) => {
+              const n = splitName(o.name);
+              return (
+                <div key={o.slug} className={`${GRID} border-t border-forest/14 py-5 last:border-b`}>
+                  <h3 className="col-span-12 font-display text-[1.2rem] font-medium leading-[1.15] md:col-span-5">
+                    <Link href={personHref(o.slug)} className={`${s.rowlink} hover:text-forest-mid`}>{n.name}</Link>
+                  </h3>
+                  <p className="meta col-span-12 mt-1 text-ink/70 md:col-span-6 md:col-start-7 md:mt-0">{o.role}{n.designations ? ` · ${n.designations}` : ""}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </Chapter>
     </div>
   );
 }

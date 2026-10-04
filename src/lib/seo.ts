@@ -76,6 +76,12 @@ export const SEO: Record<string, Meta> = {
       "What the firm actually thinks about Ontario real estate: yields, lending conditions, lease covenants and the high-end market in Oakville, King City and Toronto.",
     canonical: "/journal",
   },
+  contact: {
+    title: `Contact: Oakville & Vaughan Offices | ${SUFFIX}`,
+    description:
+      "Offices in Oakville and Vaughan. Start a conversation about a purchase, a sale, an executive lease or a portfolio mandate; someone from the desk replies inside one business day.",
+    canonical: "/contact",
+  },
   dataroom: {
     title: `Client Data Room | ${SUFFIX}`, description: "Secure document access for active mandates.", canonical: "/data-room",
   },
