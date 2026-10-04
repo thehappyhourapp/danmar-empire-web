@@ -12,8 +12,8 @@ export function Footer({ onEnquire }: { onEnquire: () => void }) {
       <div className="mx-auto max-w-[1560px] px-6 py-20 md:px-10 md:py-28">
         <div className="grid gap-14 lg:grid-cols-[1.3fr_1fr_1fr_1.1fr]">
           <div>
-            <img src={sealCream} alt="Danmar Empire" width={104} height={104}
-              className="mb-9 block" style={{ width: 104, height: 104, objectFit: "contain" }} />
+            <img src={sealCream} alt="Danmar Empire" width={120} height={120}
+              className="mb-9 block" style={{ width: 120, height: 120, objectFit: "contain" }} />
             <Wordmark light />
             <p className="mt-7 max-w-[30ch] font-display text-[22px] leading-[1.35] text-paper/85 md:text-[26px]">
               Asset management, investment, private sales and executive leasing. Oakville, Vaughan, and across Ontario.

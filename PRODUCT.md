@@ -48,14 +48,14 @@ Success is measured as qualified private enquiries started from the site: contac
 
 Binding, as given by the owner. The full visual specification lives in **CLAUDE.md, "Design DNA — Danmar"**, which governs where it is more specific than anything here.
 
-- **Name:** Danmar Empire Real Estate Corp., Brokerage. The header shows the seal and "DANMAR EMPIRE" only.
+- **Name:** Danmar Empire Real Estate Corp., Brokerage. The header shows the building emblem and "DANMAR EMPIRE" only; the full seal appears only at 120px or larger.
 - **Tone:** assured, quiet, specific. Never salesy.
 - **Palette:**
   - forest #0F3B2F is primary;
   - cream #EEE8E0;
   - ink #12261F;
   - brass #8A6B2F, for labels, figures and at most one italic line per chapter only, never as fill;
-  - hairlines are forest on cream (content rules at 14%, drawn column grid at 10%) and paper at 8% on dark grounds.
+  - hairlines are forest on cream (content rules at 14%, drawn column grid at 6%) and paper on dark grounds (content rules at 12%, drawn column grid at 5%).
 - **Type:**
   - Bodoni Moda for display, with optical size set manually (opsz 16 for display, 10 for figures, never auto);
   - Libre Franklin 400 for body text, and Libre Franklin 500 for `.meta` labels. 500 for running text reads heavy on cream and loses the contrast with the labels;

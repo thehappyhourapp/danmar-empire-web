@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 
 const SAVED_KEY = "danmar:saved";
 import Link from "next/link";
@@ -13,6 +13,8 @@ import { Nav } from "./Nav";
 import { Footer } from "./Footer";
 import { ImageFrame } from "./ImageFrame";
 import { TypeSwitch } from "./TypeSwitch";
+import { ClientAccess } from "./ClientAccess";
+import { sendByMail } from "@/lib/mailto";
 
 /* Visit-level state that used to live in App.tsx. It sits in the root layout, so it
    survives client-side navigation between routes exactly as it did in the SPA. */
@@ -20,6 +22,7 @@ interface Site {
   saved: Set<string>;
   toggleSave: (id: string) => void;
   enquire: () => void;
+  requestAccess: () => void;
   q: Query; setQ: (q: Query) => void;
   text: string; setText: (s: string) => void;
   search: (q: Query, t: string) => void;
@@ -56,36 +59,41 @@ function Enquire({ open, close }: { open: boolean; close: () => void }) {
         {sent ? (
           <div className="px-8 pb-16 md:px-10">
             <div className="border border-forest/16 p-8">
-              <div className="meta text-brass">Received</div>
-              <p className="mt-4 font-display text-[24px] leading-snug">Someone from the desk will be in touch inside one business day.</p>
+              <div className="meta text-brass">Sent to your email app</div>
+              <p className="mt-4 font-display text-[24px] leading-snug">Send it from there, and someone from the desk will be in touch inside one business day.</p>
               <p className="mt-4 text-[14px] leading-[1.8] text-mute">
                 If it is urgent, call the Oakville office on 905 901 5011.
               </p>
             </div>
           </div>
         ) : (
-          <form className="px-8 pb-16 md:px-10" onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
+          <form className="px-8 pb-16 md:px-10" onSubmit={(e) => {
+            e.preventDefault();
+            const f = new FormData(e.currentTarget); const v = (k: string) => String(f.get(k) ?? "");
+            sendByMail("Enquiry", [["I am", v("role")], ["Name", v("name")], ["Email", v("email")], ["Telephone", v("tel")], ["Looking for", v("brief")]]);
+            setSent(true);
+          }}>
             <div className="meta mb-4 text-mute">I am</div>
             <div className="mb-8 grid grid-cols-2 gap-2">
               {["Buying", "Selling", "Leasing", "Investing"].map((r) => (
                 <label key={r} className="cursor-pointer">
-                  <input type="radio" name="role" className="peer sr-only" defaultChecked={r === "Buying"} />
+                  <input type="radio" name="role" value={r} className="peer sr-only" defaultChecked={r === "Buying"} />
                   <span className="meta block border border-forest/20 px-4 py-3 text-center text-mute transition-colors peer-checked:border-ink peer-checked:bg-forest peer-checked:text-paper">{r}</span>
                 </label>
               ))}
             </div>
 
-            {[["Name", "text", "Your name"], ["Email", "email", "you@company.com"], ["Telephone", "tel", "Optional"]].map(([l, t, p]) => (
+            {[["Name", "text", "Your name", "name"], ["Email", "email", "you@company.com", "email"], ["Telephone", "tel", "Optional", "tel"]].map(([l, t, p, n]) => (
               <div key={l} className="mb-6">
                 <label className="meta mb-2 block text-mute">{l}</label>
-                <input type={t} placeholder={p} required={t !== "tel"}
+                <input type={t} name={n} placeholder={p} required={t !== "tel"}
                   className="w-full border-0 border-b border-forest/25 bg-transparent py-3 text-[15px] outline-none transition-colors focus:border-ink" />
               </div>
             ))}
 
             <div className="mb-8">
               <label className="meta mb-2 block text-mute">What you are looking for</label>
-              <textarea rows={4} placeholder="Budget, area, timing, and anything that actually matters to you."
+              <textarea name="brief" rows={4} placeholder="Budget, area, timing, and anything that actually matters to you."
                 className="w-full resize-none border-0 border-b border-forest/25 bg-transparent py-3 text-[15px] outline-none transition-colors focus:border-ink" />
             </div>
 
@@ -166,6 +174,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
     try { localStorage.setItem(SAVED_KEY, JSON.stringify([...saved])); } catch { /* ignore */ }
   }, [saved]);
   const [enq, setEnq] = useState(false);
+  const [access, setAccess] = useState(false);
   const [savedOpen, setSavedOpen] = useState(false);
   const [notice, setNotice] = useState(true);
   /* The notice bar sits in the flow at a fixed 36px, so its height is in the server
@@ -176,9 +185,11 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
     setSaved((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const search = (nq: Query, t: string) => { setQ(nq); setText(t); router.push("/collection"); };
   const enquire = () => setEnq(true);
+  const requestAccess = () => setAccess(true);
+  const closeAccess = useCallback(() => setAccess(false), []);
 
   return (
-    <Ctx.Provider value={{ saved, toggleSave, enquire, q, setQ, text, setText, search }}>
+    <Ctx.Provider value={{ saved, toggleSave, enquire, requestAccess, q, setQ, text, setText, search }}>
       <div className="min-h-screen bg-paper antialiased">
         {notice && (
           <div className="sticky top-0 z-[80] flex h-9 items-center gap-3 bg-forest-soft px-4 text-paper sm:gap-4 sm:px-5">
@@ -199,10 +210,17 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
 
         <TypeSwitch />
         <Enquire open={enq} close={() => setEnq(false)} />
+        <ClientAccess open={access} close={closeAccess} />
         <Saved open={savedOpen} close={() => setSavedOpen(false)} ids={saved} toggle={toggleSave} />
       </div>
     </Ctx.Provider>
   );
+}
+
+/** Client access is by invitation: this opens the request dialog, never a login. */
+export function ClientAccessButton({ className, children }: { className?: string; children: React.ReactNode }) {
+  const { requestAccess } = useSite();
+  return <button type="button" onClick={requestAccess} className={className}>{children}</button>;
 }
 
 /** A button anywhere on a server-rendered page that opens the enquiry drawer. */

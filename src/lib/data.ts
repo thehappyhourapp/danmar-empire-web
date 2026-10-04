@@ -344,8 +344,8 @@ export const TEAM: Person[] = [
 
 export const OFFICES = [
   { city: "Oakville", addr: "2010 Winston Park Drive, Suite 200", post: "Oakville, ON  L6H 6P5", tel: "905 901 5011" },
+  { city: "Oakville", addr: "2380 Bristol Circle, Unit 12", post: "Oakville, ON  L6H 6M5", tel: "905 901 5011" },
   { city: "Vaughan", addr: "9131 Keele Street, Suite A4", post: "Vaughan, ON  L4K 0G7", tel: "905 901 5011" },
-  { city: "Design Studio", addr: "77 Woodstream Boulevard", post: "Vaughan, ON  L4L 7Y7", tel: "By appointment" },
 ];
 
 /* The ownership argument. This is the firm's sharpest differentiator and the

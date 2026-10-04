@@ -55,7 +55,7 @@ export function ImageFrame({
         <img
           ref={img} src={src} alt={alt} loading="lazy" decoding="async"
           onLoad={() => setOk(true)} onError={() => setOk(false)}
-          className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms]"
+          className="absolute inset-0 h-full w-full object-cover transition-opacity [transition-duration:1200ms]"
           style={{ opacity: ok ? 1 : 0 }}
         />
       )}

@@ -8,9 +8,9 @@ export const GRID = "grid grid-cols-12 gap-x-4 md:gap-x-8";
 export const HEAD = "font-display font-medium text-[clamp(2.1rem,4.8vw,3.75rem)] leading-[1] tracking-[-.01em]";
 export const delay = (i: number) => ({ ["--d" as string]: `${Math.min(i, 3) * 120}ms` }) as React.CSSProperties;
 
-/** The drawn 12-column grid, forest/10 on cream. Column lines run the chapter's full height. */
+/** The drawn 12-column grid, forest/6 on cream. Column lines run the chapter's full height. */
 export function GridLines({ tone = "cream" }: { tone?: "cream" | "dark" }) {
-  const rule = tone === "cream" ? "border-forest/10" : "border-paper/8";
+  const rule = tone === "cream" ? "border-forest/6" : "border-paper/5";
   return (
     <div aria-hidden className="pointer-events-none absolute inset-y-0 left-4 right-4 z-0 md:left-12 md:right-12">
       <div className={`${GRID} h-full border-r ${rule}`}>

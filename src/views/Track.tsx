@@ -63,7 +63,7 @@ export function Track() {
               <Reveal key={t.id} className={pat[0]} delay={(i % 2) * 100}>
                 <article className="group">
                   <ImageFrame src={t.photo} hue={t.hue} ratio={pat[1]} alt={t.place}
-                    className="transition-[filter] duration-[900ms] group-hover:brightness-110">
+                    className="transition-[filter] [transition-duration:900ms] group-hover:brightness-110">
                     <span className="meta absolute left-5 top-5 border border-paper/50 bg-forest-deep/45 px-2.5 py-1 text-paper backdrop-blur-sm">
                       {t.kind} {t.year}
                     </span>

@@ -21,17 +21,18 @@ Next.js 15 App Router, TypeScript, Tailwind 3. Deployed on Vercel. `npm run buil
 
 ## Fonts
 
-- Bodoni Moda (display, figures) and Libre Franklin (text, meta) are embedded as base64 `@font-face` in `src/fonts.css`.
-- Keep them embedded. Never swap them for a Google Fonts link or `next/font/google`. The site then falls back to a default serif whenever the CDN is unreachable.
+- Bodoni Moda (display, figures) and Libre Franklin (text, meta) are self-hosted as `.woff2` in `public/fonts/` and kept in the repo. `src/fonts.css` declares them with `font-display: swap`, plus metric-matched local fallbacks (`Bodoni Moda Fallback` on Georgia, `Libre Franklin Fallback` on Arial) so the swap does not move the layout. The two regular faces are preloaded in `src/app/layout.tsx`; italics load on demand.
+- Never swap them for a Google Fonts link or `next/font/google`. The site then falls back to a default serif whenever the CDN is unreachable.
 - The only CDN fonts are the prototype-only alternates in `TypeSwitch`.
 
 ## Header
 
-- The site header shows the seal mark at 34 to 40px, beside the wordmark "DANMAR EMPIRE" only, set in Bodoni Moda.
-- Use `sealForest` on light backgrounds and `sealCream` on dark ones (over the homepage hero, and in the mobile menu). Both come from `src/lib/marks.ts`.
+- The site header shows the building emblem at 30px (the seal's building alone, without the ring lettering), beside the wordmark "DANMAR EMPIRE" only, set in Bodoni Moda.
+- Use `emblemForest` on cream and `emblemCream` on forest (over the homepage hero, and in the mobile menu). Both come from `src/lib/marks.ts`.
+- The full seal (`sealForest`, `sealCream`) appears only at 120px or larger: the Home hero corner and the footer. Below that its lettering cannot resolve.
 - Never put the full registered name "Danmar Empire Real Estate Corp., Brokerage" in the header.
 - The full registered name stays in the footer on every page. That satisfies the RECO requirement to identify the brokerage by its registered name.
-- In code: `<Seal size={38} light={...} />` plus `<Wordmark registered={false} />` in `src/components/Nav.tsx`. The footer uses `<Wordmark />` with the default `registered` set to true.
+- In code: `<Emblem size={30} light={...} />` plus `<Wordmark registered={false} />` in `src/components/Nav.tsx`. The footer uses `<Wordmark />` with the default `registered` set to true.
 
 ## Copy rules
 
@@ -65,9 +66,10 @@ Merged from four `/taste` analyses (full data in `docs/taste/`). Loam House and 
 ### Grid (hairline)
 
 - 12 columns. Margins 16px at 390, 48px at 1440; gutters 16px and 32px. Max content width 1440px.
-- The grid is drawn: 1px rules mark column lines and row breaks, and run edge to edge of the content box. Each ground has its own rule colour, because `forest/10` is invisible on a dark chapter:
-  - on cream (`paper`, `paper-deep`): `forest/10` for the drawn column grid, `forest/14` for content rules (row breaks, dividers, table lines), so the grid sits behind them;
-  - on dark (`forest`, `forest-deep`): `paper/8`.
+- The grid is drawn: 1px rules mark column lines and row breaks, and run edge to edge of the content box. Each ground has its own rule colours, because a forest line is invisible on a dark chapter:
+  - on cream (`paper`, `paper-deep`): `forest/6` for the drawn column grid, `forest/14` for content rules (row breaks, dividers, table lines), so the grid sits behind them;
+  - on dark (`forest`, `forest-deep`): `paper/5` for the drawn column grid, `paper/12` for content rules.
+  - These grid values were lightened from forest/10 and paper/8 on 4 Oct 2026 because the lines read too present on placeholder blocks. Reassess once real photography is in.
   - Draw the grid on every chapter of a page or on none of them. Never skip it on dark chapters. [Oryzo: 1px drafting guides; Leome: 1px row rules on a 12-column grid.]
 - Text blocks start on a column line. Body measure is at most 60ch.
 

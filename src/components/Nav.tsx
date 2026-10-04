@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { href } from "@/lib/routes";
-import { sealCream, sealForest } from "@/lib/marks";
+import { emblemCream, emblemForest } from "@/lib/marks";
 
 export const NAV = [
   { id: "management", label: "Asset Management" },
@@ -15,15 +15,16 @@ export const NAV = [
   { id: "firm", label: "The Firm" },
 ];
 
-/** Daniel's seal, drawn in Canva and exported as outlined SVG. Two colourways so
- *  it never sits on a background rectangle of its own: forest on light, cream on dark. */
-export function Seal({ size = 34, className = "", light = false }: { size?: number; className?: string; light?: boolean }) {
+/** The building emblem from Daniel's seal, without the ring lettering, which cannot
+ *  resolve at header size. Forest on cream, cream on forest. The full seal is used
+ *  only at 120px or larger (the Home hero corner, the footer). */
+export function Emblem({ size = 30, className = "", light = false }: { size?: number; className?: string; light?: boolean }) {
+  const w = Math.round(size * 0.804); // the emblem's own aspect, 95.965 x 119.34
   return (
-    <img src={light ? sealCream : sealForest} alt="" aria-hidden
-      width={size} height={size} className={className} style={{ width: size, height: size, objectFit: "contain" }} />
+    <img src={light ? emblemCream : emblemForest} alt="" aria-hidden
+      width={w} height={size} className={className} style={{ width: w, height: size }} />
   );
 }
-export const Monogram = Seal;
 
 /** `registered` adds the full registered name beneath. The header never shows it;
  *  the footer carries it on every page, which is where RECO identification lives. */
@@ -70,7 +71,7 @@ export function Nav({
       >
         <div className="mx-auto flex max-w-[1560px] items-center gap-8 px-6 py-5 md:px-10">
           <Link href="/" aria-label="Danmar Empire, home" className="flex shrink-0 items-center gap-3 text-left">
-            <Seal size={38} light={light} />
+            <Emblem size={30} light={light} />
             <Wordmark light={light} registered={false} />
           </Link>
 
@@ -117,7 +118,7 @@ export function Nav({
         <div className="fixed inset-0 z-[90] bg-forest-deep text-paper animate-fadeIn">
           <div className="flex items-center justify-between px-6 py-5 md:px-10">
             <div className="flex items-center gap-3">
-              <Seal size={38} light />
+              <Emblem size={30} light />
               <Wordmark light registered={false} />
             </div>
             <button onClick={() => setOpen(false)} aria-label="Close" className="text-paper">

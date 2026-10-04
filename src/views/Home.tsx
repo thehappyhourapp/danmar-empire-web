@@ -29,7 +29,7 @@ const GROUND: Record<Tone, string> = {
 
 /** The drawn 12-column grid. Column lines run the full height of the chapter. */
 function GridLines({ tone }: { tone: Tone }) {
-  const rule = tone === "cream" ? "border-forest/10" : "border-paper/8";
+  const rule = tone === "cream" ? "border-forest/6" : "border-paper/5";
   return (
     <div aria-hidden className="pointer-events-none absolute inset-y-0 left-4 right-4 z-0 md:left-12 md:right-12">
       <div className={`${GRID} h-full border-r ${rule}`}>
@@ -107,7 +107,7 @@ export function Home() {
                 <span className="meta text-paper/70">Scroll</span>
               </div>
               <div className="col-span-6 flex justify-end lg:col-span-3 lg:col-start-10">
-                <img src="/marks/seal-cream.svg" alt="" width={160} height={160} decoding="async" className="h-[88px] w-[88px] md:h-[160px] md:w-[160px]" />
+                <img src="/marks/seal-cream.svg" alt="" width={160} height={160} decoding="async" className="h-[120px] w-[120px] md:h-[160px] md:w-[160px]" />
               </div>
             </div>
           </div>
@@ -167,7 +167,7 @@ export function Home() {
                   </div>
                 </div>
                 <div className="col-span-7 self-center md:col-span-6 md:col-start-5 md:self-end md:pb-2">
-                  <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1] transition-colors duration-200 ease-[cubic-bezier(.25,1,.5,1)] group-hover:text-forest-mid">
+                  <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1] transition-colors duration-200 [transition-timing-function:cubic-bezier(.25,1,.5,1)] group-hover:text-forest-mid">
                     {l.name}
                   </h3>
                   <p className="meta mt-3 text-ink/70">

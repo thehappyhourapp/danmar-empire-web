@@ -57,7 +57,7 @@ export function ListingCard({
     <article className="group cursor-pointer" onClick={() => router.push(propertyHref(l.id))}>
       <div className="relative">
         <ImageFrame src={l.photo} hue={l.hue} ratio={ratio} alt={l.name}
-          className="transition-[filter,transform] duration-[900ms] group-hover:brightness-[1.06]" />
+          className="transition-[filter,transform] [transition-duration:900ms] group-hover:brightness-[1.06]" />
         <div className="absolute left-4 top-4 flex gap-2"><Tier t={l.tier} onDark /></div>
         <div className="absolute right-4 top-4"><SaveBtn on={saved} toggle={toggle} /></div>
         {dim && (

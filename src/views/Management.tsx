@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { href } from "@/lib/routes";
 import { Reveal } from "@/components/Reveal";
-import { EnquireButton } from "@/components/SiteShell";
+import { ClientAccessButton, EnquireButton } from "@/components/SiteShell";
 import { ImageFrame } from "@/components/ImageFrame";
 
 const NUMBERS: [string, string][] = [
@@ -44,9 +44,9 @@ export function Management() {
             <EnquireButton className="meta border border-paper/35 px-8 py-4 transition-colors hover:bg-paper hover:text-forest">
               Request a mandate call
             </EnquireButton>
-            <EnquireButton className="meta border border-paper/20 px-8 py-4 text-paper/80 transition-colors hover:border-paper/50 hover:text-paper">
+            <ClientAccessButton className="meta border border-paper/20 px-8 py-4 text-paper/80 transition-colors hover:border-paper/50 hover:text-paper">
               Client login
-            </EnquireButton>
+            </ClientAccessButton>
           </div>
         </div>
       </section>

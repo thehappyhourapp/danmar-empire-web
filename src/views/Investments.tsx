@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { propertyHref } from "@/lib/routes";
 import { Reveal } from "@/components/Reveal";
-import { EnquireButton } from "@/components/SiteShell";
+import { ClientAccessButton, EnquireButton } from "@/components/SiteShell";
 import { LISTINGS } from "@/lib/data";
 import { money } from "@/lib/parse";
 import { ImageFrame } from "@/components/ImageFrame";
@@ -39,9 +39,9 @@ export function Investments() {
           </p>
           <div className="mt-12 flex flex-wrap gap-4">
             <EnquireButton className="meta border border-forest/25 px-7 py-4 transition-colors hover:bg-forest hover:text-paper">Request a mandate call</EnquireButton>
-            <EnquireButton className="meta border border-forest/16 px-7 py-4 text-ink/70 transition-colors hover:border-ink/40 hover:text-ink">
+            <ClientAccessButton className="meta border border-forest/16 px-7 py-4 text-ink/70 transition-colors hover:border-ink/40 hover:text-ink">
               Investor login
-            </EnquireButton>
+            </ClientAccessButton>
           </div>
         </div>
 
