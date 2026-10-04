@@ -1,135 +1,87 @@
-import { Reveal } from "@/components/Reveal";
-import { EnquireButton } from "@/components/SiteShell";
-import { COVENANTS, LISTINGS } from "@/lib/data";
-import { ImageFrame } from "@/components/ImageFrame";
-import { ListingCard } from "@/components/ListingCard";
+import { COVENANTS, FURNISHING, PILLARS } from "@/lib/data";
+import { href } from "@/lib/routes";
+import { GRID, Lines, HEAD, delay } from "@/components/Chapter";
+import { Practice, PracticeLink } from "@/components/Practice";
+import s from "@/components/motion.module.css";
+
+/* Executive leasing: built from the Asset Management template. Whole-page cream.
+   The only practice page with the covenant list and the furnishing row. */
 
 const FOR_LANDLORDS = [
-  ["Covenant verification", "We qualify the guarantee behind the tenant: corporate undertaking, parent-company covenant, or diplomatic note. Personal credit files are the fallback, not the standard."],
-  ["Term and escalation", "Twelve to thirty-six months with fixed escalation, not a twelve-month term that has to be renegotiated in month nine."],
-  ["Turnkey presentation", "Furnishing, photography and the relocation package are produced in-house. A furnished executive property lets at a materially higher rate than the same house empty."],
-  ["Managed handover", "Move-in inspection, schedule of condition, utilities transfer and a single point of contact for the term."],
+  { title: "Covenant verification", text: "We qualify the guarantee behind the tenant: corporate undertaking, parent-company covenant, or diplomatic note. Personal credit files are the fallback, not the standard." },
+  { title: "Term and escalation", text: "Twelve to thirty-six months with fixed escalation, not a twelve-month term that has to be renegotiated in month nine." },
+  { title: "Turnkey presentation", text: "Furnishing, photography and the relocation package are produced in-house. A furnished executive property lets at a materially higher rate than the same house empty." },
+  { title: "Managed handover", text: "Move-in inspection, schedule of condition, utilities transfer and a single point of contact for the term." },
 ];
 
-const FOR_TENANTS = [
-  ["One shortlist", "We are given a brief by your relocation department and we return a shortlist, not a portal link. Most placements close on the first or second viewing."],
-  ["School and commute mapping", "Catchments, private-school proximity and realistic drive times, checked rather than assumed."],
-  ["Discretion", "We do not name our tenants or their employers, publicly or to other landlords."],
-  ["Paperwork that survives review", "Leases drafted to survive a corporate legal review, including assignment, early-termination and diplomatic-clause provisions."],
+const FOR_RELOCATION = [
+  { title: "One shortlist", text: "We are given a brief by your relocation department and we return a shortlist, not a portal link. Most placements close on the first or second viewing." },
+  { title: "School and commute mapping", text: "Catchments, private-school proximity and realistic drive times, checked rather than assumed." },
+  { title: "Discretion", text: "We do not name our tenants or their employers, publicly or to other landlords." },
+  { title: "Paperwork that survives review", text: "Leases drafted to survive a corporate legal review, including assignment, early-termination and diplomatic-clause provisions." },
 ];
+
+function Extras() {
+  return (
+    <>
+      {/* covenants, as rows */}
+      <div className="col-span-12 mt-20 lg:mt-28">
+        <Lines lines={["Covenants we place against."]} className={`${HEAD} mb-10 max-w-[20ch] lg:mb-14`} />
+        <div>
+          {COVENANTS.map((c, i) => (
+            <p key={c} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-5 last:border-b`} style={delay(i)}>
+              <span className="col-span-12 text-[16px] leading-[1.7] text-ink/80 md:col-span-8 md:col-start-2">{c}</span>
+            </p>
+          ))}
+        </div>
+        <p className="meta mt-5 text-ink/70">We describe the covenant, never the client.</p>
+      </div>
+
+      {/* furnishing, one row */}
+      <div data-reveal className={`${s.rise} col-span-12 mt-20 ${GRID} border-y border-forest/14 py-10 lg:mt-28`}>
+        <div className="col-span-12 md:col-span-5">
+          <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">Furnished, where the brief calls for it</h3>
+          <p className="fig mt-5 text-[clamp(1.6rem,2.6vw,2.4rem)] text-brass">+{FURNISHING.uplift}</p>
+          <p className="meta mt-2 text-ink/70">of base rent, fully furnished and installed</p>
+        </div>
+        <div className="col-span-12 mt-6 md:col-span-6 md:col-start-7 md:mt-0">
+          <p className="max-w-[56ch] text-[15px] leading-[1.85] text-ink/80">{FURNISHING.note}</p>
+          <p className="meta mt-5 text-ink/70">
+            Specified and installed by us through {FURNISHING.sources.join(", ")}. Not affiliated with any of them.
+          </p>
+        </div>
+      </div>
+    </>
+  );
+}
 
 export function Leasing() {
-  const leases = LISTINGS.filter((l) => l.intent === "lease");
-  const top = leases.find((l) => l.id === "bridle-path")!;
-
+  const pillar = PILLARS[3];
   return (
-    <div className="pt-[88px]">
-      <section className="relative bg-forest-deep text-paper">
-        <ImageFrame src={top.photo} hue={top.hue} ratio="auto" className="!absolute inset-0 h-full w-full" alt="" />
-        <div className="absolute inset-0 bg-gradient-to-b from-forest-deep/95 via-forest-deep/78 to-forest-deep" />
-        <div className="relative mx-auto max-w-[1560px] px-6 py-24 md:px-10 md:py-36">
-          <div className="meta mb-6 text-brass-light">Executive Leasing</div>
-          <h1 className="max-w-[19ch] font-display text-[clamp(2.4rem,5.6vw,4.8rem)] leading-[1] tracking-[-.015em]">
-            Ten thousand a month and up, placed against a verified covenant.
-          </h1>
-          <p className="mt-8 max-w-[58ch] text-[16px] leading-[1.8] text-paper/80">
-            We act on both sides of the executive lease: for landlords who want the rent to arrive without a
-            monthly conversation about it, and for relocation departments who want the search finished before
-            the family lands.
-          </p>
-          <div className="mt-12 grid max-w-[760px] grid-cols-2 gap-px bg-paper/15 md:grid-cols-4">
-            {[["$12,000+", "Average lease"], ["12–36", "Months, typical term"], ["$10k+", "Entry point"], ["+30–45%", "Furnished uplift"]].map(([v, k]) => (
-              <div key={k} className="bg-forest-deep p-5">
-                <div className="font-display text-[clamp(1.3rem,2.4vw,2rem)] leading-none">{v}</div>
-                <div className="meta mt-2 text-paper/85">{k}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-[1560px] px-6 py-20 md:px-10 md:py-28">
-        <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
-          <Reveal>
-            <div className="meta mb-6 text-brass">For landlords</div>
-            <h2 className="max-w-[18ch] font-display text-[clamp(1.8rem,3.4vw,2.8rem)] leading-[1.06]">
-              You are not letting a house. You are underwriting a payer.
-            </h2>
-            <dl className="mt-10 border-t border-forest/14">
-              {FOR_LANDLORDS.map(([t, d]) => (
-                <div key={t} className="border-b border-forest/14 py-6">
-                  <dt className="font-display text-[19px]">{t}</dt>
-                  <dd className="mt-2.5 max-w-[54ch] text-[14px] leading-[1.85] text-mute">{d}</dd>
-                </div>
-              ))}
-            </dl>
-          </Reveal>
-          <Reveal delay={110}>
-            <div className="meta mb-6 text-brass">For relocation departments</div>
-            <h2 className="max-w-[18ch] font-display text-[clamp(1.8rem,3.4vw,2.8rem)] leading-[1.06]">
-              One brief in, one shortlist back.
-            </h2>
-            <dl className="mt-10 border-t border-forest/14">
-              {FOR_TENANTS.map(([t, d]) => (
-                <div key={t} className="border-b border-forest/14 py-6">
-                  <dt className="font-display text-[19px]">{t}</dt>
-                  <dd className="mt-2.5 max-w-[54ch] text-[14px] leading-[1.85] text-mute">{d}</dd>
-                </div>
-              ))}
-            </dl>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="bg-paper-deep py-20 md:py-28">
-        <div className="mx-auto max-w-[1560px] px-6 md:px-10">
-          <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <div className="meta mb-5 text-brass">Currently available</div>
-              <h2 className="max-w-[20ch] font-display text-[clamp(1.8rem,3.6vw,2.9rem)] leading-[1.06]">
-                Executive inventory, including properties held off the portals.
-              </h2>
-            </div>
-            <span className="meta text-mute">{leases.length} properties</span>
-          </div>
-          <div className="grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
-            {leases.map((l, i) => (
-              <Reveal key={l.id} delay={(i % 3) * 90}>
-                <ListingCard l={l} ratio={i === 0 ? "4/5" : "4/5"} />
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-forest-deep py-20 text-paper md:py-28">
-        <div className="mx-auto grid max-w-[1560px] gap-14 px-6 md:px-10 lg:grid-cols-[1fr_1fr] lg:gap-24">
-          <div>
-            <div className="meta mb-6 text-brass-light">Covenants we place against</div>
-            <ul className="border-t border-paper/12">
-              {COVENANTS.map((c) => (
-                <li key={c} className="flex items-baseline gap-5 border-b border-paper/12 py-5 text-[15px] text-paper/80">
-                  <span className="mt-[8px] h-[5px] w-[5px] shrink-0 rounded-full bg-brass" />{c}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h2 className="max-w-[20ch] font-display text-[clamp(1.7rem,3.2vw,2.6rem)] leading-[1.1]">
-              We describe the covenant. We never name the client.
-            </h2>
-            <p className="mt-7 max-w-[52ch] text-[15px] leading-[1.9] text-paper/85">
-              Tenant identity, employer and posting are confidential information held on behalf of our clients.
-              We will confirm the strength and form of a covenant to a landlord in writing, because that is what
-              the decision actually turns on. We will not publish who lives where, and we will not trade on a
-              name for marketing.
-            </p>
-            <EnquireButton className="meta mt-9 border border-paper/35 px-7 py-4 transition-colors hover:bg-paper hover:text-ink">
-              Brief the leasing desk
-            </EnquireButton>
-          </div>
-        </div>
-      </section>
-    </div>
+    <Practice
+      tone="cream"
+      id="leasing"
+      path={href("leasing")}
+      eyebrow="Executive Leasing"
+      headline={["Ten thousand a month and up, placed against a verified covenant."]}
+      italic="We qualify the guarantee, not a credit file."
+      intro={[
+        "We act on both sides of the executive lease: for landlords who want the rent to arrive without a monthly conversation about it, and for relocation departments who want the search finished before the family lands.",
+      ]}
+      // the furnishing figure alone; its unit words are in the furnishing row below
+      numbers={[...pillar.stats.filter(([k]) => k !== "Furnishing"), ["Entry point", "$10,000 per month"], ["Furnishing", `+${FURNISHING.uplift.replace(" to ", " – ")}`]]}
+      sections={[
+        { heading: "For landlords.", items: FOR_LANDLORDS },
+        { heading: "For relocation departments.", items: FOR_RELOCATION },
+      ]}
+      extras={<Extras />}
+      close={{
+        headline: "Brief the leasing desk.",
+        enquire: "Brief the desk",
+        login: "Client login",
+        aside: <PracticeLink href={href("collection")}>Executive leases are in the Collection</PracticeLink>,
+      }}
+      service={{ name: "Executive and luxury home leasing", type: "Executive leasing", description: "Executive leasing for corporate and diplomatic relocation from $10,000 per month, placed against verified covenants across Oakville, King City and Toronto." }}
+    />
   );
 }
