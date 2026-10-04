@@ -18,7 +18,7 @@ export function Footer({ onEnquire }: { onEnquire: () => void }) {
             <p className="mt-7 max-w-[30ch] font-display text-[22px] leading-[1.35] text-paper/85 md:text-[26px]">
               Asset management, investment, private sales and executive leasing. Oakville, Vaughan, and across Ontario.
             </p>
-            <button onClick={onEnquire}
+            <button onClick={() => onEnquire()}
               className="meta mt-8 border border-paper/30 px-6 py-3 text-paper transition-colors hover:bg-paper hover:text-ink">
               Start a conversation
             </button>

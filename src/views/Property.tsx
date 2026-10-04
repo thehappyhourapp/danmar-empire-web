@@ -24,9 +24,8 @@ function photoFor(id: string) {
   return fs.existsSync(path.join(process.cwd(), "public", rel)) ? rel : null;
 }
 
-/** Always five fields, from the listing's own data. Land and some commercial
- *  listings have no rooms or area, so the market and the offer fill the strip;
- *  nothing is invented to make up the count. */
+/** Three to five fields from the listing's own data, never one that repeats what
+ *  the page already shows. Land has type, tenure and status; nothing is invented. */
 function specs(l: Listing): [string, string][] {
   const out: [string, string][] = [["Type", l.kind], ["Tenure", l.tenure]];
   if (l.beds) out.push(["Bedrooms", String(l.beds)]);
@@ -34,11 +33,16 @@ function specs(l: Listing): [string, string][] {
   if (l.sqft) out.push(["Area", `${l.sqft.toLocaleString("en-CA")} sq ft`]);
   if (l.capRate) out.push(["Going-in yield", `${l.capRate.toFixed(1)}%`]);
   if (l.noi) out.push(["Net operating income", `$${l.noi.toLocaleString("en-CA")}`]);
-  const pads: [string, string][] = [["Market", l.region], ["Offered", l.intent === "lease" ? "To lease" : "For sale"]];
-  while (out.length < 4 && pads.length) out.push(pads.shift()!);
   out.push(["Status", l.status]);
   return out.slice(0, 5);
 }
+
+/* Spans per field count that keep every divider on a drawn column line. */
+const SPANS: Record<number, string[]> = {
+  3: ["md:col-span-4", "md:col-span-4", "md:col-span-4"],
+  4: ["md:col-span-3", "md:col-span-3", "md:col-span-3", "md:col-span-3"],
+  5: ["md:col-span-3", "md:col-span-2", "md:col-span-2", "md:col-span-2", "md:col-span-3"],
+};
 
 function jsonLd(l: Listing, photo: string | null) {
   const lease = l.intent === "lease";
@@ -70,7 +74,7 @@ function jsonLd(l: Listing, photo: string | null) {
 export function Property({ l }: { l: Listing }) {
   const lease = l.intent === "lease";
   const photo = photoFor(l.id);
-  const more = LISTINGS.filter((x) => x.id !== l.id && (x.city === l.city || x.useClass === l.useClass)).slice(0, 3);
+  const more = LISTINGS.filter((x) => x.id !== l.id && x.tier !== "Off-Market" && (x.city === l.city || x.useClass === l.useClass)).slice(0, 3);
   const rows = specs(l);
 
   return (
@@ -108,10 +112,10 @@ export function Property({ l }: { l: Listing }) {
         </div>
 
         {/* five fields, one row, hairlines between */}
-        {/* five fields on the 12-column grid, spanning 3/2/2/2/3 so every divider sits on a drawn column line */}
+        {/* three to five fields on the 12-column grid, spans chosen so every divider sits on a drawn column line */}
         <dl className={`col-span-12 mt-12 ${GRID} border-y border-forest/14 lg:mt-16`}>
           {rows.map(([k, v], i) => (
-            <div key={k} className={`${i === 4 ? "col-span-12" : "col-span-6"} flex flex-col-reverse gap-1.5 py-5 pr-4 ${i % 2 ? "border-l border-forest/14 pl-4" : ""} ${i >= 2 ? "border-t border-forest/14 md:border-t-0" : ""} ${i % 2 === 0 && i !== 4 ? "-mr-4 md:mr-0" : ""} ${[3, 2, 2, 2, 3][i] === 3 ? "md:col-span-3" : "md:col-span-2"} md:border-l md:pl-4 md:first:border-l-0 md:first:pl-0`}>
+            <div key={k} className={`${i === rows.length - 1 && rows.length % 2 ? "col-span-12" : "col-span-6"} flex flex-col-reverse gap-1.5 py-5 pr-4 ${i % 2 ? "border-l border-forest/14 pl-4" : ""} ${i >= 2 ? "border-t border-forest/14 md:border-t-0" : ""} ${i % 2 === 0 && !(i === rows.length - 1 && rows.length % 2) ? "-mr-4 md:mr-0" : ""} ${SPANS[rows.length][i]} md:border-l md:pl-4 md:first:border-l-0 md:first:pl-0`}>
               <dt className="meta text-ink/70">{k}</dt>
               <dd className="fig text-[15px] text-brass">{v}</dd>
             </div>

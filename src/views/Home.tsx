@@ -13,7 +13,7 @@ import s from "./Home.module.css";
 
 type Tone = "cream" | "forest" | "deep";
 
-const FEATURED = ["bronte-harbour", "namron-gate", "keele-wilson", "bridle-path"];
+const FEATURED = ["bronte-harbour", "namron-gate", "keele-wilson", "yorkville-penthouse"];
 const RECORD = ["t3", "t5", "t1", "t8", "t2", "t7"];
 const PRACTICE_ROUTES = ["management", "investments", "collection", "leasing"];
 

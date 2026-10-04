@@ -4,7 +4,7 @@ Nothing on this list may be live on danmarempire.com at launch. Remove an item o
 
 ## Form backend
 
-The enquire drawer and the client access request have no backend. Both currently open the visitor's email app with a prefilled message to daniel@danmarempire.com (`src/lib/mailto.ts`). Replace with a real submission path (server action or API route, spam protection, a confirmation the visitor can see, and a record the desk can work from) before launch.
+Set `RESEND_API_KEY` and `RESEND_FROM` in Vercel (every environment), and verify a sending subdomain in Resend after the Cloudflare move. Until the key is set, `/api/enquire` answers 503 and both forms show the desk address as text.
 
 ## "$1B+ transacted"
 

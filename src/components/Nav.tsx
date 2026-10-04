@@ -100,7 +100,7 @@ export function Nav({
               </span>
             </button>
             <button
-              onClick={onEnquire}
+              onClick={() => onEnquire()}
               className={`meta hidden border px-4 py-2 transition-colors md:block ${
                 light ? "border-paper/35 text-paper hover:bg-paper hover:text-ink"
                       : "border-forest/25 text-forest hover:bg-forest hover:text-paper"}`}

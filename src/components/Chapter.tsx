@@ -34,12 +34,12 @@ export function Lines({ lines, as = "h2", className = "" }: { lines: string[]; a
   );
 }
 
-/** A cream chapter with the grid drawn behind it. Inner pages hold one ground. */
-export function Chapter({ className = "", inner = "", children }: { className?: string; inner?: string; children: React.ReactNode }) {
+/** A chapter with the grid drawn behind it. Inner pages hold one ground for the whole page. */
+export function Chapter({ tone = "cream", className = "", inner = "", children }: { tone?: "cream" | "forest"; className?: string; inner?: string; children: React.ReactNode }) {
   return (
-    <section className={`${s.chapter} bg-paper text-ink ${className}`}>
+    <section className={`${s.chapter} ${tone === "forest" ? `bg-forest text-paper ${s.dark}` : "bg-paper text-ink"} ${className}`}>
       <div className="relative mx-auto max-w-[1440px]">
-        <GridLines />
+        <GridLines tone={tone === "forest" ? "dark" : "cream"} />
         <div className={`relative z-10 px-4 md:px-12 ${GRID} ${inner}`}>{children}</div>
       </div>
     </section>

@@ -16,7 +16,7 @@ export function Collection() {
           <Lines as="h1" lines={["Our own listings,", "and nothing else."]} className={HEAD} />
         </div>
         <p className="col-span-12 mt-6 max-w-[52ch] text-[15px] leading-[1.85] text-ink/75 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:self-end">
-          Properties held by Danmar Empire Real Estate Corp., Brokerage. Every one has been underwritten,
+          Listed by Danmar Empire Real Estate Corp., Brokerage. Every one has been underwritten,
           photographed and written by us before it was priced. We do not republish the rest of the board,
           because a list of everything is not an opinion about anything.
         </p>

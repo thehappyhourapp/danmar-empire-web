@@ -14,14 +14,15 @@ import { Footer } from "./Footer";
 import { ImageFrame } from "./ImageFrame";
 import { TypeSwitch } from "./TypeSwitch";
 import { ClientAccess } from "./ClientAccess";
-import { sendByMail } from "@/lib/mailto";
+import { DESK_ADDRESS_CLASS, DESK_EMAIL, submitEnquiry } from "@/lib/enquire";
+import type { SubmitResult } from "@/lib/enquire";
 
 /* Visit-level state that used to live in App.tsx. It sits in the root layout, so it
    survives client-side navigation between routes exactly as it did in the SPA. */
 interface Site {
   saved: Set<string>;
   toggleSave: (id: string) => void;
-  enquire: () => void;
+  enquire: (listing?: ListingRef) => void;
   requestAccess: () => void;
   q: Query; setQ: (q: Query) => void;
   text: string; setText: (s: string) => void;
@@ -36,43 +37,52 @@ export function useSite() {
 }
 
 /* ───────────────── Enquiry drawer: an invitation, not a lead-capture form ─────────────── */
-function Enquire({ open, close }: { open: boolean; close: () => void }) {
-  const [sent, setSent] = useState(false);
-  useEffect(() => { if (open) setSent(false); }, [open]);
+export interface ListingRef { id: string; name: string }
+
+function Enquire({ open, close, listing }: { open: boolean; close: () => void; listing: ListingRef | null }) {
+  const [state, setState] = useState<"idle" | "sending" | SubmitResult>("idle");
+  useEffect(() => { if (open) setState("idle"); }, [open]);
   if (!open) return null;
+
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (state === "sending") return;
+    const f = new FormData(e.currentTarget);
+    const v = (k: string) => String(f.get(k) ?? "").trim();
+    const note = [`I am: ${v("role")}`, v("tel") ? `Telephone: ${v("tel")}` : null, "", v("brief")].filter((l) => l !== null).join("\n");
+    setState("sending");
+    setState(await submitEnquiry({ kind: "enquiry", name: v("name"), email: v("email"), note, listingRef: listing ? `${listing.id} (${listing.name})` : undefined, website: v("website") }));
+  };
+
   return (
     <div className="fixed inset-0 z-[70] flex justify-end">
       <div className="absolute inset-0 bg-forest-deep/60 backdrop-blur-sm animate-fadeIn" onClick={close} />
-      <aside className="relative h-full w-full max-w-[520px] overflow-y-auto bg-paper thin animate-riseIn">
+      <aside className="relative h-full w-full max-w-[520px] overflow-y-auto bg-paper thin animate-riseIn" role="dialog" aria-modal="true" aria-label="Enquire">
         <div className="flex items-start justify-between p-8 md:p-10">
           <div>
             <div className="meta text-brass">Enquire</div>
             <h2 className="mt-4 max-w-[16ch] font-display text-[30px] leading-[1.08] md:text-[36px]">
               Tell us what you are trying to do.
             </h2>
+            {listing && <p className="meta mt-5 text-ink/70">Regarding <span className="text-forest">{listing.name}</span></p>}
           </div>
           <button onClick={close} aria-label="Close" className="mt-1 text-mute hover:text-ink">
             <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M1 1l20 20M21 1L1 21" stroke="currentColor" strokeWidth="1.2" /></svg>
           </button>
         </div>
 
-        {sent ? (
+        {state === "sent" ? (
           <div className="px-8 pb-16 md:px-10">
-            <div className="border border-forest/16 p-8">
-              <div className="meta text-brass">Sent to your email app</div>
-              <p className="mt-4 font-display text-[24px] leading-snug">Send it from there, and someone from the desk will be in touch inside one business day.</p>
+            <div className="border border-forest/16 p-8" role="status">
+              <div className="meta text-brass">Received</div>
+              <p className="mt-4 font-display text-[24px] leading-snug">Someone from the desk will be in touch inside one business day.</p>
               <p className="mt-4 text-[14px] leading-[1.8] text-mute">
                 If it is urgent, call the Oakville office on 905 901 5011.
               </p>
             </div>
           </div>
         ) : (
-          <form className="px-8 pb-16 md:px-10" onSubmit={(e) => {
-            e.preventDefault();
-            const f = new FormData(e.currentTarget); const v = (k: string) => String(f.get(k) ?? "");
-            sendByMail("Enquiry", [["I am", v("role")], ["Name", v("name")], ["Email", v("email")], ["Telephone", v("tel")], ["Looking for", v("brief")]]);
-            setSent(true);
-          }}>
+          <form className="px-8 pb-16 md:px-10" onSubmit={submit}>
             <div className="meta mb-4 text-mute">I am</div>
             <div className="mb-8 grid grid-cols-2 gap-2">
               {["Buying", "Selling", "Leasing", "Investing"].map((r) => (
@@ -83,10 +93,10 @@ function Enquire({ open, close }: { open: boolean; close: () => void }) {
               ))}
             </div>
 
-            {[["Name", "text", "Your name", "name"], ["Email", "email", "you@company.com", "email"], ["Telephone", "tel", "Optional", "tel"]].map(([l, t, p, n]) => (
+            {[["Name", "text", "Your name", "name", "name"], ["Email", "email", "you@company.com", "email", "email"], ["Telephone", "tel", "Optional", "tel", "tel"]].map(([l, t, ph, n, ac]) => (
               <div key={l} className="mb-6">
                 <label className="meta mb-2 block text-mute">{l}</label>
-                <input type={t} name={n} placeholder={p} required={t !== "tel"}
+                <input type={t} name={n} autoComplete={ac} placeholder={ph} required={t !== "tel"}
                   className="w-full border-0 border-b border-forest/25 bg-transparent py-3 text-[15px] outline-none transition-colors focus:border-ink" />
               </div>
             ))}
@@ -96,8 +106,25 @@ function Enquire({ open, close }: { open: boolean; close: () => void }) {
               <textarea name="brief" rows={4} placeholder="Budget, area, timing, and anything that actually matters to you."
                 className="w-full resize-none border-0 border-b border-forest/25 bg-transparent py-3 text-[15px] outline-none transition-colors focus:border-ink" />
             </div>
+            {/* honeypot: hidden from people, filled by scripts */}
+            <div aria-hidden className="absolute -left-[9999px] top-0 h-px w-px overflow-hidden">
+              <label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
+            </div>
 
-            <button type="submit" className="meta w-full border border-forest/25 py-4 transition-colors hover:bg-forest hover:text-paper">Send</button>
+            <button type="submit" disabled={state === "sending"} aria-busy={state === "sending"}
+              className="meta w-full border border-forest/25 py-4 transition-colors hover:bg-forest hover:text-paper disabled:opacity-60">
+              {state === "sending" ? "Sending" : "Send"}
+            </button>
+            {state === "unavailable" && (
+              <p role="status" className="mt-5 text-[14px] leading-[1.8] text-ink/80">
+                The form is not connected yet. Email <span className={DESK_ADDRESS_CLASS}>{DESK_EMAIL}</span>.
+              </p>
+            )}
+            {state === "failed" && (
+              <p role="status" className="mt-5 text-[14px] leading-[1.8] text-ink/80">
+                That did not send. Try again, or email <span className={DESK_ADDRESS_CLASS}>{DESK_EMAIL}</span>.
+              </p>
+            )}
             <p className="meta mt-5 leading-[1.8] text-mute">
               We use what you send to answer you. We do not sell or share it, and we do not add you to a list
               without asking.
@@ -174,6 +201,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
     try { localStorage.setItem(SAVED_KEY, JSON.stringify([...saved])); } catch { /* ignore */ }
   }, [saved]);
   const [enq, setEnq] = useState(false);
+  const [enqListing, setEnqListing] = useState<ListingRef | null>(null);
   const [access, setAccess] = useState(false);
   const [savedOpen, setSavedOpen] = useState(false);
   const [notice, setNotice] = useState(true);
@@ -184,7 +212,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   const toggleSave = (id: string) =>
     setSaved((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const search = (nq: Query, t: string) => { setQ(nq); setText(t); router.push("/collection"); };
-  const enquire = () => setEnq(true);
+  const enquire = (listing?: ListingRef) => { setEnqListing(listing ?? null); setEnq(true); };
   const requestAccess = () => setAccess(true);
   const closeAccess = useCallback(() => setAccess(false), []);
 
@@ -209,7 +237,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         </div>
 
         <TypeSwitch />
-        <Enquire open={enq} close={() => setEnq(false)} />
+        <Enquire open={enq} close={() => setEnq(false)} listing={enqListing} />
         <ClientAccess open={access} close={closeAccess} />
         <Saved open={savedOpen} close={() => setSavedOpen(false)} ids={saved} toggle={toggleSave} />
       </div>
@@ -226,5 +254,5 @@ export function ClientAccessButton({ className, children }: { className?: string
 /** A button anywhere on a server-rendered page that opens the enquiry drawer. */
 export function EnquireButton({ className, children }: { className?: string; children: React.ReactNode }) {
   const { enquire } = useSite();
-  return <button onClick={enquire} className={className}>{children}</button>;
+  return <button type="button" onClick={() => enquire()} className={className}>{children}</button>;
 }

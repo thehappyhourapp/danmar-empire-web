@@ -8,6 +8,12 @@
   position: relative;
 }
 
+/* the global selection colours are forest on cream; on a forest ground they vanish */
+.dark ::selection {
+  background: #eee8e0;
+  color: #0f3b2f;
+}
+
 .tlink {
   text-decoration: underline;
   text-decoration-thickness: 1px;

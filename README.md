@@ -27,3 +27,15 @@ npm start        # serve the production build
   There is no MLS search or map, by design.
 - `src/lib/seo.ts` is the single source of truth for per-page title, description
   and canonical path.
+
+## Environment
+
+Both forms (the enquire drawer and the client access request) post to `/api/enquire`, which sends
+mail to the desk through [Resend](https://resend.com). Two variables, set in Vercel for every
+environment and in `.env.local` for local work (see `.env.example`):
+
+- `RESEND_API_KEY`: the Resend API key.
+- `RESEND_FROM`: the verified sender, for example `Danmar Empire <desk@mail.danmarempire.com>`,
+  on a domain or subdomain verified in Resend.
+
+Without them the route answers 503 and the forms show the desk address as selectable text.

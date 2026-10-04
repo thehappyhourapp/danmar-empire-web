@@ -130,7 +130,7 @@ export function Track() {
               to have.
             </p>
           </div>
-          <button onClick={onEnquire} className="meta border border-paper/35 px-8 py-4 transition-colors hover:bg-paper hover:text-forest">
+          <button onClick={() => onEnquire()} className="meta border border-paper/35 px-8 py-4 transition-colors hover:bg-paper hover:text-forest">
             Speak privately
           </button>
         </div>
