@@ -3,7 +3,7 @@ import { LISTINGS, OWNERSHIP, PILLARS, TRACK } from "@/lib/data";
 import { money } from "@/lib/parse";
 import { href, propertyHref } from "@/lib/routes";
 import { ImageFrame } from "@/components/ImageFrame";
-import { HomeMotion } from "@/components/HomeMotion";
+import { MotionController } from "@/components/MotionController";
 import s from "./Home.module.css";
 
 /* Home is five chapters on two temperature cuts: forest, then cream for three
@@ -73,7 +73,7 @@ export function Home() {
 
   return (
     <div id="home">
-      <HomeMotion rootId="home" />
+      <MotionController rootId="home" />
 
       {/* ───────── 1. Hero: forest. The headline is the LCP element and never animates. */}
       <section className={`${s.chapter} ${s.dark} bg-forest text-paper`}>

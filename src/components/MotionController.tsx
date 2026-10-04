@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 /**
- * Motion controller for the Home route. Renders nothing.
+ * Motion controller for a route. Renders nothing. Hero lift, scroll cue and parallax hooks are optional; a page without them gets reveals and wipes only.
  *
  * It switches on html[data-motion="on"] after hydration, and only when the
  * visitor has not asked for reduced motion. Home.module.css keys every hidden
@@ -15,7 +15,7 @@ import { useEffect } from "react";
  * independent damping, x += (target - x) * (1 - e^(-k dt)), k = 8, and the loop
  * runs only while something is still settling.
  */
-export function HomeMotion({ rootId }: { rootId: string }) {
+export function MotionController({ rootId }: { rootId: string }) {
   useEffect(() => {
     const root = document.getElementById(rootId);
     if (!root) return;
@@ -49,6 +49,22 @@ export function HomeMotion({ rootId }: { rootId: string }) {
         { rootMargin: "0px 0px -10% 0px", threshold: 0.02 },
       );
       pending.forEach((el) => io.observe(el));
+
+      // Filtering remounts rows. Anything that arrives later is shown in place when it
+      // lands on screen and observed otherwise, so nothing is left in a hidden state.
+      const arrive = (el: HTMLElement) => {
+        if (el.classList.contains("in")) return;
+        if (el.getBoundingClientRect().top < vh() * 0.95) el.classList.add("in", "instant");
+        else io.observe(el);
+      };
+      const mo = new MutationObserver((records) => {
+        for (const r of records) r.addedNodes.forEach((n) => {
+          if (!(n instanceof HTMLElement)) return;
+          if (n.matches("[data-reveal], [data-wipe]")) arrive(n);
+          n.querySelectorAll<HTMLElement>("[data-reveal], [data-wipe]").forEach(arrive);
+        });
+      });
+      mo.observe(root, { childList: true, subtree: true });
 
       const lift = root.querySelector<HTMLElement>("[data-hero-lift]");
       const cue = root.querySelector<HTMLElement>("[data-cue]");
@@ -100,11 +116,12 @@ export function HomeMotion({ rootId }: { rootId: string }) {
 
       cleanup = () => {
         io.disconnect();
+        mo.disconnect();
         window.removeEventListener("scroll", kick);
         window.removeEventListener("resize", kick);
         cancelAnimationFrame(raf);
         delete html.dataset.motion;
-        targets.forEach((el) => el.classList.remove("in", "instant"));
+        root.querySelectorAll("[data-reveal], [data-wipe]").forEach((el) => el.classList.remove("in", "instant"));
         if (lift) lift.style.transform = "";
         if (cue) cue.style.opacity = "";
         plx.forEach((p) => { p.el.style.transform = ""; });

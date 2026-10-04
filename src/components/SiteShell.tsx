@@ -1,6 +1,8 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+
+const SAVED_KEY = "danmar:saved";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LISTINGS } from "@/lib/data";
@@ -148,6 +150,21 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   const [q, setQ] = useState<Query>(EMPTY);
   const [text, setText] = useState("");
   const [saved, setSaved] = useState<Set<string>>(new Set());
+  /* The shortlist persists in localStorage. It is read after mount so the server
+     and first client render agree (an empty set), and nothing is written back
+     until that read has happened. */
+  const savedLoaded = useRef(false);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(SAVED_KEY);
+      if (raw) setSaved(new Set(JSON.parse(raw) as string[]));
+    } catch { /* storage unavailable: the shortlist lasts the visit */ }
+    savedLoaded.current = true;
+  }, []);
+  useEffect(() => {
+    if (!savedLoaded.current) return;
+    try { localStorage.setItem(SAVED_KEY, JSON.stringify([...saved])); } catch { /* ignore */ }
+  }, [saved]);
   const [enq, setEnq] = useState(false);
   const [savedOpen, setSavedOpen] = useState(false);
   const [notice, setNotice] = useState(true);

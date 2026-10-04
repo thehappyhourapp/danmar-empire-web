@@ -1,185 +1,173 @@
-"use client";
-
+import fs from "node:fs";
+import path from "node:path";
+import Image from "next/image";
 import Link from "next/link";
-import { href } from "@/lib/routes";
-import { useSite } from "@/components/SiteShell";
-import { useState } from "react";
 import { LISTINGS } from "@/lib/data";
 import type { Listing } from "@/lib/data";
 import { money } from "@/lib/parse";
-import { ImageFrame } from "@/components/ImageFrame";
-import { SaveBtn, Tier, ListingCard } from "@/components/ListingCard";
-import { project, VB, LAKE, ROADS, PLACES } from "@/lib/geo";
+import { href, propertyHref } from "@/lib/routes";
+import { SITE } from "@/lib/metadata";
+import { Chapter, GRID, delay } from "@/components/Chapter";
+import { ListingRow } from "@/components/ListingRow";
+import { MotionController } from "@/components/MotionController";
+import { SaveLink } from "@/components/SaveLink";
+import { EnquireButton } from "@/components/SiteShell";
+import s from "@/components/motion.module.css";
 
-const TABS = ["Details", "Location", "Floorplan", "Brochure"] as const;
+const BROKERAGE = "Danmar Empire Real Estate Corp., Brokerage";
 
-function MiniMap({ l }: { l: Listing }) {
-  const p = project(l.lng, l.lat);
-  return (
-    <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#07241B]">
-      <svg viewBox={`${Math.max(0, p.x - 190)} ${Math.max(0, p.y - 107)} 380 214`} className="h-full w-full">
-        <rect x="0" y="0" width={VB.w} height={VB.h} fill="#07241B" />
-        <path d={LAKE} fill="#11332A" stroke="rgba(198,169,107,.3)" strokeWidth="1" />
-        {ROADS.map((r) => <path key={r.label} d={r.d} fill="none" stroke="rgba(255,255,255,.16)" strokeWidth="1.2" />)}
-        {PLACES.map((pl) => {
-          const q = project(pl.lng, pl.lat);
-          return <text key={pl.name} x={q.x + 6} y={q.y + 3} fill="rgba(243,241,236,.4)" fontSize="9"
-            fontFamily="Libre Franklin, sans-serif" fontWeight="500" letterSpacing="1.4">{pl.name.toUpperCase()}</text>;
-        })}
-        <circle cx={p.x} cy={p.y} r="16" fill="rgba(198,169,107,.18)" />
-        <circle cx={p.x} cy={p.y} r="5" fill="#C6A96B" stroke="#07241B" strokeWidth="1.5" />
-      </svg>
-      <p className="meta absolute bottom-3 left-3 text-paper/85">Approximate location</p>
-    </div>
-  );
+/** Photography lives at /public/photos/{id}.jpg. Until a file exists the hero is
+ *  the flat forest/10 block, the same placeholder the rows use. Checked at build
+ *  time: every listing page is statically generated. */
+function photoFor(id: string) {
+  const rel = `/photos/${id}.jpg`;
+  return fs.existsSync(path.join(process.cwd(), "public", rel)) ? rel : null;
+}
+
+/** Always five fields, from the listing's own data. Land and some commercial
+ *  listings have no rooms or area, so the market and the offer fill the strip;
+ *  nothing is invented to make up the count. */
+function specs(l: Listing): [string, string][] {
+  const out: [string, string][] = [["Type", l.kind], ["Tenure", l.tenure]];
+  if (l.beds) out.push(["Bedrooms", String(l.beds)]);
+  if (l.baths) out.push(["Bathrooms", String(l.baths)]);
+  if (l.sqft) out.push(["Area", `${l.sqft.toLocaleString("en-CA")} sq ft`]);
+  if (l.capRate) out.push(["Going-in yield", `${l.capRate.toFixed(1)}%`]);
+  if (l.noi) out.push(["Net operating income", `$${l.noi.toLocaleString("en-CA")}`]);
+  const pads: [string, string][] = [["Market", l.region], ["Offered", l.intent === "lease" ? "To lease" : "For sale"]];
+  while (out.length < 4 && pads.length) out.push(pads.shift()!);
+  out.push(["Status", l.status]);
+  return out.slice(0, 5);
+}
+
+function jsonLd(l: Listing, photo: string | null) {
+  const lease = l.intent === "lease";
+  const available = l.status === "Available" || l.status === "Conditional";
+  return {
+    "@context": "https://schema.org",
+    "@type": "RealEstateListing",
+    name: l.name,
+    description: l.standfirst,
+    url: `${SITE}${propertyHref(l.id)}`,
+    ...(photo ? { image: `${SITE}${photo}` } : {}),
+    offers: {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": l.useClass === "residential" ? "SingleFamilyResidence" : "Place",
+        name: l.name,
+        address: { "@type": "PostalAddress", streetAddress: l.address, addressLocality: l.city, addressRegion: "ON", addressCountry: "CA" },
+      },
+      price: l.price,
+      priceCurrency: "CAD",
+      ...(lease ? { priceSpecification: { "@type": "UnitPriceSpecification", price: l.price, priceCurrency: "CAD", unitCode: "MON" } } : {}),
+      availability: available ? "https://schema.org/InStock" : "https://schema.org/SoldOut",
+      businessFunction: lease ? "http://purl.org/goodrelations/v1#LeaseOut" : "http://purl.org/goodrelations/v1#Sell",
+      offeredBy: { "@type": "RealEstateAgent", name: BROKERAGE, url: SITE },
+    },
+  };
 }
 
 export function Property({ l }: { l: Listing }) {
-  const { saved, toggleSave, enquire: onEnquire } = useSite();
-  const [tab, setTab] = useState<typeof TABS[number]>("Details");
   const lease = l.intent === "lease";
+  const photo = photoFor(l.id);
   const more = LISTINGS.filter((x) => x.id !== l.id && (x.city === l.city || x.useClass === l.useClass)).slice(0, 3);
-
-  const specs: [string, string][] = [
-    ["Address", l.address],
-    ["Submarket", `${l.region}, ${l.city}`],
-    ["Type", l.kind],
-    ["Tenure", l.tenure],
-    ...(l.beds ? ([["Bedrooms", String(l.beds)]] as [string, string][]) : []),
-    ...(l.baths ? ([["Bathrooms", String(l.baths)]] as [string, string][]) : []),
-    ...(l.sqft ? ([["Area", `${l.sqft.toLocaleString("en-CA")} sq ft`]] as [string, string][]) : []),
-    ...(l.capRate ? ([["Going-in yield", `${l.capRate.toFixed(1)}%`]] as [string, string][]) : []),
-    ...(l.noi ? ([["Net operating income", `$${l.noi.toLocaleString("en-CA")}`]] as [string, string][]) : []),
-    ["Status", l.status],
-  ];
+  const rows = specs(l);
 
   return (
-    <div className="pt-[88px]">
-      <div className="mx-auto max-w-[1560px] px-6 md:px-10">
-        <Link href={href("collection")} className="meta inline-block py-8 text-mute link-u hover:text-ink">← The Collection</Link>
+    <div id="property">
+      <MotionController rootId="property" />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd(l, photo)).replace(/</g, "\\u003c") }} />
 
-        {/* name alone, then one line of data */}
-        <header className="max-w-[22ch]">
-          <div className="mb-5 flex items-center gap-3"><Tier t={l.tier} /></div>
-          <h1 className="font-display text-[clamp(2.4rem,6vw,5rem)] leading-[.98] tracking-[-.015em]">{l.name}</h1>
-        </header>
-        <p className="meta mt-7 text-mute">
-          {money(l.price, lease)} <span className="mx-2 opacity-40">/</span> {l.tenure}
-          <span className="mx-2 opacity-40">/</span> {l.region}, {l.city}
-        </p>
-
-        <div className="relative mt-10">
-          <ImageFrame src={l.photo} hue={l.hue} ratio="21/10" alt={l.name} />
-          <div className="absolute right-5 top-5"><SaveBtn on={saved.has(l.id)} toggle={() => toggleSave(l.id)} /></div>
-        </div>
-
-        {/* invitations, not a lead-capture form */}
-        <div className="mt-8 flex flex-wrap items-center gap-4 border-b border-forest/14 pb-10">
-          <button onClick={onEnquire} className="meta border border-forest/25 px-7 py-4 transition-colors hover:bg-forest hover:text-paper">
-            {lease ? "Request a viewing" : "Request a private viewing"}
-          </button>
-          <button onClick={onEnquire} className="meta border border-forest/16 px-7 py-4 text-ink/70 transition-colors hover:border-ink/40 hover:text-ink">
-            {l.useClass === "investment" ? "Request the diligence package" : "Register for similar properties"}
-          </button>
-          <div className="meta ml-auto flex gap-5 text-mute">
-            <a className="link-u" href={`mailto:?subject=${encodeURIComponent(l.name)}`}>Email</a>
-            <a className="link-u" href="#" onClick={(e) => e.preventDefault()}>WhatsApp</a>
-          </div>
-        </div>
-
-        {/* prose before specification, pull-quote first */}
-        <div className="grid gap-16 py-16 md:py-20 lg:grid-cols-[1.35fr_1fr] lg:gap-24">
-          <div>
-            <blockquote className="max-w-[30ch] font-display text-[clamp(1.6rem,3.2vw,2.5rem)] leading-[1.18] tracking-[-.01em]">
-              “{l.standfirst}”
-            </blockquote>
-            <div className="mt-10 max-w-[62ch] space-y-6 text-[15px] leading-[1.9] text-ink/78">
-              {l.body.map((p, i) => <p key={i}>{p}</p>)}
-            </div>
-            <p className="meta mt-10 text-mute">
-              Listed by Danmar Empire Real Estate Corp., Brokerage
-            </p>
-          </div>
-
-          <aside>
-            <div className="meta mb-5 text-brass">Particulars</div>
-            <dl className="border-t border-forest/14">
-              {specs.map(([k, v]) => (
-                <div key={k} className="flex items-baseline justify-between gap-6 border-b border-forest/14 py-3.5">
-                  <dt className="meta text-mute">{k}</dt>
-                  <dd className="text-right fig text-[12px] tabular-nums">{v}</dd>
-                </div>
-              ))}
-            </dl>
-            {l.features.length > 0 && (
-              <>
-                <div className="meta mb-4 mt-10 text-brass">Notable</div>
-                <ul className="space-y-2.5">
-                  {l.features.map((f) => (
-                    <li key={f} className="flex items-baseline gap-3 text-[14px] capitalize text-ink/75">
-                      <span className="mt-[7px] h-[4px] w-[4px] shrink-0 rounded-full bg-brass" />{f}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-          </aside>
-        </div>
-
-        {/* gallery: a grid with a link out, not a carousel you are trapped in */}
-        <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-          {[0, 1, 2, 3].map((i) => (
-            <ImageFrame key={i} src={l.photo} hue={l.hue + i * 34} ratio="1/1" alt="" />
-          ))}
-        </div>
-        <button className="meta mt-4 text-mute link-u hover:text-ink">More photographs →</button>
-
-        {/* every MLS artefact deferred into one quiet tab row */}
-        <div className="mt-20">
-          <div className="flex flex-wrap gap-8 border-b border-forest/14">
-            {TABS.map((t) => (
-              <button key={t} onClick={() => setTab(t)}
-                className={`meta pb-4 transition-colors ${tab === t ? "text-ink" : "text-mute hover:text-ink"}`}>
-                {t}{tab === t && <span className="mt-[15px] block h-px w-full bg-brass" />}
-              </button>
-            ))}
-          </div>
-          <div className="py-10">
-            {tab === "Location" && <MiniMap l={l} />}
-            {tab === "Details" && (
-              <div className="grid gap-x-14 gap-y-3 md:grid-cols-2">
-                {specs.map(([k, v]) => (
-                  <div key={k} className="flex items-baseline justify-between gap-6 border-b border-forest/12 py-3">
-                    <span className="meta text-mute">{k}</span><span className="fig text-[12px]">{v}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-            {(tab === "Floorplan" || tab === "Brochure") && (
-              <div className="flex flex-wrap items-center gap-6 border border-dashed border-forest/25 p-10">
-                <p className="max-w-[46ch] text-[14px] leading-[1.8] text-mute">
-                  {tab === "Floorplan"
-                    ? "Measured floorplans are released with the viewing confirmation."
-                    : "The full brochure, including survey and mechanical schedules, is available on request."}
-                </p>
-                <button onClick={onEnquire} className="meta ml-auto border border-forest/25 px-6 py-3 hover:bg-forest hover:text-paper">Request</button>
-              </div>
-            )}
-          </div>
-        </div>
+      {/* ───────── Hero: full-bleed, the LCP element. Paints at full opacity and never animates. */}
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-forest/10 md:aspect-[21/10] lg:max-h-[62svh]">
+        {photo ? (
+          <Image src={photo} alt={`${l.name}, ${l.address}, ${l.city}`} fill priority sizes="100vw" className="object-cover" />
+        ) : (
+          <span className="sr-only">Photography to follow</span>
+        )}
       </div>
 
-      {/* related */}
-      <section className="mt-16 border-t border-forest/14 bg-paper-deep py-20 md:py-28">
-        <div className="mx-auto max-w-[1560px] px-6 md:px-10">
-          <div className="meta mb-10 text-brass">Also on the books</div>
-          <div className="grid gap-8 md:grid-cols-3">
-            {more.map((m) => (
-              <ListingCard key={m.id} l={m} ratio="4/5" />
-            ))}
-          </div>
+      <Chapter inner="pb-20 pt-10 md:pt-14 lg:pb-28">
+        <nav aria-label="Breadcrumb" className="col-span-12">
+          <Link href={href("collection")} className={`${s.tlink} meta text-ink/70 hover:text-forest`}>The Collection</Link>
+        </nav>
+
+        {/* name alone, then one line of data */}
+        <header className="col-span-12 mt-10 lg:col-span-8">
+          <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1] tracking-[-.015em]">{l.address}</h1>
+          <p className="meta mt-5 text-ink/70">
+            <span className="block md:inline">{l.name}</span>
+            <span className="mx-1.5 hidden opacity-40 md:inline">/</span>
+            <span className="block md:inline">{l.region}, {l.city}</span>
+            {l.tier && <><span className="mx-1.5 hidden opacity-40 md:inline">/</span><span className="block text-brass md:inline">{l.tier}</span></>}
+          </p>
+        </header>
+        <div className="col-span-12 mt-8 lg:col-span-3 lg:col-start-10 lg:mt-10 lg:self-end lg:text-right">
+          <p className="fig text-[clamp(1.75rem,2.6vw,2.4rem)] text-brass">{money(l.price, lease)}</p>
+          <p className="meta mt-2 text-ink/70">{lease ? "To lease, per month" : "For sale"} · Listed by the brokerage</p>
         </div>
-      </section>
+
+        {/* five fields, one row, hairlines between */}
+        {/* five fields on the 12-column grid, spanning 3/2/2/2/3 so every divider sits on a drawn column line */}
+        <dl className={`col-span-12 mt-12 ${GRID} border-y border-forest/14 lg:mt-16`}>
+          {rows.map(([k, v], i) => (
+            <div key={k} className={`${i === 4 ? "col-span-12" : "col-span-6"} flex flex-col-reverse gap-1.5 py-5 pr-4 ${i % 2 ? "border-l border-forest/14 pl-4" : ""} ${i >= 2 ? "border-t border-forest/14 md:border-t-0" : ""} ${i % 2 === 0 && i !== 4 ? "-mr-4 md:mr-0" : ""} ${[3, 2, 2, 2, 3][i] === 3 ? "md:col-span-3" : "md:col-span-2"} md:border-l md:pl-4 md:first:border-l-0 md:first:pl-0`}>
+              <dt className="meta text-ink/70">{k}</dt>
+              <dd className="fig text-[15px] text-brass">{v}</dd>
+            </div>
+          ))}
+        </dl>
+
+        {/* prose before specification, the standfirst first */}
+        <p data-reveal className={`${s.rise} col-span-12 mt-16 max-w-[30ch] font-display text-[clamp(1.5rem,3vw,2.4rem)] font-medium leading-[1.18] tracking-[-.01em] lg:col-span-7 lg:mt-24`}>
+          {l.standfirst}
+        </p>
+        <div className="col-span-12 mt-8 space-y-6 lg:col-span-6 lg:mt-10">
+          {l.body.map((p, i) => (
+            <p key={i} data-reveal className={`${s.rise} max-w-[60ch] text-[15.5px] leading-[1.9] text-ink/80`} style={delay(i)}>{p}</p>
+          ))}
+          <p className="meta pt-4 text-ink/70">Listed by {BROKERAGE}</p>
+        </div>
+        <aside className="col-span-12 mt-12 lg:col-span-4 lg:col-start-9 lg:mt-10">
+          {l.features.length > 0 && (
+            <>
+              <h2 className="meta text-brass">Notable</h2>
+              <ul className="mt-4 border-t border-forest/14">
+                {l.features.map((f) => (
+                  <li key={f} className="border-b border-forest/14 py-3 text-[14.5px] text-ink/80 first-letter:uppercase">{f}</li>
+                ))}
+              </ul>
+            </>
+          )}
+          <div className="mt-10 flex flex-col items-start gap-4">
+            <EnquireButton className={`${s.tlink} font-display text-[1.3rem] font-medium leading-tight text-forest`}>
+              {lease ? "Request a viewing" : "Request a private viewing"}
+            </EnquireButton>
+            <EnquireButton className={`${s.tlink} text-[15px] text-ink/75 hover:text-forest`}>
+              {l.useClass === "investment" ? "Request the diligence package" : "Register for similar properties"}
+            </EnquireButton>
+            <SaveLink id={l.id} />
+          </div>
+          <p className="meta mt-10 max-w-[36ch] leading-[1.9] text-ink/70">
+            Measured floorplans and the full brochure are released with the viewing confirmation.
+          </p>
+        </aside>
+      </Chapter>
+
+      {/* related, as rows */}
+      {more.length > 0 && (
+        <Chapter inner="pb-24 pt-4 lg:pb-32">
+          <div className={`${GRID} col-span-12 items-baseline`}>
+            <h2 className="col-span-12 font-display text-[clamp(1.6rem,2.8vw,2.25rem)] font-medium leading-[1.05] md:col-span-5">Also on the books</h2>
+            <p className="col-span-12 mt-3 text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-7 md:mt-0">
+              Held by the brokerage in the same market or the same class.
+            </p>
+          </div>
+          <div className="col-span-12 mt-10">
+            {more.map((m, i) => <ListingRow key={m.id} l={m} index={i} />)}
+          </div>
+        </Chapter>
+      )}
     </div>
   );
 }
