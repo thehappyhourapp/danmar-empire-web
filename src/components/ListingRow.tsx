@@ -36,10 +36,10 @@ export function ListingRow({ l, index, save = true, photo, level = 3 }: { l: Lis
         </p>
       </div>
       <p className="col-span-12 mt-4 max-w-[48ch] text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-5 md:mt-0 md:self-start md:pt-2">{l.standfirst}</p>
-      <div className="col-span-12 mt-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 md:col-span-2 md:col-start-11 md:row-span-2 md:row-start-1 md:mt-0 md:block md:self-center md:text-right">
+      <div className="col-span-12 mt-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 md:col-span-8 md:col-start-5 lg:col-span-2 lg:col-start-11 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:block lg:self-center lg:text-right">
         <span className="fig block text-[clamp(1.5rem,1.8vw,1.7rem)] text-brass">{money(l.price, lease)}</span>
         <span className="meta mt-2 block text-ink/70">{lease ? "To lease" : "For sale"} · {l.kind}</span>
-        {save && <span className="block basis-full md:mt-4"><SaveLink id={l.id} /></span>}
+        {save && <span className="block basis-full lg:mt-4"><SaveLink id={l.id} /></span>}
       </div>
     </div>
   );
@@ -70,10 +70,10 @@ function OffMarketRow({ l, index, level }: { l: Listing; index: number; level: 2
       <p className="col-span-12 mt-4 max-w-[48ch] text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-5 md:mt-0 md:self-start md:pt-2">
         Held off the public record at the owner's instruction. Particulars are shared on enquiry.
       </p>
-      <div className="col-span-12 mt-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 md:col-span-2 md:col-start-11 md:row-span-2 md:row-start-1 md:mt-0 md:block md:self-center md:text-right">
+      <div className="col-span-12 mt-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 md:col-span-8 md:col-start-5 lg:col-span-2 lg:col-start-11 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:block lg:self-center lg:text-right">
         <span className="fig block text-[clamp(1.5rem,1.8vw,1.7rem)] text-brass">By enquiry</span>
         <span className="meta mt-2 block text-ink/70">{lease ? "To lease" : "For sale"} · {l.kind}</span>
-        <span className="block basis-full md:mt-4"><EnquireLink listing={{ id: l.id, name: l.name }}>Enquire</EnquireLink></span>
+        <span className="block basis-full lg:mt-4"><EnquireLink listing={{ id: l.id, name: l.name }}>Enquire</EnquireLink></span>
       </div>
     </div>
   );

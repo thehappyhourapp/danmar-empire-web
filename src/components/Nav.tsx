@@ -99,7 +99,7 @@ export function Nav({
             <Wordmark light={light} registered={false} />
           </Link>
 
-          <nav className="ml-auto hidden items-center gap-8 xl:flex">
+          <nav className="ml-auto hidden items-center gap-6 xl:flex">
             {NAV.map((n) => (
               <Link
                 key={n.id} href={href(n.id)} aria-current={page === n.id ? "page" : undefined}
@@ -132,7 +132,7 @@ export function Nav({
             >
               Enquire
             </button>
-            <button onClick={() => setOpen(true)} className={`xl:hidden ${light ? "text-paper" : "text-forest"}`} aria-label="Menu" aria-expanded={open}>
+            <button onClick={() => setOpen(true)} className={`-mx-3 -my-[15px] px-3 py-[15px] xl:hidden ${light ? "text-paper" : "text-forest"}`} aria-label="Menu" aria-expanded={open}>
               <svg width="24" height="14" viewBox="0 0 24 14" fill="none"><path d="M0 1h24M0 7h24M0 13h16" stroke="currentColor" strokeWidth="1.2"/></svg>
             </button>
           </div>

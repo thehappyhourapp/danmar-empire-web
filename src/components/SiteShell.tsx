@@ -171,13 +171,13 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
     <Ctx.Provider value={{ saved, toggleSave, enquire, requestAccess, q, setQ, text, setText, search }}>
       <div className="min-h-screen bg-paper antialiased">
         {notice && (
-          <aside aria-label="Prototype notice" className="sticky top-0 z-[80] flex h-9 items-center gap-3 bg-forest-soft px-4 text-paper sm:gap-4 sm:px-5">
+          <aside aria-label="Prototype notice" className="sticky top-0 z-[80] flex h-9 items-center gap-3 overflow-hidden bg-forest-soft px-4 text-paper sm:gap-4 sm:px-5">
             <span className="meta shrink-0">Prototype</span>
             <span className="min-w-0 truncate text-[11.5px] leading-none text-paper/90 sm:text-[12px]">
               <span className="sm:hidden">Placeholder content. Do not publish as-is.</span>
               <span className="hidden sm:inline">Design prototype. Listings, transactions and figures are placeholder content pending the PropTx feed and your sign-off. Do not publish as-is.</span>
             </span>
-            <button onClick={() => setNotice(false)} className="meta ml-auto shrink-0 text-paper/80 hover:text-paper">Hide</button>
+            <button onClick={() => setNotice(false)} className="meta -my-2 ml-auto shrink-0 py-2 text-paper/80 hover:text-paper">Hide</button>
           </aside>
         )}
 

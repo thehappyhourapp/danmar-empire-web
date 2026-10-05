@@ -13,11 +13,11 @@
 /* A forest ground: hairlines turn paper, and the selection inverts because the
    global forest-on-cream selection would vanish. */
 .dark {
-  --hair: #eee8e0;
+  --hair: var(--paper);
 }
 .dark ::selection {
-  background: #eee8e0;
-  color: #0f3b2f;
+  background: var(--paper);
+  color: var(--forest);
 }
 
 /* Text links and row titles use the shared hairline in motion.module.css. */

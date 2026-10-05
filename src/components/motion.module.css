@@ -20,11 +20,11 @@
 
 /* A forest ground: the selection inverts and hairlines turn paper. */
 .dark {
-  --hair: #eee8e0;
+  --hair: var(--paper);
 }
 .dark ::selection {
-  background: #eee8e0;
-  color: #0f3b2f;
+  background: var(--paper);
+  color: var(--forest);
 }
 
 /* ───────── Hairlines (interface clock)
@@ -32,7 +32,11 @@
    Text links carry a resting hairline at 35% of their colour, so they read as
    links without hover. On hover or keyboard focus a second hairline draws over
    it from the left in brass (paper on forest), and retracts to the right. Row
-   titles and nav links have no resting hairline, only the drawn one. */
+   titles and nav links have no resting hairline, only the drawn one.
+
+   A text link's ::before is also its hit area: it reaches 4px above and below
+   the label, so a 10.5px .meta link is a 24px target (WCAG 2.2, 2.5.8) without
+   moving anything. It paints the resting hairline along its own lower edge. */
 
 .tlink,
 .rowlink,
@@ -41,7 +45,6 @@
   display: inline-block;
   text-decoration: none;
 }
-.tlink::before,
 .tlink::after,
 .rowlink::after,
 .navlink::after {
@@ -54,7 +57,10 @@
   pointer-events: none;
 }
 .tlink::before {
-  background: currentColor;
+  content: "";
+  position: absolute;
+  inset: -4px 0;
+  background: linear-gradient(currentColor, currentColor) 0 calc(100% - 1px) / 100% 1px no-repeat;
   opacity: 0.35;
 }
 .tlink::after,

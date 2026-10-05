@@ -55,7 +55,7 @@
 }
 
 @layer components {
-  /* metadata line: mono, uppercase, tracked — never chips or pills */
+  /* metadata line: Libre Franklin 500, uppercase, tracked; never chips or pills */
   .meta {
     font-family: 'Libre Franklin', 'Libre Franklin Fallback', ui-sans-serif, system-ui, sans-serif;
     font-weight: 500;
@@ -85,6 +85,9 @@
 :root {
   --ui: cubic-bezier(0.25, 1, 0.5, 1);
   --hair: #80642c;
+  /* the two grounds, for CSS modules that cannot read Tailwind's tokens */
+  --paper: #eee8e0;
+  --forest: #0f3b2f;
   /* the fixed header's height: inner pages set their top padding from it */
   --nav-h: 70px;
 }
