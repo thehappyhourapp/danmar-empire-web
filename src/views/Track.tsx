@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { TRACK } from "@/lib/data";
 import { money } from "@/lib/parse";
+import { photo } from "@/lib/photos";
 import { href } from "@/lib/routes";
 import { Chapter, GRID, HEAD, Lines } from "@/components/Chapter";
 import { ImageFrame } from "@/components/ImageFrame";
@@ -44,7 +45,7 @@ export function Track() {
             return (
               <div key={t.id} className={`${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`}>
                 <div aria-hidden className={`col-span-5 self-center md:col-span-3 md:row-span-2 ${odd ? "md:col-start-2" : ""}`}>
-                  <ImageFrame src={`/photos/track/${t.id}.jpg`} hue={t.hue} ratio={odd ? "3/4" : "4/5"} alt="" fallback="flat" />
+                  <ImageFrame src={photo(`/photos/track/${t.id}.jpg`)} hue={t.hue} ratio={odd ? "3/4" : "4/5"} alt="" fallback="flat" />
                 </div>
                 <div className="col-span-7 self-center md:col-span-6 md:col-start-5 md:self-end md:pb-2">
                   <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">{t.place}</h3>

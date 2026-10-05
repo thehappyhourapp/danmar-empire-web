@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { OFFICES } from "@/lib/data";
-import { SITE } from "@/lib/metadata";
+import { ORG_ID, REGISTERED_NAME, SITE, officeAddresses } from "@/lib/metadata";
 import { href } from "@/lib/routes";
 import { Chapter, GRID, HEAD, Lines, delay } from "@/components/Chapter";
 import { EnquiryForm } from "@/components/EnquiryForm";
@@ -10,28 +10,21 @@ import s from "@/components/motion.module.css";
 /* Contact: cream, line rise only. The offices as rows, then the enquiry form
    inline, posting through the same path and states as the drawer. */
 
-const BROKERAGE = "Danmar Empire Real Estate Corp., Brokerage";
 const EMAIL = "info@danmarempire.com";
 
 const telHref = (t: string) => `tel:+1${t.replace(/\D/g, "")}`;
-const postal = (post: string) => {
-  const [locality, rest = ""] = post.split(",");
-  const [region, ...code] = rest.trim().split(/\s+/);
-  return { locality: locality.trim(), region, code: code.join(" ") };
-};
 
 export function Contact() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
-    name: BROKERAGE,
+    "@id": ORG_ID,
+    name: "Danmar Empire",
+    legalName: REGISTERED_NAME,
     url: SITE,
     email: EMAIL,
     telephone: `+1 ${OFFICES[0].tel}`,
-    address: OFFICES.map((o) => {
-      const p = postal(o.post);
-      return { "@type": "PostalAddress", streetAddress: o.addr, addressLocality: p.locality, addressRegion: p.region, postalCode: p.code, addressCountry: "CA" };
-    }),
+    address: officeAddresses(),
   };
 
   return (

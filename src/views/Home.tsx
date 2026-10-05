@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LISTINGS, OWNERSHIP, PILLARS, TRACK } from "@/lib/data";
 import { money } from "@/lib/parse";
+import { listingPhoto } from "@/lib/photos";
 import { href, propertyHref } from "@/lib/routes";
 import { ImageFrame } from "@/components/ImageFrame";
 import { MotionController } from "@/components/MotionController";
@@ -166,7 +167,7 @@ export function Home() {
                 <div className={`col-span-5 self-center md:col-span-3 md:row-span-2 ${i % 2 ? "md:col-start-2" : ""}`}>
                   <div className="overflow-hidden">
                     <div className={s.plx} data-parallax>
-                      <ImageFrame src={`/photos/${l.id}.jpg`} hue={l.hue} ratio={i % 2 ? "3/4" : "4/5"} alt={l.name} fallback="flat" />
+                      <ImageFrame src={listingPhoto(l.id)} hue={l.hue} ratio={i % 2 ? "3/4" : "4/5"} alt={l.name} fallback="flat" />
                     </div>
                   </div>
                 </div>

@@ -1,5 +1,3 @@
-import fs from "node:fs";
-import path from "node:path";
 import Image from "next/image";
 import Link from "next/link";
 import { LISTINGS } from "@/lib/data";
@@ -9,20 +7,13 @@ import { href, propertyHref } from "@/lib/routes";
 import { SITE } from "@/lib/metadata";
 import { Chapter, GRID, delay } from "@/components/Chapter";
 import { ListingRow } from "@/components/ListingRow";
+import { listingPhoto } from "@/lib/photos";
 import { MotionController } from "@/components/MotionController";
 import { SaveLink } from "@/components/SaveLink";
 import { EnquireButton } from "@/components/SiteShell";
 import s from "@/components/motion.module.css";
 
 const BROKERAGE = "Danmar Empire Real Estate Corp., Brokerage";
-
-/** Photography lives at /public/photos/{id}.jpg. Until a file exists the hero is
- *  the flat forest/10 block, the same placeholder the rows use. Checked at build
- *  time: every listing page is statically generated. */
-function photoFor(id: string) {
-  const rel = `/photos/${id}.jpg`;
-  return fs.existsSync(path.join(process.cwd(), "public", rel)) ? rel : null;
-}
 
 /** Three to five fields from the listing's own data, never one that repeats what
  *  the page already shows. Land has type, tenure and status; nothing is invented. */
@@ -44,7 +35,7 @@ const SPANS: Record<number, string[]> = {
   5: ["md:col-span-3", "md:col-span-2", "md:col-span-2", "md:col-span-2", "md:col-span-3"],
 };
 
-function jsonLd(l: Listing, photo: string | null) {
+function jsonLd(l: Listing, photo?: string) {
   const lease = l.intent === "lease";
   const available = l.status === "Available" || l.status === "Conditional";
   return {
@@ -73,7 +64,7 @@ function jsonLd(l: Listing, photo: string | null) {
 
 export function Property({ l }: { l: Listing }) {
   const lease = l.intent === "lease";
-  const photo = photoFor(l.id);
+  const photo = listingPhoto(l.id);
   const more = LISTINGS.filter((x) => x.id !== l.id && x.tier !== "Off-Market" && (x.city === l.city || x.useClass === l.useClass)).slice(0, 3);
   const rows = specs(l);
 
@@ -168,7 +159,7 @@ export function Property({ l }: { l: Listing }) {
             </p>
           </div>
           <div className="col-span-12 mt-10">
-            {more.map((m, i) => <ListingRow key={m.id} l={m} index={i} />)}
+            {more.map((m, i) => <ListingRow key={m.id} l={m} index={i} photo={listingPhoto(m.id)} />)}
           </div>
         </Chapter>
       )}

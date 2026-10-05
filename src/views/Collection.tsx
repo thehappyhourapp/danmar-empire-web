@@ -1,5 +1,6 @@
 import { Chapter, Lines, HEAD } from "@/components/Chapter";
 import { MotionController } from "@/components/MotionController";
+import { listingPhotos } from "@/lib/photos";
 import { CollectionList } from "./CollectionList";
 
 /* Own listings only. The firm signs the TRREB DLA (its own listings with full
@@ -20,7 +21,7 @@ export function Collection() {
           photographed and written by us before it was priced. We do not republish the rest of the board,
           because a list of everything is not an opinion about anything.
         </p>
-        <CollectionList />
+        <CollectionList photos={listingPhotos()} />
       </Chapter>
     </div>
   );

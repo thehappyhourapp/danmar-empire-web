@@ -82,6 +82,11 @@ export const SEO: Record<string, Meta> = {
       "Offices in Oakville and Vaughan. Start a conversation about a purchase, a sale, an executive lease or a portfolio mandate; someone from the desk replies inside one business day.",
     canonical: "/contact",
   },
+  notfound: {
+    title: `Page Not Found | ${SUFFIX}`,
+    description: "There is nothing at this address. The Collection and the rest of the site are a link away.",
+    canonical: "/404",
+  },
   dataroom: {
     title: `Client Data Room | ${SUFFIX}`, description: "Secure document access for active mandates.", canonical: "/data-room",
   },

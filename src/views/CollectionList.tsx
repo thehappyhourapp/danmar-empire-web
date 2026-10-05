@@ -20,7 +20,7 @@ const LENSES: { id: string; label: string; patch: Partial<Query> }[] = [
   { id: "lease", label: "Executive Leasing", patch: { intent: "lease", lens: null } },
 ];
 
-export function CollectionList() {
+export function CollectionList({ photos }: { photos: Record<string, string> }) {
   const { q, setQ, text, setText } = useSite();
   const results = useMemo(() => apply(LISTINGS, q), [q]);
   const activeLens =
@@ -55,7 +55,7 @@ export function CollectionList() {
       </div>
 
       <div className="col-span-12 [&>div:first-child]:border-t-0">
-        {results.length ? results.map((l, i) => <ListingRow key={l.id} l={l} index={i} />) : (
+        {results.length ? results.map((l, i) => <ListingRow key={l.id} l={l} index={i} photo={photos[l.id]} />) : (
           <div className="border-y border-forest/14 py-20">
             <p className="font-display text-[26px] font-medium text-ink/80">Nothing on the books matches that brief.</p>
             <p className="mt-4 max-w-[48ch] text-[14px] leading-[1.8] text-ink/70">

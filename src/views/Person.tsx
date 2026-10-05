@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { TEAM } from "@/lib/data";
 import type { Person as P } from "@/lib/data";
-import { SITE } from "@/lib/metadata";
+import { ORG_ID, SITE } from "@/lib/metadata";
 import { splitName } from "@/lib/people";
 import { href, personHref } from "@/lib/routes";
 import { Chapter, GRID, HEAD, Lines, delay } from "@/components/Chapter";
@@ -28,7 +28,7 @@ export function Person({ p }: { p: P }) {
     url: `${SITE}${personHref(p.slug)}`,
     ...(p.email ? { email: p.email } : {}),
     ...(p.tel ? { telephone: `+1 ${p.tel}` } : {}),
-    worksFor: { "@type": "RealEstateAgent", name: BROKERAGE, url: SITE },
+    worksFor: { "@type": "RealEstateAgent", "@id": ORG_ID, name: BROKERAGE, url: SITE },
   };
 
   const rows = ([
