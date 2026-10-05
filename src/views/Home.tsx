@@ -102,8 +102,8 @@ export function Home() {
                 Our own capital in the markets we advise on.
               </p>
               <p className="col-span-12 mt-10 max-w-[46ch] text-[16px] leading-[1.75] text-paper/80 md:col-span-7 md:text-[18px] lg:col-span-5">
-                Private portfolios from $10M to $250M. Executive leases from $10,000 a month.
-                Commercial and investment across Ontario.
+                We manage private portfolios from $10M to $250M, arrange executive leases from $10,000 a month,
+                and buy and sell high-end residential, commercial and investment property across Ontario.
               </p>
             </div>
 
