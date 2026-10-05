@@ -1,9 +1,13 @@
 import Link from "next/link";
-import { href } from "@/lib/routes";
-import { Reveal } from "@/components/Reveal";
-import { EnquireButton } from "@/components/SiteShell";
 import { AREAS, LISTINGS } from "@/lib/data";
-import { ImageFrame } from "@/components/ImageFrame";
+import { href } from "@/lib/routes";
+import { Chapter, GRID, HEAD, Lines, delay } from "@/components/Chapter";
+import { MotionController } from "@/components/MotionController";
+import { EnquireButton } from "@/components/SiteShell";
+import s from "@/components/motion.module.css";
+
+/* Areas: cream, line rise only. Three tiers, each a section title row, then one
+   row per area: name, its note, and what the data holds about it as .meta. */
 
 const TIERS: { t: 1 | 2 | 3; label: string; blurb: string }[] = [
   { t: 1, label: "Core markets", blurb: "Where we hold inventory, keep an office, or trade every month." },
@@ -13,76 +17,64 @@ const TIERS: { t: 1 | 2 | 3; label: string; blurb: string }[] = [
 
 export function Areas() {
   return (
-    <div className="pt-[88px]">
-      <section className="mx-auto max-w-[1520px] px-6 pb-14 pt-12 md:px-12 md:pt-16">
-        <div className="meta mb-7 text-brass">Where we act</div>
-        <h1 className="max-w-[20ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] leading-[1.04] tracking-[-.005em]">
-          Oakville first. Ontario throughout.
-        </h1>
-        <p className="mt-8 max-w-[62ch] text-[16px] font-normal leading-[1.9] text-ink/72">
+    <div id="areas">
+      <MotionController rootId="areas" />
+      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-32">
+        {/* ── head */}
+        <div className="col-span-12 lg:col-span-8">
+          <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em]">Oakville first. Ontario throughout.</h1>
+        </div>
+        <p className="col-span-12 mt-10 max-w-[58ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-16">
           The firm keeps offices in Oakville and Vaughan and is licensed across Ontario. Oakville is where the
           depth is: it is our home market, our largest book, and the town we know street by street. Beyond it we
-          act throughout the Greater Toronto Area and in the province's recreational and specialist markets.
+          act throughout the Greater Toronto Area and in the province&apos;s recreational and specialist markets.
         </p>
-      </section>
 
-      {TIERS.map((tier) => {
-        const list = AREAS.filter((a) => a.tier === tier.t);
-        return (
-          <section key={tier.t} className={tier.t === 2 ? "border-y border-forest/14 bg-paper-deep py-20 md:py-24" : "py-20 md:py-24"}>
-            <div className="mx-auto max-w-[1520px] px-6 md:px-12">
-              <Reveal className="mb-12 flex flex-wrap items-baseline gap-x-8 gap-y-2">
-                <h2 className="font-display text-[clamp(1.5rem,2.8vw,2.1rem)]">{tier.label}</h2>
-                <p className="meta text-mute">{tier.blurb}</p>
-              </Reveal>
-
-              <div className="grid gap-x-10 gap-y-12 md:grid-cols-2">
-                {list.map((a, i) => {
-                  const count = LISTINGS.filter((l) => l.city === a.name).length;
-                  return (
-                    <Reveal key={a.slug} delay={(i % 2) * 90}>
-                      <article className="group grid gap-6 sm:grid-cols-[150px_1fr]">
-                        <ImageFrame hue={(a.slug.length * 37) % 360} ratio="4/5" alt={a.name}
-                          className="transition-[filter] duration-700 group-hover:brightness-110" />
-                        <div className="border-t border-forest/14 pt-5">
-                          <div className="flex items-baseline justify-between gap-4">
-                            <h3 className="font-display text-[26px] leading-none">{a.name}</h3>
-                            <span className="meta text-mute">{a.region}</span>
-                          </div>
-                          <p className="mt-5 max-w-[46ch] text-[14px] font-normal leading-[1.9] text-mute">{a.note}</p>
-                          <p className="meta mt-5 leading-[1.9] text-ink/70">{a.pockets.join(" · ")}</p>
-                          <div className="mt-6 flex items-center gap-6">
-                            <Link href={href("collection")} className="meta link-u text-forest/70 hover:text-forest">
-                              {count ? `${count} available →` : "Enquire about inventory →"}
-                            </Link>
-                          </div>
-                        </div>
-                      </article>
-                    </Reveal>
-                  );
-                })}
+        {TIERS.map((tier) => {
+          const list = AREAS.filter((a) => a.tier === tier.t);
+          return (
+            <section key={tier.t} className="col-span-12 mt-20 lg:mt-28">
+              {/* tier title row */}
+              <div className={`${GRID} pb-8 lg:pb-10`}>
+                <Lines lines={[tier.label]} className={`${HEAD} col-span-12 md:col-span-6`} />
+                <p className="meta col-span-12 mt-4 max-w-[52ch] leading-[1.9] text-ink/70 md:col-span-5 md:col-start-8 md:mt-0 md:self-end">{tier.blurb}</p>
               </div>
-            </div>
-          </section>
-        );
-      })}
+              {list.map((a, i) => {
+                const count = LISTINGS.filter((l) => l.city === a.name).length;
+                return (
+                  <div key={a.slug} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`} style={delay(i)}>
+                    <div className="col-span-12 md:col-span-5">
+                      <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">{a.name}</h3>
+                      <p className="meta mt-3 text-ink/70">
+                        <span className="block md:inline">{a.region}</span>
+                        {count > 0 && <><span className="mx-1.5 hidden opacity-40 md:inline">/</span><Link href={href("collection")} className={`${s.tlink} block md:inline`}><span className="fig text-[13px] tracking-normal text-brass">{count}</span> in the Collection</Link></>}
+                      </p>
+                    </div>
+                    <div className="col-span-12 mt-4 md:col-span-6 md:col-start-7 md:mt-0">
+                      <p className="max-w-[56ch] text-[15px] leading-[1.85] text-ink/80">{a.note}</p>
+                      <p className="meta mt-4 max-w-[64ch] leading-[1.9] text-ink/60">{a.pockets.join(" · ")}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </section>
+          );
+        })}
 
-      <section className="bg-forest py-20 text-paper md:py-28">
-        <div className="mx-auto flex max-w-[1520px] flex-wrap items-end justify-between gap-10 px-6 md:px-12">
-          <div>
-            <h2 className="max-w-[24ch] font-display text-[clamp(1.7rem,3.4vw,2.7rem)] leading-[1.12]">
-              Looking somewhere that is not on this list?
-            </h2>
-            <p className="mt-6 max-w-[52ch] text-[15px] font-normal leading-[1.9] text-paper/80">
+        {/* ── close */}
+        <div className={`col-span-12 mt-20 ${GRID} border-t border-forest/14 pt-12 lg:mt-28 lg:pt-16`}>
+          <div className="col-span-12 lg:col-span-6">
+            <Lines lines={["Somewhere that is not", "on this list?"]} className={`${HEAD} max-w-[18ch]`} />
+          </div>
+          <div className="col-span-12 mt-8 flex flex-col items-start gap-5 lg:col-span-5 lg:col-start-7 lg:mt-2">
+            <p className="max-w-[46ch] text-[15px] leading-[1.8] text-ink/80">
               We are licensed province-wide and we travel for the right mandate. If it is outside our depth we
               will tell you that, and refer you to someone whose market it is.
             </p>
+            <EnquireButton className={`${s.tlink} font-display text-[1.35rem] font-medium leading-tight text-forest`}>Tell us where</EnquireButton>
           </div>
-          <EnquireButton className="meta border border-paper/35 px-8 py-4 transition-colors hover:bg-paper hover:text-forest">
-            Tell us where
-          </EnquireButton>
         </div>
-      </section>
+      </Chapter>
     </div>
   );
 }

@@ -449,7 +449,7 @@ export const AREAS: Area[] = [
     note: "Acreage, hobby farms and the estate subdivisions on the moraine.",
     pockets: ["Caledon East", "Palgrave", "Aurora Estates", "South Richvale"] },
   { slug: "muskoka", name: "Muskoka", region: "Cottage Country", tier: 3,
-    note: "The Big Three lakes. Boathouse frontage, shoreline road allowance and the assignment market that most agents outside the district get wrong.",
+    note: "The Big Three lakes. Boathouse frontage, shoreline road allowance and the assignment market, each with rules of its own.",
     pockets: ["Lake Joseph", "Lake Rosseau", "Lake Muskoka", "Port Carling", "Windermere"] },
   { slug: "niagara", name: "Niagara & Prince Edward County", region: "Southern Ontario", tier: 3,
     note: "Estate wineries, agricultural land with severance potential, and the hospitality assets attached to both.",

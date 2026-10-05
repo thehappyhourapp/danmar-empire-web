@@ -1,70 +1,55 @@
-import { Reveal } from "@/components/Reveal";
-import { EnquireButton } from "@/components/SiteShell";
 import { JOURNAL } from "@/lib/data";
-import { ImageFrame } from "@/components/ImageFrame";
+import { Chapter, GRID, HEAD, Lines, delay } from "@/components/Chapter";
+import { MotionController } from "@/components/MotionController";
+import { EnquireButton } from "@/components/SiteShell";
+import s from "@/components/motion.module.css";
+
+/* The Journal: cream, line rise only. A list of what the firm has written, as
+   rows. The pieces have no published bodies yet, so the rows do not link. */
 
 export function Journal() {
-  const [lead, ...rest] = JOURNAL;
   return (
-    <div className="pt-[88px]">
-      <section className="mx-auto max-w-[1560px] px-6 pb-16 pt-10 md:px-10 md:pb-24 md:pt-14">
-        <div className="meta mb-6 text-brass">Journal</div>
-        <h1 className="max-w-[22ch] font-display text-[clamp(2.4rem,5.6vw,4.8rem)] leading-[1] tracking-[-.015em]">
-          Market reports, field notes, and the occasional argument.
-        </h1>
-      </section>
+    <div id="journal">
+      <MotionController rootId="journal" />
+      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-32">
+        {/* ── head */}
+        <div className="col-span-12 lg:col-span-8">
+          <h1 className="max-w-[20ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em]">Market reports, field notes, and the occasional argument.</h1>
+        </div>
+        <p className="col-span-12 mt-10 max-w-[52ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-5 lg:col-start-8 lg:mt-16 lg:self-end">
+          Written for owners rather than for headlines. The Prime Report comes out twice a year; the rest
+          appears when there is something worth saying.
+        </p>
 
-      <section className="mx-auto max-w-[1560px] px-6 pb-20 md:px-10">
-        <Reveal>
-          <button className="group grid w-full gap-10 border-y border-forest/14 py-12 text-left lg:grid-cols-[1.1fr_1fr] lg:gap-16">
-            <ImageFrame hue={26} ratio="16/10" alt="" className="transition-transform duration-700 group-hover:scale-[1.01]" />
-            <div className="self-center">
-              <div className="meta flex items-center gap-3 text-brass">{lead.kind}<span className="text-mute">{lead.date}</span></div>
-              <h2 className="mt-6 max-w-[22ch] font-display text-[clamp(1.9rem,3.8vw,3rem)] leading-[1.06] transition-colors group-hover:text-brass">
-                {lead.title}
-              </h2>
-              <p className="mt-6 max-w-[52ch] text-[15px] leading-[1.85] text-ink/70">{lead.dek}</p>
-              <div className="meta mt-8 text-mute">Read · {lead.read}</div>
-            </div>
-          </button>
-        </Reveal>
-
-        <div className="grid gap-px bg-forest/12 md:grid-cols-3">
-          {rest.map((j, i) => (
-            <Reveal key={j.id} delay={i * 80} className="bg-paper">
-              <button className="group block h-full w-full p-8 text-left transition-colors hover:bg-paper-deep md:p-10">
-                <div className="meta flex items-center gap-3 text-brass">{j.kind}<span className="text-mute">{j.date}</span></div>
-                <h3 className="mt-5 max-w-[24ch] font-display text-[22px] leading-tight">{j.title}</h3>
-                <p className="mt-4 max-w-[44ch] text-[14px] leading-[1.8] text-mute">{j.dek}</p>
-                <div className="meta mt-7 text-mute transition-colors group-hover:text-ink">Read · {j.read}</div>
-              </button>
-            </Reveal>
+        {/* ── the list */}
+        <div className="col-span-12 mt-16 lg:mt-24">
+          {JOURNAL.map((j, i) => (
+            <article key={j.id} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`} style={delay(i)}>
+              <div className="col-span-12 md:col-span-5">
+                <p className="meta text-ink/70">
+                  <time>{j.date}</time><span className="mx-1.5 opacity-40">/</span>{j.kind}
+                </p>
+                <h2 className="mt-4 max-w-[24ch] font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.15]">{j.title}</h2>
+              </div>
+              <p className="col-span-12 mt-4 max-w-[56ch] text-[15px] leading-[1.85] text-ink/80 md:col-span-6 md:col-start-7 md:mt-0 md:self-end">{j.dek}</p>
+            </article>
           ))}
         </div>
-      </section>
 
-      <section className="bg-forest-deep py-20 text-paper md:py-28">
-        <div className="mx-auto grid max-w-[1560px] items-center gap-12 px-6 md:px-10 lg:grid-cols-[1.2fr_1fr]">
-          <div>
-            <div className="meta mb-5 text-brass-light">The Prime Report</div>
-            <h2 className="max-w-[22ch] font-display text-[clamp(1.9rem,3.8vw,3rem)] leading-[1.08]">
-              Twice a year we publish what we are actually seeing.
-            </h2>
-            <p className="mt-6 max-w-[54ch] text-[15px] leading-[1.9] text-paper/85">
-              Written for owners rather than for headlines. Sent to the list, not posted to social.
-            </p>
+        {/* ── close */}
+        <div className={`col-span-12 mt-20 ${GRID} border-t border-forest/14 pt-12 lg:mt-28 lg:pt-16`}>
+          <div className="col-span-12 lg:col-span-6">
+            <Lines lines={["The Prime Report,", "twice a year."]} className={`${HEAD} max-w-[18ch]`} />
           </div>
-          <div>
-            <label className="meta mb-3 block text-paper/62">Email address</label>
-            <div className="flex border border-paper/30">
-              <input type="email" placeholder="you@company.com"
-                className="w-full bg-transparent px-5 py-4 text-[14px] text-paper outline-none placeholder:text-paper/60" />
-              <EnquireButton className="meta shrink-0 border-l border-paper/30 px-6 transition-colors hover:bg-paper hover:text-ink">Subscribe</EnquireButton>
-            </div>
-            <p className="meta mt-3 text-paper/55">Two emails a year. Unsubscribe in one click.</p>
+          <div className="col-span-12 mt-8 flex flex-col items-start gap-5 lg:col-span-5 lg:col-start-7 lg:mt-2">
+            <p className="max-w-[46ch] text-[15px] leading-[1.8] text-ink/80">
+              Sent to clients of the firm and to anyone who asks the desk for it. Two emails a year, and
+              nothing else unless you ask.
+            </p>
+            <EnquireButton className={`${s.tlink} font-display text-[1.35rem] font-medium leading-tight text-forest`}>Ask for the report</EnquireButton>
           </div>
         </div>
-      </section>
+      </Chapter>
     </div>
   );
 }

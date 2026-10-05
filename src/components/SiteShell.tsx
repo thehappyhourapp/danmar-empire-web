@@ -14,8 +14,8 @@ import { Footer } from "./Footer";
 import { ImageFrame } from "./ImageFrame";
 import { TypeSwitch } from "./TypeSwitch";
 import { ClientAccess } from "./ClientAccess";
-import { DESK_ADDRESS_CLASS, DESK_EMAIL, submitEnquiry } from "@/lib/enquire";
-import type { SubmitResult } from "@/lib/enquire";
+import { EnquiryForm } from "./EnquiryForm";
+import type { ListingRef } from "./EnquiryForm";
 
 /* Visit-level state that used to live in App.tsx. It sits in the root layout, so it
    survives client-side navigation between routes exactly as it did in the SPA. */
@@ -37,22 +37,11 @@ export function useSite() {
 }
 
 /* ───────────────── Enquiry drawer: an invitation, not a lead-capture form ─────────────── */
-export interface ListingRef { id: string; name: string }
+export type { ListingRef };
 
 function Enquire({ open, close, listing }: { open: boolean; close: () => void; listing: ListingRef | null }) {
-  const [state, setState] = useState<"idle" | "sending" | SubmitResult>("idle");
-  useEffect(() => { if (open) setState("idle"); }, [open]);
+  // unmounting on close resets the form, so every open starts idle
   if (!open) return null;
-
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (state === "sending") return;
-    const f = new FormData(e.currentTarget);
-    const v = (k: string) => String(f.get(k) ?? "").trim();
-    const note = [`I am: ${v("role")}`, v("tel") ? `Telephone: ${v("tel")}` : null, "", v("brief")].filter((l) => l !== null).join("\n");
-    setState("sending");
-    setState(await submitEnquiry({ kind: "enquiry", name: v("name"), email: v("email"), note, listingRef: listing ? `${listing.id} (${listing.name})` : undefined, website: v("website") }));
-  };
 
   return (
     <div className="fixed inset-0 z-[70] flex justify-end">
@@ -71,66 +60,7 @@ function Enquire({ open, close, listing }: { open: boolean; close: () => void; l
           </button>
         </div>
 
-        {state === "sent" ? (
-          <div className="px-8 pb-16 md:px-10">
-            <div className="border border-forest/16 p-8" role="status">
-              <div className="meta text-brass">Received</div>
-              <p className="mt-4 font-display text-[24px] leading-snug">Someone from the desk will be in touch inside one business day.</p>
-              <p className="mt-4 text-[14px] leading-[1.8] text-mute">
-                If it is urgent, call the Oakville office on 905 901 5011.
-              </p>
-            </div>
-          </div>
-        ) : (
-          <form className="px-8 pb-16 md:px-10" onSubmit={submit}>
-            <div className="meta mb-4 text-mute">I am</div>
-            <div className="mb-8 grid grid-cols-2 gap-2">
-              {["Buying", "Selling", "Leasing", "Investing"].map((r) => (
-                <label key={r} className="cursor-pointer">
-                  <input type="radio" name="role" value={r} className="peer sr-only" defaultChecked={r === "Buying"} />
-                  <span className="meta block border border-forest/20 px-4 py-3 text-center text-mute transition-colors peer-checked:border-ink peer-checked:bg-forest peer-checked:text-paper">{r}</span>
-                </label>
-              ))}
-            </div>
-
-            {[["Name", "text", "Your name", "name", "name"], ["Email", "email", "you@company.com", "email", "email"], ["Telephone", "tel", "Optional", "tel", "tel"]].map(([l, t, ph, n, ac]) => (
-              <div key={l} className="mb-6">
-                <label className="meta mb-2 block text-mute">{l}</label>
-                <input type={t} name={n} autoComplete={ac} placeholder={ph} required={t !== "tel"}
-                  className="w-full border-0 border-b border-forest/25 bg-transparent py-3 text-[15px] outline-none transition-colors focus:border-ink" />
-              </div>
-            ))}
-
-            <div className="mb-8">
-              <label className="meta mb-2 block text-mute">What you are looking for</label>
-              <textarea name="brief" rows={4} placeholder="Budget, area, timing, and anything that actually matters to you."
-                className="w-full resize-none border-0 border-b border-forest/25 bg-transparent py-3 text-[15px] outline-none transition-colors focus:border-ink" />
-            </div>
-            {/* honeypot: hidden from people, filled by scripts */}
-            <div aria-hidden className="absolute -left-[9999px] top-0 h-px w-px overflow-hidden">
-              <label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
-            </div>
-
-            <button type="submit" disabled={state === "sending"} aria-busy={state === "sending"}
-              className="meta w-full border border-forest/25 py-4 transition-colors hover:bg-forest hover:text-paper disabled:opacity-60">
-              {state === "sending" ? "Sending" : "Send"}
-            </button>
-            {state === "unavailable" && (
-              <p role="status" className="mt-5 text-[14px] leading-[1.8] text-ink/80">
-                The form is not connected yet. Email <span className={DESK_ADDRESS_CLASS}>{DESK_EMAIL}</span>.
-              </p>
-            )}
-            {state === "failed" && (
-              <p role="status" className="mt-5 text-[14px] leading-[1.8] text-ink/80">
-                That did not send. Try again, or email <span className={DESK_ADDRESS_CLASS}>{DESK_EMAIL}</span>.
-              </p>
-            )}
-            <p className="meta mt-5 leading-[1.8] text-mute">
-              We use what you send to answer you. We do not sell or share it, and we do not add you to a list
-              without asking.
-            </p>
-          </form>
-        )}
+        <EnquiryForm listing={listing} className="px-8 pb-16 md:px-10" />
       </aside>
     </div>
   );
