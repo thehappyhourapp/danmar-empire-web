@@ -75,13 +75,13 @@ export function Firm() {
             {TEAM.map((p, i) => {
               const { name, designations } = splitName(p.name);
               return (
-                <div key={p.slug} data-reveal className={`${s.rise} ${GRID} border-t ${rule} py-8 last:border-b md:py-10`} style={delay(i)}>
+                <div key={p.slug} data-reveal className={`${s.rise} ${s.row} ${GRID} border-t ${rule} py-8 last:border-b md:py-10`} style={delay(i)}>
                   <Link href={personHref(p.slug)} aria-label={name} className="col-span-4 self-center md:col-span-2">
                     <ImageFrame ratio="4/5" alt="" fallback="flat" ground="forest" />
                   </Link>
                   <div className="col-span-8 self-center md:col-span-6 md:col-start-4">
                     <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">
-                      <Link href={personHref(p.slug)} className={`${s.rowlink} hover:text-brass-light`}>{name}</Link>
+                      <Link href={personHref(p.slug)} className={s.rowlink}>{name}</Link>
                     </h3>
                     <p className="meta mt-3 text-paper/70">
                       <span className="block md:inline">{p.role}</span>

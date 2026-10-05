@@ -93,9 +93,9 @@ export function Person({ p }: { p: P }) {
             {others.map((o) => {
               const n = splitName(o.name);
               return (
-                <div key={o.slug} className={`${GRID} border-t border-forest/14 py-5 last:border-b`}>
+                <div key={o.slug} className={`${s.row} ${GRID} border-t border-forest/14 py-5 last:border-b`}>
                   <h3 className="col-span-12 font-display text-[1.2rem] font-medium leading-[1.15] md:col-span-5">
-                    <Link href={personHref(o.slug)} className={`${s.rowlink} hover:text-forest-mid`}>{n.name}</Link>
+                    <Link href={personHref(o.slug)} className={s.rowlink}>{n.name}</Link>
                   </h3>
                   <p className="meta col-span-12 mt-1 text-ink/70 md:col-span-6 md:col-start-7 md:mt-0">{o.role}{n.designations ? ` · ${n.designations}` : ""}</p>
                 </div>

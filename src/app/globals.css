@@ -73,12 +73,6 @@
     letter-spacing: .012em;
   }
   .rule { height: 1px; background: currentColor; opacity: .16; }
-  .link-u {
-    background-image: linear-gradient(currentColor, currentColor);
-    background-size: 0% 1px; background-repeat: no-repeat; background-position: 0 100%;
-    transition: background-size .45s cubic-bezier(.16,.84,.44,1);
-  }
-  .link-u:hover { background-size: 100% 1px; }
   .grain::after {
     content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .22;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
@@ -86,9 +80,20 @@
   }
 }
 
-/* scroll reveal */
-.rv { opacity: 0; transform: translateY(18px); transition: opacity .9s cubic-bezier(.16,.84,.44,1), transform .9s cubic-bezier(.16,.84,.44,1); }
-.rv.in { opacity: 1; transform: none; }
+/* Motion tokens for src/components/motion.module.css: the interface curve, and the
+   hairline colour (brass on cream; .dark grounds set it to paper). */
+:root {
+  --ui: cubic-bezier(0.25, 1, 0.5, 1);
+  --hair: #8a6b2f;
+}
+
+/* Visible keyboard focus on every control: a 1px rule in the text colour. Fields
+   keep their own focus rule (the bottom border darkens), and a panel that takes
+   focus programmatically (tabindex -1) draws no ring around itself. */
+:where(a[href], button, summary, select, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 4px;
+}
 
 /* custom scrollbars inside panels */
 .thin::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -96,10 +101,6 @@
 .thin::-webkit-scrollbar-track { background: transparent; }
 
 @media (prefers-reduced-motion: reduce) {
-  .rv { opacity: 1 !important; transform: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
 }
 
-/* dialog entrance: the interface clock (200ms), a short rise; reduced motion fades only */
-@keyframes dlgFade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes dlgRise { from { opacity: 0; transform: translateY(8px) scale(0.99); } to { opacity: 1; transform: none; } }

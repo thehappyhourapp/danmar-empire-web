@@ -1,20 +1,56 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Motion controller for a route. Renders nothing. Hero lift, scroll cue and parallax hooks are optional; a page without them gets reveals and wipes only.
  *
  * It switches on html[data-motion="on"] after hydration, and only when the
- * visitor has not asked for reduced motion. Home.module.css keys every hidden
+ * visitor has not asked for reduced motion. The motion CSS keys every hidden
  * start state off that attribute, so the server HTML is the finished page for
  * everyone else. Before switching on, anything already in the viewport is
  * marked shown in place, so nothing on screen flashes hidden and back.
+ *
+ * Reveal units. A [data-reveal] element reveals on its own. A [data-reveal-group]
+ * reveals every [data-reveal] inside it on one trigger, so a title and its text
+ * read as one object; each member keeps its own --d offset for the stagger.
+ *
+ * Wipes. A [data-wipe] overlay holds the previous ground over the first viewport
+ * of a new chapter. It fires when the real boundary reaches 60% of the viewport,
+ * and the reveal units it covers start as the wipe's edge passes them, so the
+ * cut and the chapter's first content move as one.
+ *
+ * Swaps. Rows that arrive inside a [data-swap] container after first render (a
+ * Collection lens change) enter on the interface clock, 40ms apart.
  *
  * Follow motion (the hero lift and the Collection parallax) uses frame-rate
  * independent damping, x += (target - x) * (1 - e^(-k dt)), k = 8, and the loop
  * runs only while something is still settling.
  */
+
+const REVEAL = "[data-reveal-group], [data-reveal]";
+const WIPE_MS = 1000;
+
+/** When the wipe's edge, travelling on cubic-bezier(0.7, 0, 0.3, 1), has covered
+ *  fraction o of the overlay: solve y(s) = o for the curve parameter, return x(s). */
+function edgeTime(o: number) {
+  const b = (s: number, p1: number, p2: number) => 3 * p1 * s * (1 - s) ** 2 + 3 * p2 * s * s * (1 - s) + s ** 3;
+  let lo = 0, hi = 1;
+  for (let n = 0; n < 24; n++) {
+    const mid = (lo + hi) / 2;
+    if (b(mid, 0, 1) < o) lo = mid; else hi = mid;
+  }
+  return Math.round(b((lo + hi) / 2, 0.7, 0.3) * WIPE_MS);
+}
+
+/** A reveal unit's own elements: the group's members, or the element itself. */
+const members = (unit: HTMLElement) =>
+  unit.hasAttribute("data-reveal-group") ? Array.from(unit.querySelectorAll<HTMLElement>("[data-reveal]")) : [unit];
+
+/** Units are groups and the reveals that are not inside one. */
+const unitsIn = (root: ParentNode) =>
+  Array.from(root.querySelectorAll<HTMLElement>(REVEAL)).filter((el) => el.hasAttribute("data-reveal-group") || !el.parentElement?.closest("[data-reveal-group]"));
+
 export function MotionController({ rootId }: { rootId: string }) {
   useEffect(() => {
     const root = document.getElementById(rootId);
@@ -25,44 +61,100 @@ export function MotionController({ rootId }: { rootId: string }) {
     const start = () => {
       const html = document.documentElement;
       const vh = () => window.innerHeight || 1;
+      const show = (unit: HTMLElement, instant = false) => {
+        unit.classList.add("in");
+        for (const el of members(unit)) el.classList.add("in", ...(instant ? ["instant"] : []));
+        if (instant) unit.classList.add("instant");
+      };
 
       // Switch motion on first: the wipe overlays are display:none until then, and a
       // hidden element measures as top 0, which would mark every wipe as already seen.
       // The measuring and the class changes all run in this one task, so nothing
       // paints in a hidden state that is not meant to stay hidden.
       html.dataset.motion = "on";
-      const targets = Array.from(root.querySelectorAll<HTMLElement>("[data-reveal], [data-wipe]"));
-      const pending: HTMLElement[] = [];
-      for (const el of targets) {
-        if (el.getBoundingClientRect().top < vh() * 0.95) el.classList.add("in", "instant");
-        else pending.push(el);
-      }
 
       const io = new IntersectionObserver(
         (entries) => {
           for (const e of entries) {
             if (!e.isIntersecting) continue;
-            e.target.classList.add("in");
+            show(e.target as HTMLElement);
             io.unobserve(e.target);
           }
         },
         { rootMargin: "0px 0px -10% 0px", threshold: 0.02 },
       );
-      pending.forEach((el) => io.observe(el));
 
-      // Filtering remounts rows. Anything that arrives later is shown in place when it
-      // lands on screen and observed otherwise, so nothing is left in a hidden state.
-      const arrive = (el: HTMLElement) => {
+      // wipes: those already on screen are spent; the rest hold what they cover
+      const held = new Map<HTMLElement, HTMLElement[]>();
+      for (const w of Array.from(root.querySelectorAll<HTMLElement>("[data-wipe]"))) {
+        if (w.getBoundingClientRect().top < vh() * 0.95) w.classList.add("in", "instant");
+        else held.set(w, []);
+      }
+      const coveringWipe = (el: HTMLElement) => {
+        const top = el.getBoundingClientRect().top;
+        for (const w of held.keys()) {
+          const r = w.getBoundingClientRect();
+          if (top >= r.top && top < r.bottom) return w;
+        }
+        return null;
+      };
+
+      for (const unit of unitsIn(root)) {
+        if (unit.getBoundingClientRect().top < vh() * 0.95) { show(unit, true); continue; }
+        const w = coveringWipe(unit);
+        if (w) held.get(w)!.push(unit);
+        else io.observe(unit);
+      }
+
+      const wipeIo = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            const w = e.target as HTMLElement;
+            wipeIo.unobserve(w);
+            const wr = w.getBoundingClientRect();
+            w.classList.add("in");
+            for (const unit of held.get(w) ?? []) {
+              if (unit.getBoundingClientRect().top >= vh() * 0.9) { io.observe(unit); continue; }
+              unit.classList.add("in");
+              for (const el of members(unit)) {
+                const o = Math.min(1, Math.max(0, (el.getBoundingClientRect().top - wr.top) / wr.height));
+                const own = parseFloat(el.style.getPropertyValue("--d")) || 0;
+                el.style.setProperty("--d", `${edgeTime(o) + own}ms`);
+                el.classList.add("in");
+              }
+            }
+            held.delete(w);
+          }
+        },
+        { rootMargin: "0px 0px -40% 0px", threshold: 0 },
+      );
+      held.forEach((_, w) => wipeIo.observe(w));
+
+      // Filtering remounts rows. Rows inside a swap container enter on the interface
+      // clock; anything else that arrives later is shown in place when it lands on
+      // screen and observed otherwise, so nothing is left in a hidden state.
+      const arrive = (el: HTMLElement, swaps: HTMLElement[]) => {
         if (el.classList.contains("in")) return;
-        if (el.getBoundingClientRect().top < vh() * 0.95) el.classList.add("in", "instant");
+        if (el.closest("[data-swap]")) {
+          el.classList.add("swap");
+          el.style.setProperty("--d", `${Math.min(swaps.length, 3) * 40}ms`);
+          swaps.push(el);
+          return;
+        }
+        if (el.getBoundingClientRect().top < vh() * 0.95) show(el, true);
         else io.observe(el);
       };
       const mo = new MutationObserver((records) => {
+        const swaps: HTMLElement[] = [];
         for (const r of records) r.addedNodes.forEach((n) => {
           if (!(n instanceof HTMLElement)) return;
-          if (n.matches("[data-reveal], [data-wipe]")) arrive(n);
-          n.querySelectorAll<HTMLElement>("[data-reveal], [data-wipe]").forEach(arrive);
+          if (n.matches(REVEAL)) arrive(n, swaps);
+          unitsIn(n).forEach((u) => arrive(u, swaps));
         });
+        if (!swaps.length) return;
+        void root.offsetWidth; // one reflow commits every start state before the targets
+        swaps.forEach((el) => el.classList.add("in"));
       });
       mo.observe(root, { childList: true, subtree: true });
 
@@ -116,12 +208,13 @@ export function MotionController({ rootId }: { rootId: string }) {
 
       cleanup = () => {
         io.disconnect();
+        wipeIo.disconnect();
         mo.disconnect();
         window.removeEventListener("scroll", kick);
         window.removeEventListener("resize", kick);
         cancelAnimationFrame(raf);
         delete html.dataset.motion;
-        root.querySelectorAll("[data-reveal], [data-wipe]").forEach((el) => el.classList.remove("in", "instant"));
+        root.querySelectorAll(`${REVEAL}, [data-wipe]`).forEach((el) => el.classList.remove("in", "instant", "swap"));
         if (lift) lift.style.transform = "";
         if (cue) cue.style.opacity = "";
         plx.forEach((p) => { p.el.style.transform = ""; });
@@ -136,4 +229,31 @@ export function MotionController({ rootId }: { rootId: string }) {
   }, [rootId]);
 
   return null;
+}
+
+export type Presence = "enter" | "open" | "exit" | null;
+
+/**
+ * Mount state for an overlay (drawer, dialog, menu) on the interface clock.
+ * Opening mounts it at "enter" and moves it to "open" two frames later, so the
+ * CSS transition has a start state to run from. Closing holds it at "exit" for
+ * exitMs, then unmounts. Under reduced motion it mounts and unmounts at once.
+ */
+export function usePresence(open: boolean, exitMs = 200): Presence {
+  const [stage, setStage] = useState<Presence>(null);
+  useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (open) {
+      if (reduce) { setStage("open"); return; }
+      setStage("enter");
+      let r2 = 0;
+      const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(() => setStage("open")); });
+      return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
+    }
+    if (reduce) { setStage(null); return; }
+    setStage((s) => (s ? "exit" : null));
+    const t = window.setTimeout(() => setStage(null), exitMs);
+    return () => window.clearTimeout(t);
+  }, [open, exitMs]);
+  return stage;
 }

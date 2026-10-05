@@ -6,6 +6,7 @@ import { href, propertyHref } from "@/lib/routes";
 import { ImageFrame } from "@/components/ImageFrame";
 import { MotionController } from "@/components/MotionController";
 import s from "./Home.module.css";
+import m from "@/components/motion.module.css";
 
 /* Home is five chapters on two temperature cuts: forest, then cream for three
    chapters, then forest-deep running straight into the footer. The footer is
@@ -41,10 +42,10 @@ function GridLines({ tone }: { tone: Tone }) {
 }
 
 /** A heading set one authored line per mask box, so each line can rise on its own. */
-function Lines({ lines, as = "h2", className = "" }: { lines: string[]; as?: "h2" | "h3" | "p"; className?: string }) {
+function Lines({ lines, as = "h2", className = "", d }: { lines: string[]; as?: "h2" | "h3" | "p"; className?: string; d?: number }) {
   const Tag = as;
   return (
-    <Tag className={`${s.mask} ${className}`} data-reveal>
+    <Tag className={`${s.mask} ${className}`} data-reveal style={d ? delay(d) : undefined}>
       {lines.map((line, i) => (
         <span key={line} className={s.line}>
           <span style={{ ["--i" as string]: i } as React.CSSProperties}>{line}</span>
@@ -58,12 +59,16 @@ function Chapter({ tone, wipeFrom, className = "", inner = "", children }: {
   tone: Tone; wipeFrom?: Tone; className?: string; inner?: string; children: React.ReactNode;
 }) {
   return (
-    <section className={`${s.chapter} ${GROUND[tone]} ${tone === "cream" ? "" : s.dark} ${className}`}>
+    <section data-ground={tone} className={`${s.chapter} ${GROUND[tone]} ${tone === "cream" ? "" : s.dark} ${className}`}>
       <div className="relative mx-auto max-w-[1440px]">
         <GridLines tone={tone} />
         <div className={`relative z-10 px-4 py-24 md:px-12 lg:py-40 ${GRID} ${inner}`}>{children}</div>
       </div>
-      {wipeFrom && <div aria-hidden data-wipe className={`${s.wipe} ${wipeFrom === "cream" ? "bg-paper" : "bg-forest"}`} />}
+      {wipeFrom && (
+        <div aria-hidden data-wipe className={`${s.wipe} ${wipeFrom === "cream" ? "bg-paper" : "bg-forest"}`}>
+          <div className="relative mx-auto h-full max-w-[1440px]"><GridLines tone={wipeFrom} /></div>
+        </div>
+      )}
     </section>
   );
 }
@@ -77,7 +82,7 @@ export function Home() {
       <MotionController rootId="home" />
 
       {/* ───────── 1. Hero: forest. The headline is the LCP element and never animates. */}
-      <section className={`${s.chapter} ${s.dark} bg-forest text-paper`}>
+      <section data-ground="forest" className={`${s.chapter} ${s.dark} bg-forest text-paper`}>
         <div className="relative mx-auto flex min-h-[100svh] max-w-[1440px] flex-col">
           <GridLines tone="forest" />
           <div className="relative z-10 flex flex-1 flex-col px-4 pb-16 pt-28 md:px-12 md:pb-20 md:pt-36">
@@ -119,17 +124,17 @@ export function Home() {
       <Chapter tone="cream" wipeFrom="forest" className="lg:min-h-[100svh]">
         {/* The sticky column's container ends with the two-column copy, so the
             headline releases before the full-width proof rows reach it. */}
-        <div className={`col-span-12 ${GRID}`}>
+        <div data-reveal-group className={`col-span-12 ${GRID}`}>
           <div className="col-span-12 lg:sticky lg:top-32 lg:col-span-5 lg:self-start">
             <Lines lines={["We own what", "we advise on."]} className={HEAD} />
-            <Lines as="p" lines={["Financed, held and sold."]} className="mt-3 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass" />
-            <blockquote data-reveal className={`${s.reveal} mt-12 max-w-[26ch] border-t border-forest/14 pt-6 font-display text-[clamp(1.2rem,1.8vw,1.5rem)] font-medium leading-[1.3] text-forest`}>
+            <Lines as="p" d={2} lines={["Financed, held and sold."]} className="mt-3 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass" />
+            <blockquote data-reveal style={delay(3)} className={`${s.reveal} mt-12 max-w-[26ch] border-t border-forest/14 pt-6 font-display text-[clamp(1.2rem,1.8vw,1.5rem)] font-medium leading-[1.3] text-forest`}>
               {OWNERSHIP.pull}
             </blockquote>
           </div>
           <div className="col-span-12 mt-12 space-y-7 lg:col-span-6 lg:col-start-7 lg:mt-0">
             {OWNERSHIP.body.map((para, i) => (
-              <p key={i} data-reveal className={`${s.reveal} max-w-[60ch] text-[16px] leading-[1.85] text-ink/80`} style={delay(i)}>{para}</p>
+              <p key={i} data-reveal className={`${s.reveal} max-w-[60ch] text-[16px] leading-[1.85] text-ink/80`} style={delay(i + 1)}>{para}</p>
             ))}
           </div>
         </div>
@@ -145,22 +150,24 @@ export function Home() {
 
       {/* ───────── 3. The Collection: cream continues. Own listings as rows. */}
       <Chapter tone="cream" className="lg:min-h-[100svh]">
-        <div className="col-span-12 lg:col-span-7">
-          <Lines lines={["From the Collection."]} className={HEAD} />
-        </div>
-        <div className="col-span-12 mt-6 lg:col-span-4 lg:col-start-9 lg:mt-0 lg:self-end">
-          <p data-reveal className={`${s.reveal} max-w-[40ch] text-[15px] leading-[1.8] text-ink/75`}>
-            Held by the brokerage, underwritten and written by us before they were priced.
-            Nothing is republished from the board.
-          </p>
-          <Link href={href("collection")} className={`${s.tlink} meta mt-5 inline-block text-forest`}>The collection</Link>
+        <div data-reveal-group className={`col-span-12 ${GRID}`}>
+          <div className="col-span-12 lg:col-span-7">
+            <Lines lines={["From the Collection."]} className={HEAD} />
+          </div>
+          <div className="col-span-12 mt-6 lg:col-span-4 lg:col-start-9 lg:mt-0 lg:self-end">
+            <p data-reveal style={delay(1)} className={`${s.reveal} max-w-[40ch] text-[15px] leading-[1.8] text-ink/75`}>
+              Held by the brokerage, underwritten and written by us before they were priced.
+              Nothing is republished from the board.
+            </p>
+            <Link href={href("collection")} className={`${m.tlink} meta mt-5 inline-block text-forest`}>The collection</Link>
+          </div>
         </div>
         <div className="col-span-12 mt-16 lg:mt-24">
           {featured.map((l, i) => {
             const lease = l.intent === "lease";
             return (
               <Link key={l.id} href={propertyHref(l.id)} data-reveal
-                className={`${s.reveal} ${s.rowlink} group ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`}
+                className={`${s.reveal} ${m.row} group ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`}
                 style={delay(i)}>
                 {/* alternate rows take the taller frame and step one column in, so the
                     list reads as offset portrait frames rather than an even stack */}
@@ -172,8 +179,8 @@ export function Home() {
                   </div>
                 </div>
                 <div className="col-span-7 self-center md:col-span-6 md:col-start-5 md:self-end md:pb-2">
-                  <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1] transition-colors duration-200 [transition-timing-function:cubic-bezier(.25,1,.5,1)] group-hover:text-forest-mid">
-                    {l.name}
+                  <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">
+                    <span className={m.rowlink}>{l.name}</span>
                   </h3>
                   <p className="meta mt-3 text-ink/70">
                     {l.address} <span className="mx-1.5 opacity-40">/</span> {l.region}, {l.city}
@@ -192,19 +199,21 @@ export function Home() {
 
       {/* ───────── 4. Track record and practices: cream continues. */}
       <Chapter tone="cream" className="lg:min-h-[100svh]">
-        <div className="col-span-12 lg:col-span-5 lg:self-end">
-          <p data-reveal className={`${s.reveal} fig text-[clamp(3.25rem,7.5vw,6.5rem)] leading-[0.9] tracking-[-.02em] text-brass`}>$1B+</p>
-        </div>
-        <div className="col-span-12 mt-12 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:self-end">
-          <Lines lines={["The number, and", "the properties behind it."]} className={HEAD} />
-          <p data-reveal className={`${s.reveal} mt-6 max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/80`}>
-            A total is easy to publish. These are some of the properties behind ours, with what they were asking,
-            published only with the parties' written consent.
+        <div data-reveal-group className={`col-span-12 ${GRID}`}>
+          <div className="col-span-12 lg:col-span-5 lg:self-end">
+            <p data-reveal className={`${s.reveal} fig text-[clamp(3.25rem,7.5vw,6.5rem)] leading-[0.9] tracking-[-.02em] text-brass`}>$1B+</p>
+          </div>
+          <div className="col-span-12 mt-12 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:self-end">
+            <Lines d={1} lines={["The number, and", "the properties behind it."]} className={HEAD} />
+            <p data-reveal style={delay(2)} className={`${s.reveal} mt-6 max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/80`}>
+              A total is easy to publish. These are some of the properties behind ours, with what they were asking,
+              published only with the parties' written consent.
+            </p>
+          </div>
+          <p data-reveal className={`${s.reveal} meta col-span-12 mt-5 leading-[1.9] text-ink/70 lg:col-span-5`} style={delay(3)}>
+            Aggregate list value of transactions the firm acted in, sale and lease, 2016 to date. Methodology on request.
           </p>
         </div>
-        <p data-reveal className={`${s.reveal} meta col-span-12 mt-5 leading-[1.9] text-ink/70 lg:col-span-5`} style={delay(1)}>
-          Aggregate list value of transactions the firm acted in, sale and lease, 2016 to date. Methodology on request.
-        </p>
 
         <div className="col-span-12 mt-16 lg:mt-24">
           {record.map((t, i) => (
@@ -221,7 +230,7 @@ export function Home() {
           ))}
           <div className="mt-6 flex flex-wrap items-baseline justify-between gap-x-10 gap-y-3">
             <p className="meta max-w-[70ch] leading-[1.9] text-ink/70">List prices at the time of the transaction, not sale prices.</p>
-            <Link href={href("track")} className={`${s.tlink} meta text-forest`}>The full record</Link>
+            <Link href={href("track")} className={`${m.tlink} meta text-forest`}>The full record</Link>
           </div>
         </div>
 
@@ -233,7 +242,7 @@ export function Home() {
                 <div className="col-span-12 md:col-span-5">
                   <h3 className="font-display text-[clamp(1.5rem,2.4vw,2.1rem)] font-medium leading-[1.1]">{p.title}</h3>
                   <p className="mt-4 max-w-[34ch] text-[15px] leading-[1.8] text-ink/75">{p.line}</p>
-                  <Link href={href(PRACTICE_ROUTES[i])} className={`${s.tlink} meta mt-6 inline-block text-forest`}>The practice</Link>
+                  <Link href={href(PRACTICE_ROUTES[i])} className={`${m.tlink} meta mt-6 inline-block text-forest`}>The practice</Link>
                 </div>
                 <div className="col-span-12 mt-6 md:col-span-6 md:col-start-7 md:mt-0">
                   <p className="max-w-[52ch] text-[14.5px] leading-[1.9] text-ink/70">{p.detail}</p>
@@ -254,20 +263,22 @@ export function Home() {
 
       {/* ───────── 5. Close: second cut, cream to forest-deep, running into the footer. */}
       <Chapter tone="deep" wipeFrom="cream" inner="lg:min-h-[100svh] lg:content-center">
-        <div className="col-span-12 lg:col-span-6">
-          <Lines lines={["Tell us what you", "are trying to do."]} className={HEAD} />
-        </div>
-        <div className="col-span-12 mt-10 lg:col-span-5 lg:col-start-8 lg:mt-0 lg:self-end">
-          <p data-reveal className={`${s.reveal} max-w-[46ch] text-[16px] leading-[1.85] text-paper/80`}>
-            A purchase, a sale, a lease, or a portfolio that needs a second pair of eyes. Someone from the desk
-            will be in touch inside one business day. We do not sell or share what you send, and we do not add
-            you to a list without asking.
-          </p>
-          <div className="mt-10 flex flex-col items-start gap-5">
-            <Link href="/contact" className={`${s.tlink} font-display text-[1.35rem] font-medium leading-tight text-paper`}>Start a conversation</Link>
-            <Link href={href("relocating")} className={`${s.tlink} text-[15px] text-paper/70`}>
-              Relocating to the Toronto area? Begin with the questions everyone asks
-            </Link>
+        <div data-reveal-group className={`col-span-12 ${GRID}`}>
+          <div className="col-span-12 lg:col-span-6">
+            <Lines lines={["Tell us what you", "are trying to do."]} className={HEAD} />
+          </div>
+          <div className="col-span-12 mt-10 lg:col-span-5 lg:col-start-8 lg:mt-0 lg:self-end">
+            <p data-reveal style={delay(1)} className={`${s.reveal} max-w-[46ch] text-[16px] leading-[1.85] text-paper/80`}>
+              A purchase, a sale, a lease, or a portfolio that needs a second pair of eyes. Someone from the desk
+              will be in touch inside one business day. We do not sell or share what you send, and we do not add
+              you to a list without asking.
+            </p>
+            <div className="mt-10 flex flex-col items-start gap-5">
+              <Link href="/contact" className={`${m.tlink} font-display text-[1.35rem] font-medium leading-tight text-paper`}>Start a conversation</Link>
+              <Link href={href("relocating")} className={`${m.tlink} text-[15px] text-paper/70`}>
+                Relocating to the Toronto area? Begin with the questions everyone asks
+              </Link>
+            </div>
           </div>
         </div>
       </Chapter>

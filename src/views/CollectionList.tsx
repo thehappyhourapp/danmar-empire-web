@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useLayoutEffect, useMemo, useRef } from "react";
 import { LISTINGS } from "@/lib/data";
 import { apply, EMPTY, isEmpty, readback } from "@/lib/parse";
 import type { Query } from "@/lib/parse";
@@ -23,6 +23,23 @@ const LENSES: { id: string; label: string; patch: Partial<Query> }[] = [
 export function CollectionList({ photos }: { photos: Record<string, string> }) {
   const { q, setQ, text, setText } = useSite();
   const results = useMemo(() => apply(LISTINGS, q), [q]);
+  // A lens change swaps the list: the keyed container remounts its rows, and
+  // MotionController enters them on the interface clock ([data-swap]). If the
+  // lens bar is stuck, the reader is put at the top of the new results before
+  // paint, so a shorter list never yanks the page.
+  const sig = JSON.stringify(q);
+  const list = useRef<HTMLDivElement>(null);
+  const bar = useRef<HTMLDivElement>(null);
+  const changed = useRef(false);
+  const firstSig = useRef(sig);
+  if (sig !== firstSig.current) changed.current = true;
+  useLayoutEffect(() => {
+    if (!changed.current || !list.current || !bar.current) return;
+    const barBottom = bar.current.getBoundingClientRect().bottom;
+    const top = list.current.getBoundingClientRect().top;
+    if (top < barBottom) window.scrollTo({ top: window.scrollY + top - barBottom, behavior: "instant" });
+  }, [sig]);
+
   const activeLens =
     LENSES.find((l) => (l.patch.lens ?? null) === (q.lens ?? null) && (l.patch.intent ?? null) === (q.intent ?? null))?.id
     ?? (isEmpty(q) ? "all" : "");
@@ -35,7 +52,7 @@ export function CollectionList({ photos }: { photos: Record<string, string> }) {
       </div>
 
       {/* lenses: plain text in a .meta row, the active one underlined */}
-      <div className="sticky top-[var(--stick)] z-30 col-span-12 mt-12 border-y border-forest/14 bg-paper py-4">
+      <div ref={bar} className="sticky top-[var(--stick)] z-30 col-span-12 mt-12 border-y border-forest/14 bg-paper py-4">
         <div className="flex flex-wrap items-baseline gap-x-8 gap-y-3">
           {LENSES.map((l) => (
             <button key={l.id} type="button" onClick={() => setQ({ ...q, ...l.patch } as Query)} aria-pressed={activeLens === l.id}
@@ -43,7 +60,9 @@ export function CollectionList({ photos }: { photos: Record<string, string> }) {
               {l.label}
             </button>
           ))}
-          <span className="meta ml-auto text-ink/70">{results.length} {results.length === 1 ? "property" : "properties"}</span>
+          <span className="meta ml-auto overflow-hidden text-ink/70" aria-live="polite">
+            <span key={sig} className={`inline-block ${changed.current ? s.swapText : ""}`}>{results.length} {results.length === 1 ? "property" : "properties"}</span>
+          </span>
         </div>
         {!isEmpty(q) && (
           <div className="mt-3 flex flex-wrap items-baseline gap-x-6 gap-y-2 border-t border-forest/14 pt-3">
@@ -54,7 +73,7 @@ export function CollectionList({ photos }: { photos: Record<string, string> }) {
         )}
       </div>
 
-      <div className="col-span-12 [&>div:first-child]:border-t-0">
+      <div ref={list} key={sig} data-swap className="col-span-12 [&>div:first-child]:border-t-0">
         {results.length ? results.map((l, i) => <ListingRow key={l.id} l={l} index={i} photo={photos[l.id]} />) : (
           <div className="border-y border-forest/14 py-20">
             <p className="font-display text-[26px] font-medium text-ink/80">Nothing on the books matches that brief.</p>

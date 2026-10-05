@@ -47,7 +47,7 @@ export function IntelBar({
   return (
     <div className="relative w-full">
       <div
-        className={`flex items-center gap-4 border-b py-3 transition-colors duration-200 md:py-4 ${
+        className={`flex items-center gap-4 border-b py-3 md:py-4 ${
           dark ? "border-paper/25" : "border-forest/14"
         } ${focus ? (dark ? "border-paper/60" : "border-forest/40") : ""}`}
       >
@@ -69,7 +69,7 @@ export function IntelBar({
         )}
         <button
           onClick={() => onOpen(q, text)} disabled={empty}
-          className={`${m.tlink} meta shrink-0 transition-colors duration-200 disabled:opacity-40 ${
+          className={`${m.tlink} meta shrink-0 disabled:opacity-40 ${
             dark ? "text-paper" : "text-forest"}`}
         >
           {empty ? "Ask" : `${hits.length} match${hits.length === 1 ? "" : "es"}`}
@@ -114,7 +114,7 @@ export function IntelBar({
                   {sugg.map((s) => (
                     <button key={s.label} onMouseDown={(e) => e.preventDefault()}
                       onClick={() => onOpen({ ...q, ...s.patch } as Query, text)}
-                      className={`${m.tlink} meta transition-colors duration-200 ${
+                      className={`${m.tlink} meta ${
                         dark ? "text-paper/80 hover:text-paper" : "text-ink/70 hover:text-forest"}`}>
                       {s.label}
                     </button>

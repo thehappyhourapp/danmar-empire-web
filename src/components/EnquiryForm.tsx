@@ -43,7 +43,7 @@ export function EnquiryForm({ listing = null, className = "" }: { listing?: List
         {["Buying", "Selling", "Leasing", "Investing"].map((r) => (
           <label key={r} className="cursor-pointer">
             <input type="radio" name="role" value={r} className="peer sr-only" defaultChecked={r === "Buying"} />
-            <span className="meta block border border-forest/20 px-4 py-3 text-center text-mute transition-colors peer-checked:border-ink peer-checked:bg-forest peer-checked:text-paper peer-focus-visible:outline peer-focus-visible:outline-1 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-forest">{r}</span>
+            <span className="meta block border border-forest/20 px-4 py-3 text-center text-mute peer-checked:border-ink peer-checked:bg-forest peer-checked:text-paper peer-focus-visible:outline peer-focus-visible:outline-1 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-forest">{r}</span>
           </label>
         ))}
       </div>
@@ -52,14 +52,14 @@ export function EnquiryForm({ listing = null, className = "" }: { listing?: List
         <div key={l} className="mb-6">
           <label className="meta mb-2 block text-mute">{l}</label>
           <input type={t} name={n} autoComplete={ac} placeholder={ph} required={t !== "tel"} aria-label={l}
-            className="w-full border-0 border-b border-forest/25 bg-transparent py-3 text-[15px] outline-none transition-colors focus:border-ink" />
+            className="w-full border-0 border-b border-forest/25 bg-transparent py-3 text-[15px] outline-none focus:border-ink" />
         </div>
       ))}
 
       <div className="mb-8">
         <label className="meta mb-2 block text-mute">What you are looking for</label>
         <textarea name="brief" rows={4} placeholder="Budget, area, timing, and anything that actually matters to you." aria-label="What you are looking for"
-          className="w-full resize-none border-0 border-b border-forest/25 bg-transparent py-3 text-[15px] outline-none transition-colors focus:border-ink" />
+          className="w-full resize-none border-0 border-b border-forest/25 bg-transparent py-3 text-[15px] outline-none focus:border-ink" />
       </div>
       {/* honeypot: hidden from people, filled by scripts */}
       <div aria-hidden className="absolute -left-[9999px] top-0 h-px w-px overflow-hidden">
@@ -67,7 +67,7 @@ export function EnquiryForm({ listing = null, className = "" }: { listing?: List
       </div>
 
       <button type="submit" disabled={state === "sending"} aria-busy={state === "sending"}
-        className="meta w-full border border-forest/25 py-4 transition-colors hover:bg-forest hover:text-paper disabled:opacity-60">
+        className="meta w-full border border-forest/25 py-4 hover:bg-forest hover:text-paper disabled:opacity-60">
         {state === "sending" ? "Sending" : "Send"}
       </button>
       {state === "unavailable" && (

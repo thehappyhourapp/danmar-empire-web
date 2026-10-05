@@ -1,56 +1,105 @@
-/* Shared grid, link and line-rise motion for inner pages (Collection, listing
-   detail, and the pages that follow). Inner pages get one reveal type: the line
-   rise. Every hidden start state hangs off html[data-motion="on"], which
+/* Shared motion for every route and for the site chrome.
+
+   Two clocks, nothing in between: the interface clock (hover, focus, toggles,
+   drawers) runs 180 to 300ms on --ui; narrative motion (reveals, wipes) runs
+   900ms to 1.6s. Only transform, opacity, filter and clip-path ever animate.
+
+   Every hidden start state for a reveal hangs off html[data-motion="on"], which
    MotionController sets only after hydration and only when prefers-reduced-motion
-   is not set, so the server HTML is the finished page for everyone else. */
+   is not set, so the server HTML is the finished page for everyone else. The
+   interface states are gated by the media query directly, because the chrome
+   lives outside any one route's controller.
+
+   The two tokens these rules read, --ui (the interface curve) and --hair (the
+   hairline colour, brass on cream), and the site-wide focus ring are declared in
+   globals.css, because a CSS module cannot select :root. */
 
 .chapter {
   position: relative;
 }
 
-/* the global selection colours are forest on cream; on a forest ground they vanish */
+/* A forest ground: the selection inverts and hairlines turn paper. */
+.dark {
+  --hair: #eee8e0;
+}
 .dark ::selection {
   background: #eee8e0;
   color: #0f3b2f;
 }
 
-.tlink {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 6px;
-  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
-  transition:
-    text-decoration-color 220ms cubic-bezier(0.25, 1, 0.5, 1),
-    color 220ms cubic-bezier(0.25, 1, 0.5, 1);
+/* ───────── Hairlines (interface clock)
+
+   Text links carry a resting hairline at 35% of their colour, so they read as
+   links without hover. On hover or keyboard focus a second hairline draws over
+   it from the left in brass (paper on forest), and retracts to the right. Row
+   titles and nav links have no resting hairline, only the drawn one. */
+
+.tlink,
+.rowlink,
+.navlink {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
 }
-.tlink:hover {
-  text-decoration-color: currentColor;
+.tlink::before,
+.tlink::after,
+.rowlink::after,
+.navlink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  pointer-events: none;
+}
+.tlink::before {
+  background: currentColor;
+  opacity: 0.35;
+}
+.tlink::after,
+.rowlink::after,
+.navlink::after {
+  background: var(--hair);
+  transform: scaleX(0);
+  transform-origin: right center;
 }
 .tlink:focus-visible {
-  outline: 1px solid currentColor;
   outline-offset: 6px;
 }
-/* an active lens or filter: the underline is already full */
-.tlinkOn {
-  text-decoration-color: currentColor;
+
+/* drawn: keyboard focus, an active lens, a saved listing, the current page */
+.tlink:focus-visible::after,
+.tlinkOn::after,
+.navlink:focus-visible::after,
+.navOn::after,
+.row:is(a):focus-visible .rowlink::after,
+.row:has(a:focus-visible) .rowlink::after {
+  transform: scaleX(1);
+  transform-origin: left center;
 }
-/* an inactive lens: no underline until hover */
-.tlinkOff {
-  text-decoration-color: transparent;
-}
-.tlinkOff:hover {
-  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+/* an inactive lens: no resting hairline, so the active one is the only rule */
+.tlinkOff::before {
+  opacity: 0;
 }
 
-.rowlink {
-  transition: color 220ms cubic-bezier(0.25, 1, 0.5, 1);
+@media (hover: hover) and (pointer: fine) {
+  .tlink:hover::after,
+  .navlink:hover::after,
+  .row:is(a):hover .rowlink::after,
+  .row:has(a:hover) .rowlink::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
 }
-.rowlink:focus-visible {
-  outline: 1px solid currentColor;
+
+/* the whole row is the target on Home; its focus ring sits outside the row */
+.row:is(a):focus-visible {
   outline-offset: 8px;
 }
 
-/* line-mask headings */
+/* ───────── Line-mask headings and the line rise (narrative clock) */
+
 .line {
   display: block;
   overflow: hidden;
@@ -59,14 +108,19 @@
 }
 .line > span {
   display: inline-block;
+}
+/* a compositor layer only while the line is waiting to rise */
+:global(html[data-motion="on"]) .mask:not(:global(.in)) .line > span {
   will-change: transform;
 }
 :global(html[data-motion="on"]) .mask:not(:global(.in)) .line > span {
   transform: translateY(115%);
 }
+/* --d offsets a whole heading inside a reveal group or behind a wipe's edge;
+   --i staggers its lines 120ms apart */
 .mask:global(.in) .line > span {
   transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: calc(var(--i, 0) * 120ms);
+  transition-delay: calc(var(--d, 0ms) + var(--i, 0) * 120ms);
 }
 
 /* line rise for rows and paragraphs: position and opacity only, no blur */
@@ -80,7 +134,129 @@
     transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0ms);
 }
 
+/* Rows that arrive when a Collection lens changes: the interface clock, a short
+   8px rise, 40ms apart (MotionController sets --d, capped at four steps). */
+:global(html[data-motion="on"]) .rise:global(.swap):not(:global(.in)) {
+  transform: translateY(8px);
+}
+.rise:global(.swap.in) {
+  transition:
+    opacity 240ms var(--ui) var(--d, 0ms),
+    transform 240ms var(--ui) var(--d, 0ms);
+}
+
 .chapter :global(.instant),
 .chapter :global(.instant) .line > span {
   transition: none !important;
+}
+
+/* ───────── Overlays (interface clock)
+
+   usePresence (MotionController.tsx) mounts an overlay at data-state="enter",
+   moves it to "open" two frames later, and holds it at "exit" until the exit
+   transition has run. Transitions, not keyframes, so a close during the
+   entrance reverses from wherever it is. */
+
+.backdrop {
+  opacity: 1;
+}
+/* the enquiry and saved drawers come from the right edge and leave by it */
+.drawer {
+  transform: none;
+}
+/* client access is a centred dialog: a small rise, no scale from nothing */
+.dialog {
+  opacity: 1;
+  transform: none;
+}
+/* the mobile menu is a cut: drawn down from the top edge, drawn back up */
+.menu {
+  clip-path: inset(0 0 0 0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .backdrop {
+    transition: opacity 240ms var(--ui);
+  }
+  .backdrop[data-state="enter"],
+  .backdrop[data-state="exit"] {
+    opacity: 0;
+  }
+  /* inside the shortest unmount window (the dialog's 180ms), so it always lands */
+  .backdrop[data-state="exit"] {
+    transition-duration: 180ms;
+  }
+
+  .drawer {
+    transition: transform 280ms var(--ui);
+  }
+  .drawer[data-state="enter"],
+  .drawer[data-state="exit"] {
+    transform: translateX(100%);
+  }
+  .drawer[data-state="exit"] {
+    transition-duration: 200ms;
+  }
+
+  .dialog {
+    transition:
+      opacity 200ms var(--ui),
+      transform 200ms var(--ui);
+  }
+  .dialog[data-state="enter"] {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .dialog[data-state="exit"] {
+    opacity: 0;
+    transform: translateY(4px);
+    transition-duration: 180ms;
+  }
+
+  .menu {
+    transition: clip-path 280ms var(--ui);
+  }
+  .menu[data-state="enter"],
+  .menu[data-state="exit"] {
+    clip-path: inset(0 0 100% 0);
+  }
+  .menu[data-state="exit"] {
+    transition-duration: 200ms;
+  }
+
+  /* hairlines draw on the interface clock */
+  .tlink::after,
+  .rowlink::after,
+  .navlink::after {
+    transition: transform 220ms var(--ui);
+  }
+
+  /* The Collection count and the nav SAVED badge acknowledge a change. The
+     component adds the class only after its first render, so nothing plays on
+     page load. Neither ever leaves the reader without the number. */
+  .swapText {
+    animation: swapText 200ms var(--ui) both;
+  }
+  .settle {
+    animation: settle 240ms var(--ui) both;
+  }
+}
+
+@keyframes swapText {
+  from {
+    opacity: 0.25;
+    transform: translateY(35%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes settle {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: none;
+  }
 }

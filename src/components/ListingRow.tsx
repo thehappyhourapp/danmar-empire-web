@@ -19,13 +19,13 @@ export function ListingRow({ l, index, save = true, photo }: { l: Listing; index
   const odd = index % 2 === 1;
   if (l.tier === "Off-Market") return <OffMarketRow l={l} index={index} />;
   return (
-    <div data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`} style={delay(index)}>
+    <div data-reveal className={`${s.rise} ${s.row} ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`} style={delay(index)}>
       <Link href={propertyHref(l.id)} aria-label={l.name} className={`col-span-5 self-center md:col-span-3 md:row-span-2 ${odd ? "md:col-start-2" : ""}`}>
         <ImageFrame src={photo} hue={l.hue} ratio={odd ? "3/4" : "4/5"} alt="" fallback="flat" />
       </Link>
       <div className="col-span-7 self-center md:col-span-6 md:col-start-5 md:self-end md:pb-2">
         <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">
-          <Link href={propertyHref(l.id)} className={`${s.rowlink} hover:text-forest-mid`}>{l.name}</Link>
+          <Link href={propertyHref(l.id)} className={s.rowlink}>{l.name}</Link>
         </h3>
         <p className="meta mt-3 text-ink/70">
           <span className="block md:inline">{l.address}</span>

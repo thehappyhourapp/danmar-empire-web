@@ -8,9 +8,10 @@ import { GRID, GridLines } from "./Chapter";
 import { Wordmark } from "./Nav";
 import s from "./motion.module.css";
 
-/* The footer is chrome, not a chapter: forest ground with cream type, the drawn
-   grid continued from the page above, the full seal at 120px, a link to every
-   route, the offices, and the full registered name with the disclosure block. */
+/* The footer is chrome, not a chapter: forest-deep, the ground Home's close runs
+   into without a seam, with cream type, the drawn grid continued from the page
+   above, the full seal at 120px, a link to every route, the offices, and the full
+   registered name with the disclosure block. */
 
 const PRACTICE_LINKS: [string, string][] = [
   ["management", "Asset Management"],
@@ -45,7 +46,7 @@ function Links({ title, items }: { title: string; items: [string, string][] }) {
 
 export function Footer({ onEnquire, onAccess }: { onEnquire: () => void; onAccess: () => void }) {
   return (
-    <footer className={`relative bg-forest text-paper ${s.dark}`}>
+    <footer data-ground="deep" className={`relative bg-forest-deep text-paper ${s.dark}`}>
       <div className="relative mx-auto max-w-[1440px]">
         <GridLines tone="dark" />
         <div className={`relative z-10 px-4 pb-10 pt-24 md:px-12 lg:pt-28 ${GRID}`}>
