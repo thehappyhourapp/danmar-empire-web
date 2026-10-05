@@ -178,7 +178,7 @@ export function Home() {
                     </div>
                   </div>
                 </div>
-                <div className="col-span-7 self-center md:col-span-6 md:col-start-5 md:self-end md:pb-2">
+                <div className="col-span-12 mt-6 md:col-span-6 md:col-start-5 md:mt-0 md:self-end md:pb-2">
                   <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">
                     <span className={m.rowlink}>{l.name}</span>
                   </h3>

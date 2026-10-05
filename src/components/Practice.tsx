@@ -58,7 +58,7 @@ export function Practice(p: PracticeProps) {
       <MotionController rootId={p.id} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
-      <Chapter tone={p.tone} inner="pb-24 pt-32 md:pt-40 lg:pb-40">
+      <Chapter tone={p.tone} inner="pb-24 pt-[calc(var(--nav-h)_+_64px_-_40px)] lg:pt-[calc(var(--nav-h)_+_96px_-_40px)] lg:pb-40">
         {/* ── head */}
         <p className={`meta col-span-12 ${brass}`}>{p.eyebrow}</p>
         <div className="col-span-12 mt-6 lg:col-span-8">

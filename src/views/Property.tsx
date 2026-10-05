@@ -82,13 +82,13 @@ export function Property({ l }: { l: Listing }) {
         )}
       </div>
 
-      <Chapter inner="pb-20 pt-10 md:pt-14 lg:pb-28">
+      <Chapter inner="pb-20 pt-[calc(64px_-_49px)] lg:pb-28 lg:pt-[calc(96px_-_49px)]">
         <nav aria-label="Breadcrumb" className="col-span-12">
           <Link href={href("collection")} className={`${s.tlink} meta text-ink/70 hover:text-forest`}>The Collection</Link>
         </nav>
 
         {/* name alone, then one line of data */}
-        <header className="col-span-12 mt-10 lg:col-span-8">
+        <header className="col-span-12 mt-6 lg:col-span-8">
           <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1] tracking-[-.015em]">{l.address}</h1>
           <p className="meta mt-6 text-ink/70">
             <span className="block md:inline">{l.name}</span>

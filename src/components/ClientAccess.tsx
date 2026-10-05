@@ -37,7 +37,7 @@ export function ClientAccess({ open, close }: { open: boolean; close: () => void
     setState(await submitEnquiry({ kind: "client-access", name: v("name"), email: v("email"), firm: v("firm"), note: v("note"), website: v("website") }));
   };
 
-  const field = "w-full border-0 border-b border-forest/25 bg-transparent py-2 text-[15px] outline-none focus:border-ink";
+  const field = "w-full border-0 border-b border-forest/55 bg-transparent py-2 text-[15px] outline-none focus:border-ink";
 
   return (
     <div className="fixed inset-0 z-[90] grid place-items-center p-4" onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
@@ -69,7 +69,7 @@ export function ClientAccess({ open, close }: { open: boolean; close: () => void
               <label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
             </div>
             <button type="submit" disabled={state === "sending"} aria-busy={state === "sending"}
-              className="meta mt-2 w-full border border-forest/25 py-4 text-forest hover:border-forest active:translate-y-px disabled:opacity-60">
+              className="meta mt-2 w-full border border-forest/55 py-4 text-forest hover:border-forest active:translate-y-px disabled:opacity-60">
               {state === "sending" ? "Sending" : "Request access"}
             </button>
             {state === "unavailable" && (

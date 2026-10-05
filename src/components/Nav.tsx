@@ -127,8 +127,8 @@ export function Nav({
             <button
               onClick={() => onEnquire()}
               className={`meta hidden border px-4 py-2 md:block ${
-                light ? "border-paper/35 text-paper hover:bg-paper hover:text-ink"
-                      : "border-forest/25 text-forest hover:bg-forest hover:text-paper"}`}
+                light ? "border-paper/45 text-paper hover:bg-paper hover:text-ink"
+                      : "border-forest/55 text-forest hover:bg-forest hover:text-paper"}`}
             >
               Enquire
             </button>
@@ -174,7 +174,7 @@ function Menu({ open, close, page, onEnquire }: { open: boolean; close: () => vo
           </Link>
         ))}
         <button onClick={() => { close(); onEnquire(); }}
-          className="mt-10 w-full border border-paper/35 py-4 meta text-paper">Enquire</button>
+          className="mt-10 w-full border border-paper/45 py-4 meta text-paper">Enquire</button>
       </nav>
     </div>
   );

@@ -28,7 +28,7 @@ export function Firm() {
   return (
     <div id="firm">
       <MotionController rootId="firm" />
-      <Chapter tone="forest" inner="pb-24 pt-32 md:pt-40 lg:pb-40">
+      <Chapter tone="forest" inner="pb-24 pt-[calc(var(--nav-h)_+_64px)] lg:pt-[calc(var(--nav-h)_+_96px)] lg:pb-40">
         {/* ── head */}
         <div className="col-span-12 lg:col-span-8">
           <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em]">A family firm that runs files like a practice.</h1>

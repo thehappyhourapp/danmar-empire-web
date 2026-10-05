@@ -81,6 +81,7 @@ Merged from four `/taste` analyses (full data in `docs/taste/`). Loam House and 
 - Two voices in one headline: a second line in Bodoni Moda italic, `brass-light` on dark grounds and `brass` on cream. At most one italic brass line per chapter, and never on inner-page section titles. Used everywhere it reads as a template. The Home hero and the Ownership band earn it; a practice-page subheading does not. [Loam: gold italic "Bayside living."; Sobha: script crossing the caps line.]
 - Body text is Libre Franklin 400, which is the current CSS. Never set running text at 500: it reads heavy on cream and loses the contrast with the labels.
 - Labels stay `.meta`: Libre Franklin 500, 10.5px, uppercase, 0.19em tracking. [Loam: DM Sans 600, 10px, 0.16em.]
+- Text is at least 14px at 390, with one exception: `.meta` labels stay at 10.5px. They are short uppercase labels with wide tracking, never running text, and the DNA's label size wins over the 14px floor (decided 5 Oct 2026).
 - Figures (`.fig`) are Bodoni Moda 500 with lining tabular numerals at opsz 10.
 
 ### Colour and temperature (Loam, Sobha)

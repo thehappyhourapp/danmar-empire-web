@@ -41,15 +41,13 @@ export function Person({ p }: { p: P }) {
     <div id="person">
       <MotionController rootId="person" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-40">
+      <Chapter inner="pb-24 pt-[calc(var(--nav-h)_+_64px_-_49px)] lg:pt-[calc(var(--nav-h)_+_96px_-_49px)] lg:pb-40">
         <nav aria-label="Breadcrumb" className="col-span-12">
           <Link href={href("firm")} className={`${s.tlink} meta text-ink/70 hover:text-forest`}>The Firm</Link>
         </nav>
 
-        <div className="col-span-12 mt-10 md:col-span-4 lg:col-span-3">
-          <ImageFrame ratio="4/5" alt={name} fallback="flat" />
-        </div>
-        <header className="col-span-12 mt-8 md:col-span-7 md:col-start-6 md:mt-10 lg:col-span-6 lg:col-start-5">
+        {/* the name leads at 390; from md the portrait takes the left of the same row */}
+        <header className="col-span-12 mt-6 md:col-span-7 md:col-start-6 md:row-start-2 lg:col-span-6 lg:col-start-5">
           <h1 className="max-w-[16ch] font-display text-[clamp(2.1rem,4.6vw,3.6rem)] font-medium leading-[1.04] tracking-[-.01em]">{name}</h1>
           <p className="meta mt-4 text-ink/70">
             <span className="block md:inline">{p.role}</span>
@@ -63,6 +61,9 @@ export function Person({ p }: { p: P }) {
             </div>
           ) : null}
         </header>
+        <div className="col-span-12 mt-10 md:col-span-4 md:col-start-1 md:row-start-2 md:mt-6 lg:col-span-3">
+          <ImageFrame ratio="4/5" alt={name} fallback="flat" />
+        </div>
 
         {/* credentials, practice, areas as rows */}
         {rows.length > 0 && <div className="col-span-12 mt-16 lg:mt-20">

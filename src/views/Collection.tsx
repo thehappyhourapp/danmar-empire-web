@@ -12,7 +12,7 @@ export function Collection() {
   return (
     <div id="collection">
       <MotionController rootId="collection" />
-      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-40">
+      <Chapter inner="pb-24 pt-[calc(var(--nav-h)_+_64px)] lg:pt-[calc(var(--nav-h)_+_96px)] lg:pb-40">
         <div className="col-span-12 lg:col-span-5">
           <Lines as="h1" lines={["Our own listings,", "and nothing else."]} className={HEAD} />
         </div>

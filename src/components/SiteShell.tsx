@@ -181,7 +181,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           </aside>
         )}
 
-        <div style={{ ["--stick" as string]: `${noticeH + 74}px` } as React.CSSProperties}>
+        <div style={{ ["--stick" as string]: `calc(${noticeH}px + var(--nav-h))` } as React.CSSProperties}>
           <Nav page={pageFor(pathname)} ground={groundFor(pathname)} saved={saved.size} savedPulse={savedPulse} onSaved={() => setSavedOpen(true)} onEnquire={enquire} offset={noticeH} />
           <main>{children}</main>
           <Footer onEnquire={() => enquire()} onAccess={requestAccess} />

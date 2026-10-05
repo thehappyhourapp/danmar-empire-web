@@ -48,8 +48,8 @@ export function IntelBar({
     <div className="relative w-full">
       <div
         className={`flex items-center gap-4 border-b py-4 md:py-4 ${
-          dark ? "border-paper/25" : "border-forest/14"
-        } ${focus ? (dark ? "border-paper/60" : "border-forest/40") : ""}`}
+          dark ? "border-paper/45" : "border-forest/55"
+        } ${focus ? (dark ? "border-paper" : "border-forest") : ""}`}
       >
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none" className={dark ? "text-paper/50" : "text-ink/70"}>
           <circle cx="7" cy="7" r="5.2" stroke="currentColor" strokeWidth="1.2" /><path d="M11 11l4 4" stroke="currentColor" strokeWidth="1.2" />

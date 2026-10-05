@@ -85,6 +85,11 @@
 :root {
   --ui: cubic-bezier(0.25, 1, 0.5, 1);
   --hair: #80642c;
+  /* the fixed header's height: inner pages set their top padding from it */
+  --nav-h: 70px;
+}
+@media (min-width: 768px) {
+  :root { --nav-h: 74px; }
 }
 
 /* Visible keyboard focus on every control: a 1px rule in the text colour. Fields

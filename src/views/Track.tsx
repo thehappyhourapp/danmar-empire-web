@@ -19,7 +19,7 @@ export function Track() {
   return (
     <div id="track">
       <MotionController rootId="track" />
-      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-40">
+      <Chapter inner="pb-24 pt-[calc(var(--nav-h)_+_64px)] lg:pt-[calc(var(--nav-h)_+_96px)] lg:pb-40">
         {/* ── head */}
         <div className="col-span-12 lg:col-span-8">
           <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em]">Every figure has an address.</h1>
@@ -47,7 +47,7 @@ export function Track() {
                 <div aria-hidden className={`col-span-5 self-center md:col-span-3 md:row-span-2 ${odd ? "md:col-start-2" : ""}`}>
                   <ImageFrame src={photo(`/photos/track/${t.id}.jpg`)} hue={t.hue} ratio={odd ? "3/4" : "4/5"} alt="" fallback="flat" />
                 </div>
-                <div className="col-span-7 self-center md:col-span-6 md:col-start-5 md:self-end md:pb-2">
+                <div className="col-span-12 mt-6 md:col-span-6 md:col-start-5 md:mt-0 md:self-end md:pb-2">
                   <h2 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">{t.place}</h2>
                   <p className="meta mt-4 text-ink/70">
                     <span className="block md:inline">{t.city}</span>

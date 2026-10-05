@@ -24,7 +24,7 @@ export function ListingRow({ l, index, save = true, photo, level = 3 }: { l: Lis
       <Link href={propertyHref(l.id)} aria-label={l.name} className={`col-span-5 self-center md:col-span-3 md:row-span-2 ${odd ? "md:col-start-2" : ""}`}>
         <ImageFrame src={photo} hue={l.hue} ratio={odd ? "3/4" : "4/5"} alt="" fallback="flat" />
       </Link>
-      <div className="col-span-7 self-center md:col-span-6 md:col-start-5 md:self-end md:pb-2">
+      <div className="col-span-12 mt-6 md:col-span-6 md:col-start-5 md:mt-0 md:self-end md:pb-2">
         <H className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">
           <Link href={propertyHref(l.id)} className={s.rowlink}>{l.name}</Link>
         </H>
@@ -57,7 +57,7 @@ function OffMarketRow({ l, index, level }: { l: Listing; index: number; level: 2
       <div aria-hidden className={`col-span-5 self-center md:col-span-3 md:row-span-2 ${odd ? "md:col-start-2" : ""}`}>
         <ImageFrame hue={l.hue} ratio={odd ? "3/4" : "4/5"} alt="" fallback="flat" />
       </div>
-      <div className="col-span-7 self-center md:col-span-6 md:col-start-5 md:self-end md:pb-2">
+      <div className="col-span-12 mt-6 md:col-span-6 md:col-start-5 md:mt-0 md:self-end md:pb-2">
         <H className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">{l.name}</H>
         <p className="meta mt-4 text-ink/70">
           <span className="block md:inline">{l.region}, {l.city}</span>
