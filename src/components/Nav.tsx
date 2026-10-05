@@ -33,13 +33,13 @@ export function Emblem({ size = 30, className = "", light = false }: { size?: nu
  *  the footer carries it on every page, which is where RECO identification lives. */
 export function Wordmark({ light = false, className = "", stacked = false, registered = true }: { light?: boolean; className?: string; stacked?: boolean; registered?: boolean }) {
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
+    <div className={`flex items-center gap-4 ${className}`}>
       <div className="leading-none">
         <div className={`font-display font-medium tracking-[.085em] ${stacked ? "text-[21px]" : "text-[16.5px]"} ${light ? "text-paper" : "text-forest"}`}>
           DANMAR EMPIRE
         </div>
         {registered && (
-          <div className={`meta mt-[6px] ${light ? "text-paper/85" : "text-mute"}`}>
+          <div className={`meta mt-[6px] ${light ? "text-paper/85" : "text-ink/70"}`}>
             Real Estate Corp., Brokerage
           </div>
         )}
@@ -99,12 +99,12 @@ export function Nav({
             <Wordmark light={light} registered={false} />
           </Link>
 
-          <nav className="ml-auto hidden items-center gap-7 xl:flex">
+          <nav className="ml-auto hidden items-center gap-8 xl:flex">
             {NAV.map((n) => (
               <Link
                 key={n.id} href={href(n.id)} aria-current={page === n.id ? "page" : undefined}
                 className={`${m.navlink} ${page === n.id ? m.navOn : ""} text-[13px] tracking-[.01em] ${
-                  light ? (page === n.id ? "text-paper" : "text-paper/75 hover:text-paper") : page === n.id ? "text-forest" : "text-forest/60 hover:text-forest"
+                  light ? (page === n.id ? "text-paper" : "text-paper/75 hover:text-paper") : page === n.id ? "text-forest" : "text-forest/75 hover:text-forest"
                 }`}
               >
                 {n.label}
@@ -112,10 +112,10 @@ export function Nav({
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-5 xl:ml-0">
+          <div className="ml-auto flex items-center gap-6 xl:ml-0">
             <button
               onClick={onSaved}
-              className={`meta hidden items-center gap-2 sm:flex ${light ? "text-paper/85 hover:text-paper" : "text-mute hover:text-forest"}`}
+              className={`meta hidden items-center gap-2 sm:flex ${light ? "text-paper/85 hover:text-paper" : "text-ink/70 hover:text-forest"}`}
             >
               Saved
               {/* settles when a save is toggled (savedPulse), never when the list is restored on load */}

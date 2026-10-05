@@ -11,7 +11,7 @@ export const metadata: Metadata = { ...toMetadata(metaFor("notfound")), alternat
 /* The 404: cream, one headline, two ways back. Nothing animates. */
 export default function NotFound() {
   return (
-    <Chapter inner="min-h-[70svh] content-start pb-24 pt-32 md:pt-40 lg:pb-32">
+    <Chapter inner="min-h-[70svh] content-start pb-24 pt-32 md:pt-40 lg:pb-40">
       <h1 className="col-span-12 max-w-[16ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em] lg:col-span-8">
         There is nothing at this address.
       </h1>

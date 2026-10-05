@@ -19,12 +19,12 @@ export function Areas() {
   return (
     <div id="areas">
       <MotionController rootId="areas" />
-      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-32">
+      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-40">
         {/* ── head */}
         <div className="col-span-12 lg:col-span-8">
           <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em]">Oakville first. Ontario throughout.</h1>
         </div>
-        <p className="col-span-12 mt-10 max-w-[58ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-16">
+        <p className="col-span-12 mt-10 max-w-[48ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-16">
           The firm keeps offices in Oakville and Vaughan and is licensed across Ontario. Oakville is where the
           depth is: it is our home market, our largest book, and the town we know street by street. Beyond it we
           act throughout the Greater Toronto Area and in the province&apos;s recreational and specialist markets.
@@ -45,14 +45,14 @@ export function Areas() {
                   <div key={a.slug} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`} style={delay(i)}>
                     <div className="col-span-12 md:col-span-5">
                       <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">{a.name}</h3>
-                      <p className="meta mt-3 text-ink/70">
+                      <p className="meta mt-4 text-ink/70">
                         <span className="block md:inline">{a.region}</span>
-                        {count > 0 && <><span className="mx-1.5 hidden opacity-40 md:inline">/</span><Link href={href("collection")} className={`${s.tlink} block md:inline`}><span className="fig text-[13px] tracking-normal text-brass">{count}</span> in the Collection</Link></>}
+                        {count > 0 && <><span className="mx-2 hidden opacity-40 md:inline">/</span><Link href={href("collection")} className={`${s.tlink} block md:inline`}><span className="fig text-[14px] tracking-normal text-brass">{count}</span> in the Collection</Link></>}
                       </p>
                     </div>
                     <div className="col-span-12 mt-4 md:col-span-6 md:col-start-7 md:mt-0">
-                      <p className="max-w-[56ch] text-[15px] leading-[1.85] text-ink/80">{a.note}</p>
-                      <p className="meta mt-4 max-w-[64ch] leading-[1.9] text-ink/60">{a.pockets.join(" · ")}</p>
+                      <p className="max-w-[48ch] text-[15px] leading-[1.85] text-ink/80">{a.note}</p>
+                      <p className="meta mt-4 max-w-[60ch] leading-[1.9] text-ink/70">{a.pockets.join(" · ")}</p>
                     </div>
                   </div>
                 );
@@ -66,7 +66,7 @@ export function Areas() {
           <div className="col-span-12 lg:col-span-6">
             <Lines lines={["Somewhere that is not", "on this list?"]} className={`${HEAD} max-w-[18ch]`} />
           </div>
-          <div className="col-span-12 mt-8 flex flex-col items-start gap-5 lg:col-span-5 lg:col-start-7 lg:mt-2">
+          <div className="col-span-12 mt-8 flex flex-col items-start gap-6 lg:col-span-5 lg:col-start-7 lg:mt-2">
             <p className="max-w-[46ch] text-[15px] leading-[1.8] text-ink/80">
               We are licensed province-wide and we travel for the right mandate. If it is outside our depth we
               will tell you that, and refer you to someone whose market it is.

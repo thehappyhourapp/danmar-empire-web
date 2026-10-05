@@ -58,7 +58,7 @@ export function Practice(p: PracticeProps) {
       <MotionController rootId={p.id} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
-      <Chapter tone={p.tone} inner="pb-24 pt-32 md:pt-40 lg:pb-32">
+      <Chapter tone={p.tone} inner="pb-24 pt-32 md:pt-40 lg:pb-40">
         {/* ── head */}
         <p className={`meta col-span-12 ${brass}`}>{p.eyebrow}</p>
         <div className="col-span-12 mt-6 lg:col-span-8">
@@ -67,7 +67,7 @@ export function Practice(p: PracticeProps) {
         </div>
         <div className={`col-span-12 mt-10 space-y-6 lg:col-span-6 lg:col-start-7 lg:mt-16 ${body}`}>
           {p.intro.map((t, i) => (
-            <p key={i} data-reveal className={`${s.rise} max-w-[58ch] text-[16px] leading-[1.85]`} style={delay(i)}>{t}</p>
+            <p key={i} data-reveal className={`${s.rise} max-w-[48ch] text-[16px] leading-[1.85]`} style={delay(i)}>{t}</p>
           ))}
         </div>
 
@@ -90,9 +90,9 @@ export function Practice(p: PracticeProps) {
                 n += 1;
                 return (
                   <div key={it.title} data-reveal className={`${s.rise} ${GRID} border-t ${rule} py-8 last:border-b md:py-10`} style={delay(i)}>
-                    <span className={`fig col-span-2 text-[13px] ${brass} md:col-span-1`}>{String(n).padStart(2, "0")}</span>
+                    <span className={`fig col-span-2 text-[14px] ${brass} md:col-span-1`}>{String(n).padStart(2, "0")}</span>
                     <h3 className="col-span-10 font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1] md:col-span-4">{it.title}</h3>
-                    <p className={`col-span-12 mt-4 max-w-[56ch] text-[15px] leading-[1.85] md:col-span-6 md:col-start-7 md:mt-0 ${body}`}>{it.text}</p>
+                    <p className={`col-span-12 mt-4 max-w-[48ch] text-[15px] leading-[1.85] md:col-span-6 md:col-start-7 md:mt-0 ${body}`}>{it.text}</p>
                   </div>
                 );
               })}
@@ -107,13 +107,13 @@ export function Practice(p: PracticeProps) {
           <div className="col-span-12 lg:col-span-6">
             <Lines lines={[p.close.headline]} className={`${HEAD} max-w-[18ch]`} />
           </div>
-          <div className="col-span-12 mt-8 flex flex-col items-start gap-5 lg:col-span-5 lg:col-start-7 lg:mt-2">
+          <div className="col-span-12 mt-8 flex flex-col items-start gap-6 lg:col-span-5 lg:col-start-7 lg:mt-2">
             {p.close.aside}
             <EnquireButton className={`${s.tlink} font-display text-[1.35rem] font-medium leading-tight ${link}`}>{p.close.enquire}</EnquireButton>
             <ClientAccessButton className={`${s.tlink} meta ${meta}`}>{p.close.login}</ClientAccessButton>
           </div>
         </div>
-        {p.note && <p className={`meta col-span-12 mt-12 max-w-[90ch] leading-[1.9] lg:col-span-8 ${meta}`}>{p.note}</p>}
+        {p.note && <p className={`meta col-span-12 mt-12 max-w-[60ch] leading-[1.9] lg:col-span-8 ${meta}`}>{p.note}</p>}
       </Chapter>
     </div>
   );

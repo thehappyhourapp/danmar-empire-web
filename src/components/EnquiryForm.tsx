@@ -25,10 +25,10 @@ export function EnquiryForm({ listing = null, className = "" }: { listing?: List
   if (state === "sent") {
     return (
       <div className={className}>
-        <div className="border border-forest/16 p-8" role="status">
+        <div className="border border-forest/14 p-8" role="status">
           <div className="meta text-brass">Received</div>
           <p className="mt-4 font-display text-[24px] leading-snug">Someone from the desk will be in touch inside one business day.</p>
-          <p className="mt-4 text-[14px] leading-[1.8] text-mute">
+          <p className="mt-4 text-[14px] leading-[1.8] text-ink/70">
             If it is urgent, call the Oakville office on 905 901 5011.
           </p>
         </div>
@@ -38,28 +38,28 @@ export function EnquiryForm({ listing = null, className = "" }: { listing?: List
 
   return (
     <form className={`relative ${className}`} onSubmit={submit}>
-      <div className="meta mb-4 text-mute">I am</div>
+      <div className="meta mb-4 text-ink/70">I am</div>
       <div className="mb-8 grid grid-cols-2 gap-2">
         {["Buying", "Selling", "Leasing", "Investing"].map((r) => (
           <label key={r} className="cursor-pointer">
             <input type="radio" name="role" value={r} className="peer sr-only" defaultChecked={r === "Buying"} />
-            <span className="meta block border border-forest/20 px-4 py-3 text-center text-mute peer-checked:border-ink peer-checked:bg-forest peer-checked:text-paper peer-focus-visible:outline peer-focus-visible:outline-1 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-forest">{r}</span>
+            <span className="meta block border border-forest/20 px-4 py-4 text-center text-ink/70 peer-checked:border-ink peer-checked:bg-forest peer-checked:text-paper peer-focus-visible:outline peer-focus-visible:outline-1 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-forest">{r}</span>
           </label>
         ))}
       </div>
 
       {[["Name", "text", "Your name", "name", "name"], ["Email", "email", "you@company.com", "email", "email"], ["Telephone", "tel", "Optional", "tel", "tel"]].map(([l, t, ph, n, ac]) => (
         <div key={l} className="mb-6">
-          <label className="meta mb-2 block text-mute">{l}</label>
+          <label className="meta mb-2 block text-ink/70">{l}</label>
           <input type={t} name={n} autoComplete={ac} placeholder={ph} required={t !== "tel"} aria-label={l}
-            className="w-full border-0 border-b border-forest/25 bg-transparent py-3 text-[15px] outline-none focus:border-ink" />
+            className="w-full border-0 border-b border-forest/25 bg-transparent py-4 text-[15px] outline-none focus:border-ink" />
         </div>
       ))}
 
       <div className="mb-8">
-        <label className="meta mb-2 block text-mute">What you are looking for</label>
+        <label className="meta mb-2 block text-ink/70">What you are looking for</label>
         <textarea name="brief" rows={4} placeholder="Budget, area, timing, and anything that actually matters to you." aria-label="What you are looking for"
-          className="w-full resize-none border-0 border-b border-forest/25 bg-transparent py-3 text-[15px] outline-none focus:border-ink" />
+          className="w-full resize-none border-0 border-b border-forest/25 bg-transparent py-4 text-[15px] outline-none focus:border-ink" />
       </div>
       {/* honeypot: hidden from people, filled by scripts */}
       <div aria-hidden className="absolute -left-[9999px] top-0 h-px w-px overflow-hidden">
@@ -71,16 +71,16 @@ export function EnquiryForm({ listing = null, className = "" }: { listing?: List
         {state === "sending" ? "Sending" : "Send"}
       </button>
       {state === "unavailable" && (
-        <p role="status" className="mt-5 text-[14px] leading-[1.8] text-ink/80">
+        <p role="status" className="mt-6 text-[14px] leading-[1.8] text-ink/80">
           The form is not connected yet. Email <span className={DESK_ADDRESS_CLASS}>{DESK_EMAIL}</span>.
         </p>
       )}
       {state === "failed" && (
-        <p role="status" className="mt-5 text-[14px] leading-[1.8] text-ink/80">
+        <p role="status" className="mt-6 text-[14px] leading-[1.8] text-ink/80">
           That did not send. Try again, or email <span className={DESK_ADDRESS_CLASS}>{DESK_EMAIL}</span>.
         </p>
       )}
-      <p className="meta mt-5 leading-[1.8] text-mute">
+      <p className="meta mt-6 max-w-[60ch] leading-[1.8] text-ink/70">
         We use what you send to answer you. We do not sell or share it, and we do not add you to a list
         without asking.
       </p>

@@ -26,9 +26,9 @@ function Rows({ items, number }: { items: [string, string][]; number: boolean })
     <div>
       {items.map(([title, text], i) => (
         <div key={title} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`} style={delay(i)}>
-          {number && <span className="fig col-span-2 text-[13px] text-brass md:col-span-1">{String(i + 1).padStart(2, "0")}</span>}
+          {number && <span className="fig col-span-2 text-[14px] text-brass md:col-span-1">{String(i + 1).padStart(2, "0")}</span>}
           <h3 className={`${number ? "col-span-10 md:col-span-4" : "col-span-12 md:col-span-5"} font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.15]`}>{title}</h3>
-          <p className="col-span-12 mt-4 max-w-[56ch] text-[15px] leading-[1.85] text-ink/80 md:col-span-6 md:col-start-7 md:mt-0">{text}</p>
+          <p className="col-span-12 mt-4 max-w-[48ch] text-[15px] leading-[1.85] text-ink/80 md:col-span-6 md:col-start-7 md:mt-0">{text}</p>
         </div>
       ))}
     </div>
@@ -59,13 +59,13 @@ export function Relocating() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld(service) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld(faq) }} />
 
-      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-32">
+      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-40">
         {/* ── head */}
         <div className="col-span-12 lg:col-span-8">
           <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em]">You are moving a family, not buying a house.</h1>
           <p className="mt-4 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass">Usually, that means a lease first.</p>
         </div>
-        <p data-reveal className={`${s.rise} col-span-12 mt-10 max-w-[58ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-16`}>
+        <p data-reveal className={`${s.rise} col-span-12 mt-10 max-w-[48ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-16`}>
           We advise high-net-worth and ultra-high-net-worth families relocating to the Greater Toronto Area
           from abroad: Oakville, King City, central Toronto and the surrounding high-end markets.
           Most of them arrive with the same five questions, and the honest answer to several of them
@@ -73,10 +73,10 @@ export function Relocating() {
         </p>
 
         {/* ── origins, one row */}
-        <p className="meta col-span-12 mt-14 border-y border-forest/14 py-5 leading-[2] text-ink/70 lg:mt-20">
+        <p className="meta col-span-12 mt-14 border-y border-forest/14 py-6 leading-[2] text-ink/70 lg:mt-20">
           <span className="text-brass">Arriving from</span>
           {RELOCATION.origins.map((o) => (
-            <span key={o}><span className="mx-3 opacity-40">·</span>{o}</span>
+            <span key={o}><span className="mx-4 opacity-40">·</span>{o}</span>
           ))}
         </p>
 
@@ -102,9 +102,9 @@ export function Relocating() {
                 {OWNERSHIP.pull}
               </blockquote>
             </div>
-            <div className="col-span-12 mt-12 space-y-7 lg:col-span-6 lg:col-start-7 lg:mt-0">
+            <div className="col-span-12 mt-12 space-y-8 lg:col-span-6 lg:col-start-7 lg:mt-0">
               {OWNERSHIP.body.map((para, i) => (
-                <p key={i} data-reveal className={`${s.rise} max-w-[60ch] text-[16px] leading-[1.85] text-ink/80`} style={delay(i)}>{para}</p>
+                <p key={i} data-reveal className={`${s.rise} max-w-[48ch] text-[16px] leading-[1.85] text-ink/80`} style={delay(i)}>{para}</p>
               ))}
             </div>
           </div>
@@ -118,7 +118,7 @@ export function Relocating() {
           <div className="col-span-12 lg:col-span-6">
             <Lines lines={["Arrange an orientation."]} className={`${HEAD} max-w-[18ch]`} />
           </div>
-          <div className="col-span-12 mt-8 flex flex-col items-start gap-5 lg:col-span-5 lg:col-start-7 lg:mt-2">
+          <div className="col-span-12 mt-8 flex flex-col items-start gap-6 lg:col-span-5 lg:col-start-7 lg:mt-2">
             <p className="max-w-[46ch] text-[15px] leading-[1.8] text-ink/80">A half day on the ground, or an hour on a call if you are still abroad. Nothing is shown and nothing is signed.</p>
             <EnquireButton className={`${s.tlink} font-display text-[1.35rem] font-medium leading-tight text-forest`}>Arrange an orientation</EnquireButton>
           </div>

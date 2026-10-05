@@ -15,7 +15,7 @@ Next.js 15 App Router, TypeScript, Tailwind 3. Deployed on Vercel. `npm run buil
 
 - forest `#0F3B2F` (deep `#07241B`, soft `#17513F`)
 - cream / paper `#EEE8E0`
-- brass `#8A6B2F` (light `#CDB177`)
+- brass `#80642C` (light `#CDB177`). Darkened from `#8A6B2F` on 5 Oct 2026, same hue, so brass labels and figures reach 4.5:1 on cream (4.57:1; the old value was 4.08:1).
 - ink `#12261F`
 - The opacity scale runs in whole steps from 0 to 100. It is required. Tailwind's default scale only has 5% steps, so classes like `bg-paper/94` or `border-forest/14` silently emit no CSS without it. Never remove it.
 

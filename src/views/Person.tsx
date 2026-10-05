@@ -41,7 +41,7 @@ export function Person({ p }: { p: P }) {
     <div id="person">
       <MotionController rootId="person" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-32">
+      <Chapter inner="pb-24 pt-32 md:pt-40 lg:pb-40">
         <nav aria-label="Breadcrumb" className="col-span-12">
           <Link href={href("firm")} className={`${s.tlink} meta text-ink/70 hover:text-forest`}>The Firm</Link>
         </nav>
@@ -53,12 +53,12 @@ export function Person({ p }: { p: P }) {
           <h1 className="max-w-[16ch] font-display text-[clamp(2.1rem,4.6vw,3.6rem)] font-medium leading-[1.04] tracking-[-.01em]">{name}</h1>
           <p className="meta mt-4 text-ink/70">
             <span className="block md:inline">{p.role}</span>
-            {designations && <><span className="mx-1.5 hidden opacity-40 md:inline">/</span><span className="block md:inline">{designations}</span></>}
+            {designations && <><span className="mx-2 hidden opacity-40 md:inline">/</span><span className="block md:inline">{designations}</span></>}
           </p>
           {p.bio?.length ? (
             <div className="mt-8 space-y-6">
               {p.bio.map((b, i) => (
-                <p key={i} data-reveal className={`${s.rise} max-w-[60ch] text-[15.5px] leading-[1.9] text-ink/80`} style={delay(i)}>{b}</p>
+                <p key={i} data-reveal className={`${s.rise} max-w-[48ch] text-[15.5px] leading-[1.9] text-ink/80`} style={delay(i)}>{b}</p>
               ))}
             </div>
           ) : null}
@@ -69,7 +69,7 @@ export function Person({ p }: { p: P }) {
           {rows.map(([k, v], i) => (
             <div key={k} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-6 last:border-b`} style={delay(i)}>
               <h2 className="col-span-12 font-display text-[1.25rem] font-medium leading-[1.15] md:col-span-5">{k}</h2>
-              <p className="col-span-12 mt-2 text-[15px] leading-[1.8] text-ink/80 md:col-span-6 md:col-start-7 md:mt-0">{v}</p>
+              <p className="col-span-12 mt-2 max-w-[48ch] text-[15px] leading-[1.8] text-ink/80 md:col-span-6 md:col-start-7 md:mt-0">{v}</p>
             </div>
           ))}
         </div>}
@@ -88,16 +88,16 @@ export function Person({ p }: { p: P }) {
 
         {/* the rest of the firm */}
         <div className="col-span-12 mt-20 lg:mt-28">
-          <p className="meta mb-6 text-brass">The rest of the firm</p>
+          <h2 className="meta mb-6 text-brass">The rest of the firm</h2>
           <div>
             {others.map((o) => {
               const n = splitName(o.name);
               return (
-                <div key={o.slug} className={`${s.row} ${GRID} border-t border-forest/14 py-5 last:border-b`}>
+                <div key={o.slug} className={`${s.row} ${GRID} border-t border-forest/14 py-6 last:border-b`}>
                   <h3 className="col-span-12 font-display text-[1.2rem] font-medium leading-[1.15] md:col-span-5">
                     <Link href={personHref(o.slug)} className={s.rowlink}>{n.name}</Link>
                   </h3>
-                  <p className="meta col-span-12 mt-1 text-ink/70 md:col-span-6 md:col-start-7 md:mt-0">{o.role}{n.designations ? ` · ${n.designations}` : ""}</p>
+                  <p className="meta col-span-12 mt-2 text-ink/70 md:col-span-6 md:col-start-7 md:mt-0">{o.role}{n.designations ? ` · ${n.designations}` : ""}</p>
                 </div>
               );
             })}

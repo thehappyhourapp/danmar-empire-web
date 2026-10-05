@@ -37,16 +37,16 @@ export function ClientAccess({ open, close }: { open: boolean; close: () => void
     setState(await submitEnquiry({ kind: "client-access", name: v("name"), email: v("email"), firm: v("firm"), note: v("note"), website: v("website") }));
   };
 
-  const field = "w-full border-0 border-b border-forest/25 bg-transparent py-2.5 text-[15px] outline-none focus:border-ink";
+  const field = "w-full border-0 border-b border-forest/25 bg-transparent py-2 text-[15px] outline-none focus:border-ink";
 
   return (
     <div className="fixed inset-0 z-[90] grid place-items-center p-4" onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
       <div aria-hidden data-state={stage} className={`${m.backdrop} pointer-events-none absolute inset-0 bg-forest-deep/60`} />
       <div ref={panel} role="dialog" aria-modal="true" aria-labelledby={titleId} data-state={stage}
-        className={`${m.dialog} relative w-full max-w-[440px] bg-paper p-7 text-ink md:p-9`}>
+        className={`${m.dialog} relative w-full max-w-[440px] bg-paper p-8 text-ink md:p-10`}>
         <div className="flex items-start justify-between gap-6">
           <h2 id={titleId} className="font-display text-[28px] font-medium leading-[1.05]">Client access</h2>
-          <button type="button" onClick={close} aria-label="Close" className="mt-1 text-ink/70 hover:text-ink">
+          <button type="button" onClick={close} aria-label="Close" className="mt-2 text-ink/70 hover:text-ink">
             <svg width="16" height="16" viewBox="0 0 22 22" fill="none" aria-hidden><path d="M1 1l20 20M21 1L1 21" stroke="currentColor" strokeWidth="1.4" /></svg>
           </button>
         </div>
@@ -55,11 +55,11 @@ export function ClientAccess({ open, close }: { open: boolean; close: () => void
         </p>
 
         {state === "sent" ? (
-          <p role="status" className="mt-7 border-t border-forest/14 pt-5 text-[14px] leading-[1.75] text-ink/80">
+          <p role="status" className="mt-8 border-t border-forest/14 pt-6 text-[14px] leading-[1.75] text-ink/80">
             Received. We will reply from a danmarempire.com address, usually inside one business day.
           </p>
         ) : (
-          <form onSubmit={submit} className="mt-6 space-y-5">
+          <form onSubmit={submit} className="mt-6 space-y-6">
             <label className="block"><span className="meta block text-ink/70">Name</span><input name="name" required autoComplete="name" className={field} /></label>
             <label className="block"><span className="meta block text-ink/70">Email</span><input name="email" type="email" required autoComplete="email" className={field} /></label>
             <label className="block"><span className="meta block text-ink/70">Firm <span className="normal-case tracking-normal">(optional)</span></span><input name="firm" autoComplete="organization" className={field} /></label>
@@ -69,7 +69,7 @@ export function ClientAccess({ open, close }: { open: boolean; close: () => void
               <label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
             </div>
             <button type="submit" disabled={state === "sending"} aria-busy={state === "sending"}
-              className="meta mt-2 w-full border border-forest/25 py-3.5 text-forest hover:border-forest active:translate-y-px disabled:opacity-60">
+              className="meta mt-2 w-full border border-forest/25 py-4 text-forest hover:border-forest active:translate-y-px disabled:opacity-60">
               {state === "sending" ? "Sending" : "Request access"}
             </button>
             {state === "unavailable" && (

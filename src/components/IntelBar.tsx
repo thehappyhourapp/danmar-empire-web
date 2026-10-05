@@ -47,15 +47,15 @@ export function IntelBar({
   return (
     <div className="relative w-full">
       <div
-        className={`flex items-center gap-4 border-b py-3 md:py-4 ${
+        className={`flex items-center gap-4 border-b py-4 md:py-4 ${
           dark ? "border-paper/25" : "border-forest/14"
         } ${focus ? (dark ? "border-paper/60" : "border-forest/40") : ""}`}
       >
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" className={dark ? "text-paper/50" : "text-mute"}>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" className={dark ? "text-paper/50" : "text-ink/70"}>
           <circle cx="7" cy="7" r="5.2" stroke="currentColor" strokeWidth="1.2" /><path d="M11 11l4 4" stroke="currentColor" strokeWidth="1.2" />
         </svg>
         <input
-          ref={ref} value={text}
+          ref={ref} value={text} aria-label="Describe what you are looking for"
           onChange={(e) => set(e.target.value)}
           onFocus={() => setFocus(true)}
           onBlur={() => setTimeout(() => setFocus(false), 180)}
@@ -65,7 +65,7 @@ export function IntelBar({
             dark ? "text-paper placeholder:text-paper/62" : "text-ink placeholder:text-forest/60"}`}
         />
         {text && (
-          <button onClick={() => set("")} className={`meta shrink-0 ${dark ? "text-paper/62 hover:text-paper" : "text-mute hover:text-ink"}`}>Clear</button>
+          <button onClick={() => set("")} className={`meta shrink-0 ${dark ? "text-paper/62 hover:text-paper" : "text-ink/70 hover:text-ink"}`}>Clear</button>
         )}
         <button
           onClick={() => onOpen(q, text)} disabled={empty}
@@ -78,10 +78,10 @@ export function IntelBar({
 
       {/* read-back panel: the bar shows its work */}
       {live && (
-        <div className={`absolute inset-x-0 top-full z-40 mt-2 border p-5 md:p-6 ${
+        <div className={`absolute inset-x-0 top-full z-40 mt-2 border p-6 md:p-6 ${
           dark ? "border-paper/20 bg-forest-deep" : "border-forest/14 bg-paper"}`}>
           {empty ? (
-            <p className={`text-[13px] ${dark ? "text-paper/55" : "text-mute"}`}>
+            <p className={`text-[14px] ${dark ? "text-paper/55" : "text-ink/70"}`}>
               Describe it the way you would to a person. Bedrooms, budget, city, and what actually matters to you.
             </p>
           ) : (
@@ -94,17 +94,17 @@ export function IntelBar({
               {hits.length ? (
                 <ul className="space-y-2">
                   {hits.slice(0, 4).map((l) => (
-                    <li key={l.id} className={`flex items-baseline justify-between gap-6 text-[13px] ${dark ? "text-paper/85" : "text-ink/75"}`}>
+                    <li key={l.id} className={`flex items-baseline justify-between gap-6 text-[14px] ${dark ? "text-paper/85" : "text-ink/75"}`}>
                       <span className="truncate">
                         <span className={dark ? "text-paper" : "text-ink"}>{l.name}</span>
-                        <span className={`ml-2 ${dark ? "text-paper/85" : "text-mute"}`}>{l.region}, {l.city}</span>
+                        <span className={`ml-2 ${dark ? "text-paper/85" : "text-ink/70"}`}>{l.region}, {l.city}</span>
                       </span>
                       <span className="meta shrink-0">{l.tier === "Off-Market" ? "By enquiry" : money(l.price, l.intent === "lease")}</span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className={`text-[13px] ${dark ? "text-paper/60" : "text-mute"}`}>
+                <p className={`text-[14px] ${dark ? "text-paper/60" : "text-ink/70"}`}>
                   Nothing on the books matches that exactly. These would open it up:
                 </p>
               )}

@@ -90,11 +90,11 @@ export function Property({ l }: { l: Listing }) {
         {/* name alone, then one line of data */}
         <header className="col-span-12 mt-10 lg:col-span-8">
           <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1] tracking-[-.015em]">{l.address}</h1>
-          <p className="meta mt-5 text-ink/70">
+          <p className="meta mt-6 text-ink/70">
             <span className="block md:inline">{l.name}</span>
-            <span className="mx-1.5 hidden opacity-40 md:inline">/</span>
+            <span className="mx-2 hidden opacity-40 md:inline">/</span>
             <span className="block md:inline">{l.region}, {l.city}</span>
-            {l.tier && <><span className="mx-1.5 hidden opacity-40 md:inline">/</span><span className="block text-brass md:inline">{l.tier}</span></>}
+            {l.tier && <><span className="mx-2 hidden opacity-40 md:inline">/</span><span className="block text-brass md:inline">{l.tier}</span></>}
           </p>
         </header>
         <div className="col-span-12 mt-8 lg:col-span-3 lg:col-start-10 lg:mt-10 lg:self-end lg:text-right">
@@ -106,7 +106,7 @@ export function Property({ l }: { l: Listing }) {
         {/* three to five fields on the 12-column grid, spans chosen so every divider sits on a drawn column line */}
         <dl className={`col-span-12 mt-12 ${GRID} border-y border-forest/14 lg:mt-16`}>
           {rows.map(([k, v], i) => (
-            <div key={k} className={`${i === rows.length - 1 && rows.length % 2 ? "col-span-12" : "col-span-6"} flex flex-col-reverse gap-1.5 py-5 pr-4 ${i % 2 ? "border-l border-forest/14 pl-4" : ""} ${i >= 2 ? "border-t border-forest/14 md:border-t-0" : ""} ${i % 2 === 0 && !(i === rows.length - 1 && rows.length % 2) ? "-mr-4 md:mr-0" : ""} ${SPANS[rows.length][i]} md:border-l md:pl-4 md:first:border-l-0 md:first:pl-0`}>
+            <div key={k} className={`${i === rows.length - 1 && rows.length % 2 ? "col-span-12" : "col-span-6"} flex flex-col-reverse gap-2 py-6 pr-4 ${i % 2 ? "border-l border-forest/14 pl-4" : ""} ${i >= 2 ? "border-t border-forest/14 md:border-t-0" : ""} ${i % 2 === 0 && !(i === rows.length - 1 && rows.length % 2) ? "-mr-4 md:mr-0" : ""} ${SPANS[rows.length][i]} md:border-l md:pl-4 md:first:border-l-0 md:first:pl-0`}>
               <dt className="meta text-ink/70">{k}</dt>
               <dd className="fig text-[15px] text-brass">{v}</dd>
             </div>
@@ -119,7 +119,7 @@ export function Property({ l }: { l: Listing }) {
         </p>
         <div className="col-span-12 mt-8 space-y-6 lg:col-span-6 lg:mt-10">
           {l.body.map((p, i) => (
-            <p key={i} data-reveal className={`${s.rise} max-w-[60ch] text-[15.5px] leading-[1.9] text-ink/80`} style={delay(i)}>{p}</p>
+            <p key={i} data-reveal className={`${s.rise} max-w-[48ch] text-[15.5px] leading-[1.9] text-ink/80`} style={delay(i)}>{p}</p>
           ))}
           <p className="meta pt-4 text-ink/70">Listed by {BROKERAGE}</p>
         </div>
@@ -129,7 +129,7 @@ export function Property({ l }: { l: Listing }) {
               <h2 className="meta text-brass">Notable</h2>
               <ul className="mt-4 border-t border-forest/14">
                 {l.features.map((f) => (
-                  <li key={f} className="border-b border-forest/14 py-3 text-[14.5px] text-ink/80 first-letter:uppercase">{f}</li>
+                  <li key={f} className="border-b border-forest/14 py-4 text-[14.5px] text-ink/80 first-letter:uppercase">{f}</li>
                 ))}
               </ul>
             </>
@@ -151,10 +151,10 @@ export function Property({ l }: { l: Listing }) {
 
       {/* related, as rows */}
       {more.length > 0 && (
-        <Chapter inner="pb-24 pt-4 lg:pb-32">
+        <Chapter inner="pb-24 pt-4 lg:pb-40">
           <div className={`${GRID} col-span-12 items-baseline`}>
             <h2 className="col-span-12 font-display text-[clamp(1.6rem,2.8vw,2.25rem)] font-medium leading-[1.05] md:col-span-5">Also on the books</h2>
-            <p className="col-span-12 mt-3 text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-7 md:mt-0">
+            <p className="col-span-12 mt-4 text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-7 md:mt-0">
               Held by the brokerage in the same market or the same class.
             </p>
           </div>

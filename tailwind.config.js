@@ -9,7 +9,7 @@ module.exports = {
         paper:  { DEFAULT: "#EEE8E0", deep: "#E2DBD1", edge: "#CFC7BB" },
         ink:    { DEFAULT: "#12261F", deep: "#08160F", soft: "#2B4438" },
         forest: { DEFAULT: "#0F3B2F", deep: "#07241B", soft: "#17513F", mid: "#246552" },
-        brass:  { DEFAULT: "#8A6B2F", light: "#CDB177", pale: "#DFD0AC" },
+        brass:  { DEFAULT: "#80642C", light: "#CDB177", pale: "#DFD0AC" },
         mute:   { DEFAULT: "#6C7A70", light: "#94A096" },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

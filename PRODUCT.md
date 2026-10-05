@@ -54,7 +54,7 @@ Binding, as given by the owner. The full visual specification lives in **CLAUDE.
   - forest #0F3B2F is primary;
   - cream #EEE8E0;
   - ink #12261F;
-  - brass #8A6B2F, for labels, figures and at most one italic line per chapter only, never as fill;
+  - brass #80642C (darkened from #8A6B2F for 4.5:1 on cream), for labels, figures and at most one italic line per chapter only, never as fill;
   - hairlines are forest on cream (content rules at 14%, drawn column grid at 6%) and paper on dark grounds (content rules at 12%, drawn column grid at 5%).
 - **Type:**
   - Bodoni Moda for display, with optical size set manually (opsz 16 for display, 10 for figures, never auto);

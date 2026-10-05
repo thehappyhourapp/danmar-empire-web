@@ -48,12 +48,12 @@ export function CollectionList({ photos }: { photos: Record<string, string> }) {
     <>
       <div className="col-span-12 mt-14 lg:col-span-8 lg:mt-20">
         <IntelBar tone="light" value={text} onValue={setText} onOpen={(nq, t) => { setQ(nq); setText(t); }} />
-        <p className="meta mt-3 text-ink/70">Bedrooms, budget, city, covenant. Your words.</p>
+        <p className="meta mt-4 text-ink/70">Bedrooms, budget, city, covenant. Your words.</p>
       </div>
 
       {/* lenses: plain text in a .meta row, the active one underlined */}
       <div ref={bar} className="sticky top-[var(--stick)] z-30 col-span-12 mt-12 border-y border-forest/14 bg-paper py-4">
-        <div className="flex flex-wrap items-baseline gap-x-8 gap-y-3">
+        <div className="flex flex-wrap items-baseline gap-x-8 gap-y-4">
           {LENSES.map((l) => (
             <button key={l.id} type="button" onClick={() => setQ({ ...q, ...l.patch } as Query)} aria-pressed={activeLens === l.id}
               className={`${s.tlink} meta ${activeLens === l.id ? `${s.tlinkOn} text-forest` : `${s.tlinkOff} text-ink/70 hover:text-forest`}`}>
@@ -65,16 +65,16 @@ export function CollectionList({ photos }: { photos: Record<string, string> }) {
           </span>
         </div>
         {!isEmpty(q) && (
-          <div className="mt-3 flex flex-wrap items-baseline gap-x-6 gap-y-2 border-t border-forest/14 pt-3">
+          <div className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-2 border-t border-forest/14 pt-4">
             <span className="meta text-brass">Reading</span>
-            <span className="text-[13px] text-ink/75">{readback(q)}</span>
+            <span className="text-[14px] text-ink/75">{readback(q)}</span>
             <button type="button" onClick={() => { setQ(EMPTY); setText(""); }} className={`${s.tlink} meta ml-auto text-ink/70 hover:text-forest`}>Reset</button>
           </div>
         )}
       </div>
 
       <div ref={list} key={sig} data-swap className="col-span-12 [&>div:first-child]:border-t-0">
-        {results.length ? results.map((l, i) => <ListingRow key={l.id} l={l} index={i} photo={photos[l.id]} />) : (
+        {results.length ? results.map((l, i) => <ListingRow key={l.id} l={l} index={i} photo={photos[l.id]} level={2} />) : (
           <div className="border-y border-forest/14 py-20">
             <p className="font-display text-[26px] font-medium text-ink/80">Nothing on the books matches that brief.</p>
             <p className="mt-4 max-w-[48ch] text-[14px] leading-[1.8] text-ink/70">

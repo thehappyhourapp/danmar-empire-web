@@ -89,8 +89,8 @@ export function Home() {
             <div className={GRID}>
               <p className="meta col-span-12 text-paper/60 md:col-span-6">
                 <span className="block md:inline">Oakville <span className="mx-2 opacity-50">·</span> King City <span className="mx-2 opacity-50">·</span> Toronto</span>
-                <span className="mx-3 hidden opacity-40 md:inline">/</span>
-                <span className="mt-1 block md:mt-0 md:inline">Est. 2016</span>
+                <span className="mx-4 hidden opacity-40 md:inline">/</span>
+                <span className="mt-2 block md:mt-0 md:inline">Est. 2016</span>
               </p>
             </div>
 
@@ -98,7 +98,7 @@ export function Home() {
               <h1 className="col-span-12 font-display text-[clamp(2.75rem,7.5vw,6.5rem)] font-medium leading-[0.98] tracking-[-.015em] lg:col-span-11">
                 Lawyer-led real estate.
               </h1>
-              <p className="col-span-12 mt-5 font-display text-[clamp(1.5rem,3vw,2.75rem)] italic leading-[1.1] text-brass-light lg:col-span-11">
+              <p className="col-span-12 mt-6 font-display text-[clamp(1.5rem,3vw,2.75rem)] italic leading-[1.1] text-brass-light lg:col-span-11">
                 Our own capital in the markets we advise on.
               </p>
               <p className="col-span-12 mt-10 max-w-[46ch] text-[16px] leading-[1.75] text-paper/80 md:col-span-7 md:text-[18px] lg:col-span-5">
@@ -127,20 +127,20 @@ export function Home() {
         <div data-reveal-group className={`col-span-12 ${GRID}`}>
           <div className="col-span-12 lg:sticky lg:top-32 lg:col-span-5 lg:self-start">
             <Lines lines={["We own what", "we advise on."]} className={HEAD} />
-            <Lines as="p" d={2} lines={["Financed, held and sold."]} className="mt-3 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass" />
+            <Lines as="p" d={2} lines={["Financed, held and sold."]} className="mt-4 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass" />
             <blockquote data-reveal style={delay(3)} className={`${s.reveal} mt-12 max-w-[26ch] border-t border-forest/14 pt-6 font-display text-[clamp(1.2rem,1.8vw,1.5rem)] font-medium leading-[1.3] text-forest`}>
               {OWNERSHIP.pull}
             </blockquote>
           </div>
-          <div className="col-span-12 mt-12 space-y-7 lg:col-span-6 lg:col-start-7 lg:mt-0">
+          <div className="col-span-12 mt-12 space-y-8 lg:col-span-6 lg:col-start-7 lg:mt-0">
             {OWNERSHIP.body.map((para, i) => (
-              <p key={i} data-reveal className={`${s.reveal} max-w-[60ch] text-[16px] leading-[1.85] text-ink/80`} style={delay(i + 1)}>{para}</p>
+              <p key={i} data-reveal className={`${s.reveal} max-w-[48ch] text-[16px] leading-[1.85] text-ink/80`} style={delay(i + 1)}>{para}</p>
             ))}
           </div>
         </div>
         <div className="col-span-12 mt-20 lg:mt-32">
           {OWNERSHIP.proof.map(([k, v], i) => (
-            <div key={k} data-reveal className={`${s.reveal} ${GRID} border-t border-forest/14 py-7 last:border-b`} style={delay(i)}>
+            <div key={k} data-reveal className={`${s.reveal} ${GRID} border-t border-forest/14 py-8 last:border-b`} style={delay(i)}>
               <h3 className="col-span-12 font-display text-[1.5rem] font-medium leading-[1.1] md:col-span-5">{k}</h3>
               <p className="col-span-12 mt-2 text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-7 md:mt-0">{v}</p>
             </div>
@@ -159,7 +159,7 @@ export function Home() {
               Held by the brokerage, underwritten and written by us before they were priced.
               Nothing is republished from the board.
             </p>
-            <Link href={href("collection")} className={`${m.tlink} meta mt-5 inline-block text-forest`}>The collection</Link>
+            <Link href={href("collection")} className={`${m.tlink} meta mt-6 inline-block text-forest`}>The collection</Link>
           </div>
         </div>
         <div className="col-span-12 mt-16 lg:mt-24">
@@ -182,12 +182,12 @@ export function Home() {
                   <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">
                     <span className={m.rowlink}>{l.name}</span>
                   </h3>
-                  <p className="meta mt-3 text-ink/70">
-                    {l.address} <span className="mx-1.5 opacity-40">/</span> {l.region}, {l.city}
+                  <p className="meta mt-4 text-ink/70">
+                    {l.address} <span className="mx-2 opacity-40">/</span> {l.region}, {l.city}
                   </p>
                 </div>
-                <p className="col-span-12 mt-4 max-w-[52ch] text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-5 md:mt-0 md:self-start md:pt-2">{l.standfirst}</p>
-                <div className="col-span-12 mt-5 flex items-baseline justify-between md:col-span-2 md:col-start-11 md:row-span-2 md:row-start-1 md:mt-0 md:block md:self-center md:text-right">
+                <p className="col-span-12 mt-4 max-w-[48ch] text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-5 md:mt-0 md:self-start md:pt-2">{l.standfirst}</p>
+                <div className="col-span-12 mt-6 flex items-baseline justify-between md:col-span-2 md:col-start-11 md:row-span-2 md:row-start-1 md:mt-0 md:block md:self-center md:text-right">
                   <span className="fig block text-[clamp(1.5rem,1.8vw,1.7rem)] text-brass">{money(l.price, lease)}</span>
                   <span className="meta mt-2 block text-ink/70">{lease ? "To lease" : "For sale"} · {l.kind}</span>
                 </div>
@@ -205,31 +205,31 @@ export function Home() {
           </div>
           <div className="col-span-12 mt-12 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:self-end">
             <Lines d={1} lines={["The number, and", "the properties behind it."]} className={HEAD} />
-            <p data-reveal style={delay(2)} className={`${s.reveal} mt-6 max-w-[52ch] text-[15.5px] leading-[1.85] text-ink/80`}>
+            <p data-reveal style={delay(2)} className={`${s.reveal} mt-6 max-w-[48ch] text-[15.5px] leading-[1.85] text-ink/80`}>
               A total is easy to publish. These are some of the properties behind ours, with what they were asking,
               published only with the parties' written consent.
             </p>
           </div>
-          <p data-reveal className={`${s.reveal} meta col-span-12 mt-5 leading-[1.9] text-ink/70 lg:col-span-5`} style={delay(3)}>
+          <p data-reveal className={`${s.reveal} meta col-span-12 mt-6 max-w-[60ch] leading-[1.9] text-ink/70 lg:col-span-5`} style={delay(3)}>
             Aggregate list value of transactions the firm acted in, sale and lease, 2016 to date. Methodology on request.
           </p>
         </div>
 
         <div className="col-span-12 mt-16 lg:mt-24">
           {record.map((t, i) => (
-            <div key={t.id} data-reveal className={`${s.reveal} ${GRID} items-baseline border-t border-forest/14 py-5 last:border-b md:py-6`} style={delay(i)}>
+            <div key={t.id} data-reveal className={`${s.reveal} ${GRID} items-baseline border-t border-forest/14 py-6 last:border-b md:py-6`} style={delay(i)}>
               <h3 className="col-span-8 font-display text-[1.25rem] font-medium leading-[1.15] md:col-span-4">{t.place}</h3>
               <p className="fig col-span-4 text-right text-[14px] text-forest md:order-last md:col-span-2 md:col-start-11">
                 {t.kind === "Leased" ? `$${t.list.toLocaleString("en-CA")}/mo` : money(t.list)}
               </p>
               <p className="meta col-span-8 mt-2 text-ink/70 md:col-span-4 md:col-start-5 md:mt-0">
-                {t.city} <span className="mx-1.5 opacity-40">/</span> {t.type}
+                {t.city} <span className="mx-2 opacity-40">/</span> {t.type}
               </p>
               <p className="meta col-span-4 mt-2 text-right text-ink/70 md:col-span-2 md:col-start-9 md:mt-0 md:text-left">{t.kind} {t.year}</p>
             </div>
           ))}
-          <div className="mt-6 flex flex-wrap items-baseline justify-between gap-x-10 gap-y-3">
-            <p className="meta max-w-[70ch] leading-[1.9] text-ink/70">List prices at the time of the transaction, not sale prices.</p>
+          <div className="mt-6 flex flex-wrap items-baseline justify-between gap-x-10 gap-y-4">
+            <p className="meta max-w-[60ch] leading-[1.9] text-ink/70">List prices at the time of the transaction, not sale prices.</p>
             <Link href={href("track")} className={`${m.tlink} meta text-forest`}>The full record</Link>
           </div>
         </div>
@@ -238,19 +238,19 @@ export function Home() {
           <Lines lines={["One set of books.", "One standard of diligence."]} className={`${HEAD} max-w-[20ch]`} />
           <div className="mt-12 lg:mt-16">
             {PILLARS.map((p, i) => (
-              <div key={p.title} data-reveal className={`${s.reveal} ${GRID} border-t border-forest/14 py-9 last:border-b md:py-12`} style={delay(i)}>
+              <div key={p.title} data-reveal className={`${s.reveal} ${GRID} border-t border-forest/14 py-10 last:border-b md:py-12`} style={delay(i)}>
                 <div className="col-span-12 md:col-span-5">
                   <h3 className="font-display text-[clamp(1.5rem,2.4vw,2.1rem)] font-medium leading-[1.1]">{p.title}</h3>
                   <p className="mt-4 max-w-[34ch] text-[15px] leading-[1.8] text-ink/75">{p.line}</p>
                   <Link href={href(PRACTICE_ROUTES[i])} className={`${m.tlink} meta mt-6 inline-block text-forest`}>The practice</Link>
                 </div>
                 <div className="col-span-12 mt-6 md:col-span-6 md:col-start-7 md:mt-0">
-                  <p className="max-w-[52ch] text-[14.5px] leading-[1.9] text-ink/70">{p.detail}</p>
-                  <dl className="mt-7 grid grid-cols-1 gap-y-4 border-t border-forest/14 pt-4 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-0">
+                  <p className="max-w-[48ch] text-[14.5px] leading-[1.9] text-ink/70">{p.detail}</p>
+                  <dl className="mt-8 grid grid-cols-1 gap-y-4 border-t border-forest/14 pt-4 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-0">
                     {p.stats.filter(([k]) => k !== "Furnishing").map(([k, v]) => (
                       <div key={k} className="flex flex-col-reverse">
-                        <dt className="meta mt-1.5 text-ink/70">{k}</dt>
-                        <dd className="fig text-[13px] text-forest">{v}</dd>
+                        <dt className="meta mt-2 text-ink/70">{k}</dt>
+                        <dd className="fig text-[14px] text-forest">{v}</dd>
                       </div>
                     ))}
                   </dl>
@@ -273,7 +273,7 @@ export function Home() {
               will be in touch inside one business day. We do not sell or share what you send, and we do not add
               you to a list without asking.
             </p>
-            <div className="mt-10 flex flex-col items-start gap-5">
+            <div className="mt-10 flex flex-col items-start gap-6">
               <Link href="/contact" className={`${m.tlink} font-display text-[1.35rem] font-medium leading-tight text-paper`}>Start a conversation</Link>
               <Link href={href("relocating")} className={`${m.tlink} text-[15px] text-paper/70`}>
                 Relocating to the Toronto area? Begin with the questions everyone asks

@@ -74,9 +74,9 @@ function Enquire({ open, close, listing }: { open: boolean; close: () => void; l
           <h2 className="mt-4 max-w-[16ch] font-display text-[30px] leading-[1.08] md:text-[36px]">
             Tell us what you are trying to do.
           </h2>
-          {listing && <p className="meta mt-5 text-ink/70">Regarding <span className="text-forest">{listing.name}</span></p>}
+          {listing && <p className="meta mt-6 text-ink/70">Regarding <span className="text-forest">{listing.name}</span></p>}
         </div>
-        <button onClick={close} aria-label="Close" className="mt-1 text-mute hover:text-ink">
+        <button onClick={close} aria-label="Close" className="mt-2 text-ink/70 hover:text-ink">
           <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M1 1l20 20M21 1L1 21" stroke="currentColor" strokeWidth="1.2" /></svg>
         </button>
       </div>
@@ -93,29 +93,29 @@ function Saved({ open, close, ids, toggle }: {
   const items = LISTINGS.filter((l) => ids.has(l.id));
   return (
     <Drawer open={open} close={close} label="Saved" width="max-w-[440px]">
-      <div className="flex items-center justify-between border-b border-forest/14 p-7">
+      <div className="flex items-center justify-between border-b border-forest/14 p-8">
         <div className="meta text-brass">Saved · {items.length}</div>
-        <button onClick={close} aria-label="Close" className="text-mute hover:text-ink">
+        <button onClick={close} aria-label="Close" className="text-ink/70 hover:text-ink">
           <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><path d="M1 1l20 20M21 1L1 21" stroke="currentColor" strokeWidth="1.2" /></svg>
         </button>
       </div>
       {items.length === 0 ? (
-        <p className="p-8 text-[14px] leading-[1.8] text-mute">
+        <p className="p-8 text-[14px] leading-[1.8] text-ink/70">
           Nothing saved yet. The bookmark on any property keeps it here for the rest of your visit.
         </p>
       ) : items.map((l) => (
-        <div key={l.id} className="flex gap-4 border-b border-forest/12 p-5">
+        <div key={l.id} className="flex gap-4 border-b border-forest/14 p-6">
           <Link href={propertyHref(l.id)} onClick={close} className="shrink-0">
             <ImageFrame src={l.photo} hue={l.hue} ratio="1/1" className="w-[80px]" alt={l.name} />
           </Link>
           <div className="min-w-0 flex-1">
             <Link href={propertyHref(l.id)} onClick={close} className="block text-left">
               <h3 className="truncate font-display text-[18px] leading-tight">{l.name}</h3>
-              <p className="meta mt-1.5 text-mute">{l.region}, {l.city}</p>
+              <p className="meta mt-2 text-ink/70">{l.region}, {l.city}</p>
             </Link>
             <div className="mt-2 flex items-center justify-between">
-              <span className="fig text-[12px] tabular-nums">{money(l.price, l.intent === "lease")}</span>
-              <button onClick={() => toggle(l.id)} className="meta text-mute hover:text-ink">Remove</button>
+              <span className="fig text-[14px] tabular-nums">{money(l.price, l.intent === "lease")}</span>
+              <button onClick={() => toggle(l.id)} className="meta text-ink/70 hover:text-ink">Remove</button>
             </div>
           </div>
         </div>
@@ -170,14 +170,14 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
     <Ctx.Provider value={{ saved, toggleSave, enquire, requestAccess, q, setQ, text, setText, search }}>
       <div className="min-h-screen bg-paper antialiased">
         {notice && (
-          <div className="sticky top-0 z-[80] flex h-9 items-center gap-3 bg-forest-soft px-4 text-paper sm:gap-4 sm:px-5">
+          <aside aria-label="Prototype notice" className="sticky top-0 z-[80] flex h-9 items-center gap-3 bg-forest-soft px-4 text-paper sm:gap-4 sm:px-5">
             <span className="meta shrink-0">Prototype</span>
             <span className="min-w-0 truncate text-[11.5px] leading-none text-paper/90 sm:text-[12px]">
               <span className="sm:hidden">Placeholder content. Do not publish as-is.</span>
               <span className="hidden sm:inline">Design prototype. Listings, transactions and figures are placeholder content pending the PropTx feed and your sign-off. Do not publish as-is.</span>
             </span>
             <button onClick={() => setNotice(false)} className="meta ml-auto shrink-0 text-paper/80 hover:text-paper">Hide</button>
-          </div>
+          </aside>
         )}
 
         <div style={{ ["--stick" as string]: `${noticeH + 74}px` } as React.CSSProperties}>

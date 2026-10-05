@@ -29,24 +29,24 @@ function Extras() {
         <Lines lines={["Covenants we place against."]} className={`${HEAD} mb-10 max-w-[20ch] lg:mb-14`} />
         <div>
           {COVENANTS.map((c, i) => (
-            <p key={c} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-5 last:border-b`} style={delay(i)}>
+            <p key={c} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-6 last:border-b`} style={delay(i)}>
               <span className="col-span-12 text-[16px] leading-[1.7] text-ink/80 md:col-span-8 md:col-start-2">{c}</span>
             </p>
           ))}
         </div>
-        <p className="meta mt-5 text-ink/70">We describe the covenant, never the client.</p>
+        <p className="meta mt-6 text-ink/70">We describe the covenant, never the client.</p>
       </div>
 
       {/* furnishing, one row */}
       <div data-reveal className={`${s.rise} col-span-12 mt-20 ${GRID} border-y border-forest/14 py-10 lg:mt-28`}>
         <div className="col-span-12 md:col-span-5">
           <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">Furnished, where the brief calls for it</h3>
-          <p className="fig mt-5 text-[clamp(1.6rem,2.6vw,2.4rem)] text-brass">+{FURNISHING.uplift}</p>
+          <p className="fig mt-6 text-[clamp(1.6rem,2.6vw,2.4rem)] text-brass">+{FURNISHING.uplift}</p>
           <p className="meta mt-2 text-ink/70">of base rent, fully furnished and installed</p>
         </div>
         <div className="col-span-12 mt-6 md:col-span-6 md:col-start-7 md:mt-0">
-          <p className="max-w-[56ch] text-[15px] leading-[1.85] text-ink/80">{FURNISHING.note}</p>
-          <p className="meta mt-5 text-ink/70">
+          <p className="max-w-[48ch] text-[15px] leading-[1.85] text-ink/80">{FURNISHING.note}</p>
+          <p className="meta mt-6 max-w-[60ch] text-ink/70">
             Specified and installed by us through {FURNISHING.sources.join(", ")}. Not affiliated with any of them.
           </p>
         </div>

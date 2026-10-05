@@ -84,7 +84,7 @@
    hairline colour (brass on cream; .dark grounds set it to paper). */
 :root {
   --ui: cubic-bezier(0.25, 1, 0.5, 1);
-  --hair: #8a6b2f;
+  --hair: #80642c;
 }
 
 /* Visible keyboard focus on every control: a 1px rule in the text colour. Fields
@@ -93,6 +93,11 @@
 :where(a[href], button, summary, select, [tabindex]:not([tabindex="-1"])):focus-visible {
   outline: 1px solid currentColor;
   outline-offset: 4px;
+}
+
+/* Headings balance their lines, so none ends on a single orphaned word. */
+h1, h2, h3 {
+  text-wrap: balance;
 }
 
 /* custom scrollbars inside panels */

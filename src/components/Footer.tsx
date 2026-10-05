@@ -34,8 +34,8 @@ const link = `${s.tlink} text-[14px] text-paper/80 hover:text-paper`;
 function Links({ title, items }: { title: string; items: [string, string][] }) {
   return (
     <nav aria-label={title}>
-      <p className="meta mb-5 text-paper/60">{title}</p>
-      <ul className="space-y-3">
+      <p className="meta mb-6 text-paper/60">{title}</p>
+      <ul className="space-y-4">
         {items.map(([id, label]) => (
           <li key={id}><Link href={href(id)} className={link}>{label}</Link></li>
         ))}
@@ -54,7 +54,7 @@ export function Footer({ onEnquire, onAccess }: { onEnquire: () => void; onAcces
           <div className="col-span-12 lg:col-span-4">
             <img src={sealCream} alt="Danmar Empire" width={120} height={120} className="block h-[120px] w-[120px] object-contain" />
             <div className="mt-8"><Wordmark light /></div>
-            <p className="mt-7 max-w-[26ch] font-display text-[clamp(1.35rem,1.9vw,1.6rem)] font-medium leading-[1.3] text-paper/90">
+            <p className="mt-8 max-w-[26ch] font-display text-[clamp(1.35rem,1.9vw,1.6rem)] font-medium leading-[1.3] text-paper/90">
               Asset management, investment, private sales and executive leasing. Oakville, Vaughan, and across Ontario.
             </p>
             <button onClick={() => onEnquire()} className={`${s.tlink} meta mt-8 inline-block text-paper`}>Start a conversation</button>
@@ -70,12 +70,12 @@ export function Footer({ onEnquire, onAccess }: { onEnquire: () => void; onAcces
 
           {/* offices */}
           <div className="col-span-12 mt-12 md:col-span-3 md:mt-16 lg:col-span-2 lg:mt-0">
-            <p className="meta mb-5 text-paper/60">Offices</p>
-            <ul className="space-y-5">
+            <p className="meta mb-6 text-paper/60">Offices</p>
+            <ul className="space-y-6">
               {OFFICES.map((o) => (
                 <li key={o.addr}>
                   <address className="text-[14px] not-italic leading-[1.7] text-paper/75">
-                    <span className="meta mb-1 block text-paper/85">{o.city}</span>
+                    <span className="meta mb-2 block text-paper/85">{o.city}</span>
                     {o.addr}<br />{o.post}
                   </address>
                 </li>
@@ -85,15 +85,15 @@ export function Footer({ onEnquire, onAccess }: { onEnquire: () => void; onAcces
 
           {/* contact */}
           <div className="col-span-12 mt-12 md:col-span-3 md:mt-16 lg:col-span-2 lg:mt-0">
-            <p className="meta mb-5 text-paper/60">Contact</p>
-            <ul className="space-y-3">
+            <p className="meta mb-6 text-paper/60">Contact</p>
+            <ul className="space-y-4">
               <li><a href="tel:+19059015011" className={link}>905 901 5011</a></li>
               <li><a href="tel:+18773262671" className={link}>1 877 DANMAR 1</a></li>
               <li><a href="mailto:info@danmarempire.com" className={link}>info@danmarempire.com</a></li>
               <li><button onClick={() => onAccess()} className={link}>Client access</button></li>
             </ul>
-            <p className="meta mb-4 mt-9 text-paper/60">Follow</p>
-            <ul className="flex gap-5">
+            <p className="meta mb-4 mt-10 text-paper/60">Follow</p>
+            <ul className="flex gap-6">
               <li><a href="https://instagram.com/danmarempire" className={link}>Instagram</a></li>
               <li><a href="https://linkedin.com/company/danmar-empire-group" className={link}>LinkedIn</a></li>
             </ul>
@@ -102,7 +102,7 @@ export function Footer({ onEnquire, onAccess }: { onEnquire: () => void; onAcces
           {/* Compliance block. RECO requires the registered brokerage name, unabbreviated;
               CREA requires attribution wherever the REALTOR® and MLS® marks appear. */}
           <div className="col-span-12 mt-20 border-t border-paper/12 pt-8 lg:mt-24">
-            <p className="max-w-[118ch] text-[12px] leading-[1.85] text-paper/65">
+            <p className="max-w-[48ch] text-[14px] leading-[1.85] lg:max-w-[1114px] lg:columns-3 lg:gap-x-8 lg:text-[12px] text-paper/65">
               Danmar Empire Real Estate Corp., Brokerage. Registered with the Real Estate Council of Ontario.
               The firm does not provide legal services. Daniel Sheikhan is licensed as a lawyer in Ontario, New York
               and Minnesota, and acts for clients of the firm as a real estate broker, not as their solicitor;
@@ -119,7 +119,7 @@ export function Footer({ onEnquire, onAccess }: { onEnquire: () => void; onAcces
               deemed reliable but is not guaranteed accurate. Prices shown are list prices and are subject to change
               without notice. Not intended to solicit properties currently under contract.
             </p>
-            <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
               <span className="meta text-paper/60">© {new Date().getFullYear()} Danmar Empire Real Estate Corp., Brokerage</span>
               <span className="meta text-paper/60">Oakville · Vaughan · Toronto</span>
             </div>
