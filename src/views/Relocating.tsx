@@ -93,19 +93,22 @@ export function Relocating() {
         </div>
 
         {/* ── ownership, the Home chapter 2 pattern */}
-        <div className={`col-span-12 mt-24 ${GRID} border-t border-forest/14 pt-16 lg:mt-32 lg:pt-20`}>
-          <div className="col-span-12 lg:sticky lg:top-32 lg:col-span-5 lg:self-start">
-            <Lines lines={["We own what", "we advise on."]} className={HEAD} />
-            <blockquote data-reveal className={`${s.rise} mt-12 max-w-[26ch] border-t border-forest/14 pt-6 font-display text-[clamp(1.2rem,1.8vw,1.5rem)] font-medium leading-[1.3] text-forest`}>
-              {OWNERSHIP.pull}
-            </blockquote>
+        {/* the sticky column's container ends with the copy; proof rows sit below it */}
+        <div className="col-span-12 mt-24 border-t border-forest/14 pt-16 lg:mt-32 lg:pt-20">
+          <div className={GRID}>
+            <div className="col-span-12 lg:sticky lg:top-32 lg:col-span-5 lg:self-start">
+              <Lines lines={["We own what", "we advise on."]} className={HEAD} />
+              <blockquote data-reveal className={`${s.rise} mt-12 max-w-[26ch] border-t border-forest/14 pt-6 font-display text-[clamp(1.2rem,1.8vw,1.5rem)] font-medium leading-[1.3] text-forest`}>
+                {OWNERSHIP.pull}
+              </blockquote>
+            </div>
+            <div className="col-span-12 mt-12 space-y-7 lg:col-span-6 lg:col-start-7 lg:mt-0">
+              {OWNERSHIP.body.map((para, i) => (
+                <p key={i} data-reveal className={`${s.rise} max-w-[60ch] text-[16px] leading-[1.85] text-ink/80`} style={delay(i)}>{para}</p>
+              ))}
+            </div>
           </div>
-          <div className="col-span-12 mt-12 space-y-7 lg:col-span-6 lg:col-start-7 lg:mt-0">
-            {OWNERSHIP.body.map((para, i) => (
-              <p key={i} data-reveal className={`${s.rise} max-w-[60ch] text-[16px] leading-[1.85] text-ink/80`} style={delay(i)}>{para}</p>
-            ))}
-          </div>
-          <div className="col-span-12 mt-16 lg:mt-24">
+          <div className="mt-16 lg:mt-24">
             <Rows items={OWNERSHIP.proof} number={false} />
           </div>
         </div>

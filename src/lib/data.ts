@@ -254,9 +254,11 @@ export const JOURNAL = [
     dek: "A premium that is real, a buildable envelope that is often smaller than the survey suggests.", read: "6 min" },
 ];
 
+/** Only slug, name and role are required. Leave a field out rather than fill it
+ *  with anything the person has not confirmed; the pages omit what is absent. */
 export interface Person {
-  slug: string; name: string; role: string; line: string;
-  creds: string[]; focus: string[]; areas: string; bio: string[]; tel?: string; email?: string;
+  slug: string; name: string; role: string; line?: string;
+  creds?: string[]; focus?: string[]; areas?: string; bio?: string[]; tel?: string; email?: string;
 }
 
 export const TEAM: Person[] = [
@@ -330,15 +332,7 @@ export const TEAM: Person[] = [
     ],
   },
   {
-    slug: "lailyn-chusan", name: "Lailyn Chusan", role: "Brokerage Administration",
-    line: "Trust accounting, deal administration and RECO compliance.",
-    creds: ["Brokerage Administration"],
-    focus: ["Deposit and commission trust", "Deal administration", "RECO compliance"],
-    areas: "Oakville",
-    tel: "905 901 5011",
-    bio: [
-      "Lailyn runs the back office: deposit and commission trust reconciliations, deal administration, and the compliance record that a RECO inspection actually looks at.",
-    ],
+    slug: "marion-miral", name: "Marion Miral", role: "Administration",
   },
 ];
 

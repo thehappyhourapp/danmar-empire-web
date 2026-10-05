@@ -34,3 +34,10 @@ export function pageFor(pathname: string): string {
   const top = "/" + (pathname.split("/")[1] ?? "");
   return Object.keys(ROUTES).find((k) => ROUTES[k] === top) ?? "";
 }
+
+/** The ground of the page at this exact path. GROUND describes index pages only:
+ *  /firm is forest, but a person page under it is cream. */
+export function groundFor(pathname: string): "forest" | "cream" {
+  const id = pageFor(pathname);
+  return ROUTES[id] === pathname ? GROUND[id] ?? "cream" : "cream";
+}

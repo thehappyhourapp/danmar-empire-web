@@ -8,7 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { LISTINGS } from "@/lib/data";
 import { EMPTY, money } from "@/lib/parse";
 import type { Query } from "@/lib/parse";
-import { pageFor, propertyHref } from "@/lib/routes";
+import { groundFor, pageFor, propertyHref } from "@/lib/routes";
 import { Nav } from "./Nav";
 import { Footer } from "./Footer";
 import { ImageFrame } from "./ImageFrame";
@@ -231,7 +231,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         )}
 
         <div style={{ ["--stick" as string]: `${noticeH + 74}px` } as React.CSSProperties}>
-          <Nav page={pageFor(pathname)} saved={saved.size} onSaved={() => setSavedOpen(true)} onEnquire={enquire} offset={noticeH} />
+          <Nav page={pageFor(pathname)} ground={groundFor(pathname)} saved={saved.size} onSaved={() => setSavedOpen(true)} onEnquire={enquire} offset={noticeH} />
           <main>{children}</main>
           <Footer onEnquire={enquire} />
         </div>

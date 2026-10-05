@@ -31,11 +31,11 @@ export function Person({ p }: { p: P }) {
     worksFor: { "@type": "RealEstateAgent", name: BROKERAGE, url: SITE },
   };
 
-  const rows: [string, React.ReactNode][] = [
-    ["Credentials", p.creds.join(" · ")],
-    ["Practice", p.focus.join(" · ")],
+  const rows = ([
+    ["Credentials", p.creds?.join(" · ")],
+    ["Practice", p.focus?.join(" · ")],
     ["Areas", p.areas],
-  ];
+  ] as [string, string | undefined][]).filter((r): r is [string, string] => !!r[1]);
 
   return (
     <div id="person">
@@ -55,25 +55,27 @@ export function Person({ p }: { p: P }) {
             <span className="block md:inline">{p.role}</span>
             {designations && <><span className="mx-1.5 hidden opacity-40 md:inline">/</span><span className="block md:inline">{designations}</span></>}
           </p>
-          <div className="mt-8 space-y-6">
-            {p.bio.map((b, i) => (
-              <p key={i} data-reveal className={`${s.rise} max-w-[60ch] text-[15.5px] leading-[1.9] text-ink/80`} style={delay(i)}>{b}</p>
-            ))}
-          </div>
+          {p.bio?.length ? (
+            <div className="mt-8 space-y-6">
+              {p.bio.map((b, i) => (
+                <p key={i} data-reveal className={`${s.rise} max-w-[60ch] text-[15.5px] leading-[1.9] text-ink/80`} style={delay(i)}>{b}</p>
+              ))}
+            </div>
+          ) : null}
         </header>
 
         {/* credentials, practice, areas as rows */}
-        <div className="col-span-12 mt-16 lg:mt-20">
+        {rows.length > 0 && <div className="col-span-12 mt-16 lg:mt-20">
           {rows.map(([k, v], i) => (
             <div key={k} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-6 last:border-b`} style={delay(i)}>
               <h2 className="col-span-12 font-display text-[1.25rem] font-medium leading-[1.15] md:col-span-5">{k}</h2>
               <p className="col-span-12 mt-2 text-[15px] leading-[1.8] text-ink/80 md:col-span-6 md:col-start-7 md:mt-0">{v}</p>
             </div>
           ))}
-        </div>
+        </div>}
 
-        {/* contact row */}
-        <div className={`col-span-12 mt-16 ${GRID} border-t border-forest/14 pt-12 lg:mt-20 lg:pt-16`}>
+        {/* contact row, only where the person has a direct line */}
+        {(p.email || p.tel) && <div className={`col-span-12 mt-16 ${GRID} border-t border-forest/14 pt-12 lg:mt-20 lg:pt-16`}>
           <div className="col-span-12 lg:col-span-6">
             <Lines lines={[`Speak with ${name.split(" ")[0]}.`]} className={`${HEAD} max-w-[18ch]`} />
           </div>
@@ -82,7 +84,7 @@ export function Person({ p }: { p: P }) {
             {telHref && <a href={telHref} className={`${s.tlink} text-[15px] text-ink/80 hover:text-forest`}>{p.tel}</a>}
             <EnquireButton className={`${s.tlink} meta text-ink/70 hover:text-forest`}>Enquire through the desk</EnquireButton>
           </div>
-        </div>
+        </div>}
 
         {/* the rest of the firm */}
         <div className="col-span-12 mt-20 lg:mt-28">

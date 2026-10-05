@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const p = TEAM.find((x) => x.slug === slug);
   if (!p) return {};
-  return detailMetadata("firm", `${p.name}, ${p.role}`, p.line, personHref(p.slug));
+  return detailMetadata("firm", `${p.name}, ${p.role}`, p.line ?? `${p.name}, ${p.role}, Danmar Empire Real Estate Corp., Brokerage.`, personHref(p.slug));
 }
 
 export default async function Page({ params }: Props) {

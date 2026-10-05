@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { GROUND, href } from "@/lib/routes";
+import { href } from "@/lib/routes";
 import { emblemCream, emblemForest } from "@/lib/marks";
 
 export const NAV = [
@@ -46,8 +46,8 @@ export function Wordmark({ light = false, className = "", stacked = false, regis
 }
 
 export function Nav({
-  page, saved, onSaved, onEnquire, offset = 0,
-}: { page: string; saved: number; onSaved: () => void; onEnquire: () => void; offset?: number }) {
+  page, ground = "cream", saved, onSaved, onEnquire, offset = 0,
+}: { page: string; ground?: "forest" | "cream"; saved: number; onSaved: () => void; onEnquire: () => void; offset?: number }) {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
   const overHero = page === "home" && !solid;
@@ -60,7 +60,7 @@ export function Nav({
   useEffect(() => setOpen(false), [page]);
 
   // the nav takes the ground of the page it is on
-  const forest = GROUND[page] === "forest";
+  const forest = ground === "forest";
   const light = overHero || forest;
 
   return (

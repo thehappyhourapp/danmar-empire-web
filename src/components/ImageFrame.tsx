@@ -8,12 +8,14 @@ import { useEffect, useId, useRef, useState } from "react";
  * architectural field rather than a grey box, so the page never looks broken.
  */
 export function ImageFrame({
-  src, hue = 30, ratio = "4/3", className = "", alt = "", tone = "dark", fallback = "art", children,
+  src, hue = 30, ratio = "4/3", className = "", alt = "", tone = "dark", fallback = "art", ground = "cream", children,
 }: {
   src?: string; hue?: number; ratio?: string; className?: string; alt?: string;
   tone?: "dark" | "light";
   /** `flat` reserves the aspect ratio as a plain forest/10 block, with no generated art. */
   fallback?: "art" | "flat";
+  /** The page ground under a flat frame: forest/10 reads on cream, paper/5 on forest. */
+  ground?: "cream" | "forest";
   children?: React.ReactNode;
 }) {
   const [ok, setOk] = useState(false);
@@ -33,7 +35,7 @@ export function ImageFrame({
   useEffect(() => { const el = img.current; if (el?.complete && el.naturalWidth) setOk(true); }, [src]);
 
   return (
-    <div className={`relative overflow-hidden ${flat ? "bg-forest/10" : "bg-forest-deep grain"} ${className}`} style={{ aspectRatio: ratio }}>
+    <div className={`relative overflow-hidden ${flat ? (ground === "forest" ? "bg-paper/5" : "bg-forest/10") : "bg-forest-deep grain"} ${className}`} style={{ aspectRatio: ratio }}>
       {!flat && (
         <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
           <defs>

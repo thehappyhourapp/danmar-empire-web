@@ -116,17 +116,21 @@ export function Home() {
 
       {/* ───────── 2. Ownership: first cut, forest to cream. */}
       <Chapter tone="cream" wipeFrom="forest" className="lg:min-h-[100svh]">
-        <div className="col-span-12 lg:sticky lg:top-32 lg:col-span-5 lg:self-start">
-          <Lines lines={["We own what", "we advise on."]} className={HEAD} />
-          <Lines as="p" lines={["Financed, held and sold."]} className="mt-3 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass" />
-          <blockquote data-reveal className={`${s.reveal} mt-12 max-w-[26ch] border-t border-forest/14 pt-6 font-display text-[clamp(1.2rem,1.8vw,1.5rem)] font-medium leading-[1.3] text-forest`}>
-            {OWNERSHIP.pull}
-          </blockquote>
-        </div>
-        <div className="col-span-12 mt-12 space-y-7 lg:col-span-6 lg:col-start-7 lg:mt-0">
-          {OWNERSHIP.body.map((para, i) => (
-            <p key={i} data-reveal className={`${s.reveal} max-w-[60ch] text-[16px] leading-[1.85] text-ink/80`} style={delay(i)}>{para}</p>
-          ))}
+        {/* The sticky column's container ends with the two-column copy, so the
+            headline releases before the full-width proof rows reach it. */}
+        <div className={`col-span-12 ${GRID}`}>
+          <div className="col-span-12 lg:sticky lg:top-32 lg:col-span-5 lg:self-start">
+            <Lines lines={["We own what", "we advise on."]} className={HEAD} />
+            <Lines as="p" lines={["Financed, held and sold."]} className="mt-3 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass" />
+            <blockquote data-reveal className={`${s.reveal} mt-12 max-w-[26ch] border-t border-forest/14 pt-6 font-display text-[clamp(1.2rem,1.8vw,1.5rem)] font-medium leading-[1.3] text-forest`}>
+              {OWNERSHIP.pull}
+            </blockquote>
+          </div>
+          <div className="col-span-12 mt-12 space-y-7 lg:col-span-6 lg:col-start-7 lg:mt-0">
+            {OWNERSHIP.body.map((para, i) => (
+              <p key={i} data-reveal className={`${s.reveal} max-w-[60ch] text-[16px] leading-[1.85] text-ink/80`} style={delay(i)}>{para}</p>
+            ))}
+          </div>
         </div>
         <div className="col-span-12 mt-20 lg:mt-32">
           {OWNERSHIP.proof.map(([k, v], i) => (
