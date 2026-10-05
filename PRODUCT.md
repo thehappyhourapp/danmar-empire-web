@@ -55,7 +55,7 @@ Binding, as given by the owner. The full visual specification lives in **CLAUDE.
   - cream #EEE8E0;
   - ink #12261F;
   - brass #80642C (darkened from #8A6B2F for 4.5:1 on cream), for labels, figures and at most one italic line per chapter only, never as fill;
-  - hairlines are forest on cream (content rules at 14%, drawn column grid at 6%) and paper on dark grounds (content rules at 12%, drawn column grid at 5%).
+  - hairlines are content rules only, forest at 14% on cream and paper at 12% on dark grounds; the 12-column grid is a layout system and is not drawn.
 - **Type:**
   - Bodoni Moda for display, with optical size set manually (opsz 16 for display, 10 for figures, never auto);
   - Libre Franklin 400 for body text, and Libre Franklin 500 for `.meta` labels. 500 for running text reads heavy on cream and loses the contrast with the labels;

@@ -8,7 +8,7 @@ import { MotionController } from "@/components/MotionController";
 import { EnquireButton } from "@/components/SiteShell";
 import s from "@/components/motion.module.css";
 
-/* The Firm: whole-page forest, grid paper/5, line rise only. The firm's position
+/* The Firm: whole-page forest, line rise only. The firm's position
    as short rows, the people as full-width rows linking to their pages, and the
    related-practice disclosure where it can be seen. */
 

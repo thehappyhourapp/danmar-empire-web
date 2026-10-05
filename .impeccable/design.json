@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-05T04:26:53.373444+00:00",
+  "generatedAt": "2026-10-05T13:01:07.612490+00:00",
   "title": "Design System: Danmar Empire",
   "extensions": {
     "colorMeta": {
@@ -247,10 +247,10 @@
   ],
   "narrative": {
     "northStar": "The Dossier",
-    "overview": "The site reads like a file a careful firm would hand across a desk: a few chapters, each with one argument, set in Bodoni on forest and cream, with the evidence laid out in ruled rows rather than cards. It refuses the hero photograph, the search portal and the card grid. Proof is given by property, figures carry their basis, and every page ends in an invitation the visitor chooses to accept.\n\nDensity is low and deliberate. A drawn twelve-column grid of hairlines sits behind every chapter, so the page always shows its structure; type sits on the column lines, and space is generous rather than decorative. Temperature, forest against cream, is the strongest move in the vocabulary and is rationed: Home makes exactly two cuts, inner pages hold one ground.\n\nMotion is quiet and two-speed. Interface feedback is quick (180 to 300ms); narrative motion is slow (900ms to 1.6s); nothing sits between. Content is in the server HTML and readable with JavaScript off, and nothing waits on an animation.",
+    "overview": "The site reads like a file a careful firm would hand across a desk: a few chapters, each with one argument, set in Bodoni on forest and cream, with the evidence laid out in ruled rows rather than cards. It refuses the hero photograph, the search portal and the card grid. Proof is given by property, figures carry their basis, and every page ends in an invitation the visitor chooses to accept.\n\nDensity is low and deliberate. A strict twelve-column grid places everything, though it is never drawn: type starts on the column lines, rows split on them, and space is generous rather than decorative. Temperature, forest against cream, is the strongest move in the vocabulary and is rationed: Home makes exactly two cuts, inner pages hold one ground.\n\nMotion is quiet and two-speed. Interface feedback is quick (180 to 300ms); narrative motion is slow (900ms to 1.6s); nothing sits between. Content is in the server HTML and readable with JavaScript off, and nothing waits on an animation.",
     "keyCharacteristics": [
       "Forest and cream grounds, brass only for labels, figures and the italic line.",
-      "A drawn 12-column hairline grid on every chapter; full-width rows on 1px rules; no cards, shadows or fills.",
+      "A 12-column layout grid that is felt, not drawn; full-width rows on 1px rules; no cards, shadows or fills.",
       "Bodoni Moda 500 display with manual optical size; Libre Franklin 400 text; tracked uppercase labels.",
       "Two motion clocks; temperature cuts that read as cuts, never fades.",
       "Own listings only; flat placeholder frames until real photography exists."
@@ -297,8 +297,8 @@
         "section": "typography"
       },
       {
-        "name": "The Drawn Grid Rule",
-        "body": "The grid is drawn on every chapter of a page or on none; never skipped on a dark chapter.",
+        "name": "The Invisible Grid Rule",
+        "body": "The 12-column grid places everything and is never drawn; the only lines on a page are content rules and control edges.",
         "section": "layout"
       },
       {
@@ -314,7 +314,7 @@
     ],
     "dos": [
       "keep brass to labels, figures, the italic line and the hairline, under 5% of a viewport.",
-      "draw the 12-column grid on every chapter, forest/6 on cream and paper/5 on forest, with content rules at forest/14 and paper/12.",
+      "set every position on the 12-column grid without drawing it, and keep content rules at forest/14 on cream and paper/12 on forest.",
       "set running text at 48ch and labels at 60ch, so no line passes 75 characters.",
       "keep text at 14px or larger at 390, `.meta` labels (10.5px) excepted.",
       "keep figures in Bodoni 500 with lining tabular numerals, and give every figure its basis.",

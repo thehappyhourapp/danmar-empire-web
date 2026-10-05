@@ -1,4 +1,4 @@
-/* Scoped grid and motion for the Home route.
+/* Scoped motion for the Home route.
 
    Every hidden start state hangs off html[data-motion="on"], which HomeMotion
    sets only after hydration and only when prefers-reduced-motion is not set.
@@ -80,7 +80,7 @@
   transition: none !important;
 }
 
-/* Temperature wipe: a cut, never a fade. The previous ground, grid and all, lies
+/* Temperature wipe: a cut, never a fade. The previous ground lies
    over the first viewport of the new chapter. When the real boundary reaches 60%
    of the viewport (MotionController's wipe observer), a hard edge carries the new
    ground down over 1.0s on the one symmetric curve, and the chapter's first

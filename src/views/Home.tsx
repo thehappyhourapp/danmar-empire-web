@@ -29,18 +29,6 @@ const GROUND: Record<Tone, string> = {
   deep: "bg-forest-deep text-paper",
 };
 
-/** The drawn 12-column grid. Column lines run the full height of the chapter. */
-function GridLines({ tone }: { tone: Tone }) {
-  const rule = tone === "cream" ? "border-forest/6" : "border-paper/5";
-  return (
-    <div aria-hidden className="pointer-events-none absolute inset-y-0 left-4 right-4 z-0 md:left-12 md:right-12">
-      <div className={`${GRID} h-full border-r ${rule}`}>
-        {Array.from({ length: 12 }, (_, i) => <div key={i} className={`border-l ${rule}`} />)}
-      </div>
-    </div>
-  );
-}
-
 /** A heading set one authored line per mask box, so each line can rise on its own. */
 function Lines({ lines, as = "h2", className = "", d }: { lines: string[]; as?: "h2" | "h3" | "p"; className?: string; d?: number }) {
   const Tag = as;
@@ -61,13 +49,10 @@ function Chapter({ tone, wipeFrom, className = "", inner = "", children }: {
   return (
     <section data-ground={tone} className={`${s.chapter} ${GROUND[tone]} ${tone === "cream" ? "" : s.dark} ${className}`}>
       <div className="relative mx-auto max-w-[1440px]">
-        <GridLines tone={tone} />
         <div className={`relative z-10 px-4 py-24 md:px-12 lg:py-40 ${GRID} ${inner}`}>{children}</div>
       </div>
       {wipeFrom && (
-        <div aria-hidden data-wipe className={`${s.wipe} ${wipeFrom === "cream" ? "bg-paper" : "bg-forest"}`}>
-          <div className="relative mx-auto h-full max-w-[1440px]"><GridLines tone={wipeFrom} /></div>
-        </div>
+        <div aria-hidden data-wipe className={`${s.wipe} ${wipeFrom === "cream" ? "bg-paper" : "bg-forest"}`} />
       )}
     </section>
   );
@@ -84,7 +69,6 @@ export function Home() {
       {/* ───────── 1. Hero: forest. The headline is the LCP element and never animates. */}
       <section data-ground="forest" className={`${s.chapter} ${s.dark} bg-forest text-paper`}>
         <div className="relative mx-auto flex min-h-[100svh] max-w-[1440px] flex-col">
-          <GridLines tone="forest" />
           <div className="relative z-10 flex flex-1 flex-col px-4 pb-16 pt-28 md:px-12 md:pb-20 md:pt-36">
             <div className={GRID}>
               <p className="meta col-span-12 text-paper/60 md:col-span-6">

@@ -45,7 +45,7 @@ Next.js 15 App Router, TypeScript, Tailwind 3. Deployed on Vercel. `npm run buil
 
 ## Design DNA — Danmar
 
-Merged from four `/taste` analyses (full data in `docs/taste/`). Loam House and Sobha Privy lead: cinematic pacing, hairline column grid, blur-to-sharp type reveals, dark-to-cream transitions. Oryzo contributes motion precision and easing only. Leome & Partners contributes inner-page restraint only; its landing page (a few giant words across an empty field) is too plain and is not a reference. Values are translated into Danmar tokens; source evidence is in brackets.
+Merged from four `/taste` analyses (full data in `docs/taste/`). Loam House and Sobha Privy lead: cinematic pacing, a strict column grid, blur-to-sharp type reveals, dark-to-cream transitions. Oryzo contributes motion precision and easing only. Leome & Partners contributes inner-page restraint only; its landing page (a few giant words across an empty field) is too plain and is not a reference. Values are translated into Danmar tokens; source evidence is in brackets.
 
 ### Hard rules (override everything below)
 
@@ -64,15 +64,15 @@ Merged from four `/taste` analyses (full data in `docs/taste/`). Loam House and 
 - Images alternate between full-bleed bands (21:10 or 16:9) and asymmetric groups of portrait frames (4:5, 3:4) offset vertically by 80 to 160px, never an even card grid. [Sobha: 1.85:1 bands, then 0.70 to 0.80 portraits at 360 to 720px.]
 - Type sits directly on photography with a forest-deep scrim. No boxed feature tiles. [Loam: 0 shadows, no cards.]
 
-### Grid (hairline)
+### Grid and hairlines
 
 - 12 columns. Margins 16px at 390, 48px at 1440; gutters 16px and 32px. Max content width 1440px.
-- The grid is drawn: 1px rules mark column lines and row breaks, and run edge to edge of the content box. Each ground has its own rule colours, because a forest line is invisible on a dark chapter:
-  - on cream (`paper`, `paper-deep`): `forest/6` for the drawn column grid, `forest/14` for content rules (row breaks, dividers, table lines), so the grid sits behind them;
-  - on dark (`forest`, `forest-deep`): `paper/5` for the drawn column grid, `paper/12` for content rules.
-  - These grid values were lightened from forest/10 and paper/8 on 4 Oct 2026 because the lines read too present on placeholder blocks. Reassess once real photography is in.
-  - Draw the grid on every chapter of a page or on none of them. Never skip it on dark chapters. [Oryzo: 1px drafting guides; Leome: 1px row rules on a 12-column grid.]
-- Text blocks start on a column line. Body measure is at most 60ch.
+- The grid is a layout system, not a drawn element. It governs every position (text blocks start on a column line, rows split title columns 1 to 5 from text columns 7 to 12), but no column lines are drawn. The drawn column grid was removed on 5 Oct 2026 at Daniel's decision.
+- Content rules are the only hairlines: 1px row breaks, dividers, table lines and the cell dividers of the spec and numbers strips. Each ground has its own rule colour, because a forest line is invisible on a dark chapter:
+  - on cream (`paper`, `paper-deep`): `forest/14`;
+  - on dark (`forest`, `forest-deep`): `paper/12`.
+  - Control edges (form fields, outlined buttons) are stronger so they meet 3:1: `forest/55` on cream, `paper/45` on dark. [Leome: 1px row rules on a 12-column grid.]
+- Body measure is at most 48ch for running text and 60ch for `.meta` footnotes, so no line passes 75 characters.
 
 ### Type
 

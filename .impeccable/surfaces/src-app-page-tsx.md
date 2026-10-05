@@ -7,13 +7,13 @@ related_targets: ["src/views/Home.tsx"]
 
 # Home (/) surface brief
 
-Scope: src/app/page.tsx and the components it renders. Visitor mode: Persuade. Audience: HNW families, relocating principals, family offices and their advisors. Job: decide whether this firm's judgement is worth a private conversation. Action: the enquiry (nav), /contact and /relocating in the close. Proof: ownership position, own listings, the properties behind the $1B+ figure. Constraints: CLAUDE.md Design DNA and PRODUCT.md are binding; two temperature cuts, footer excluded; grid drawn on every chapter; no preloader; LCP headline never animates; readable with JavaScript off.
+Scope: src/app/page.tsx and the components it renders. Visitor mode: Persuade. Audience: HNW families, relocating principals, family offices and their advisors. Job: decide whether this firm's judgement is worth a private conversation. Action: the enquiry (nav), /contact and /relocating in the close. Proof: ownership position, own listings, the properties behind the $1B+ figure. Constraints: CLAUDE.md Design DNA and PRODUCT.md are binding; two temperature cuts, footer excluded; no preloader; LCP headline never animates; readable with JavaScript off.
 
 ## Direction contract
 
 THESIS: Home is a dossier read in five chapters, not a portal. It refuses the hero photograph, the search bar and the card grid; proof is given by property, and the page ends in an invitation rather than a capture.
 
-OWN-WORLD: forest #0F3B2F opening, forest-deep #07241B closing into the footer, cream #EEE8E0 between; Bodoni Moda 500 display at opsz 16, Libre Franklin 400 body, .meta labels; brass only as the two italic lines and the figures; a drawn 12-column hairline grid on every chapter (forest/10 on cream, paper/8 on dark); full-width rows on 1px rules; no cards, shadows, fills or pills.
+OWN-WORLD: forest #0F3B2F opening, forest-deep #07241B closing into the footer, cream #EEE8E0 between; Bodoni Moda 500 display at opsz 16, Libre Franklin 400 body, .meta labels; brass only as the two italic lines and the figures; a 12-column layout grid that is not drawn (removed 5 Oct 2026); full-width rows on 1px rules; no cards, shadows, fills or pills.
 
 STORY: the visitor learns the firm is lawyer-led and owns in its markets, sees its own listings and the houses behind the number, and is invited to say what they are trying to do.
 

@@ -28,7 +28,7 @@ function specs(l: Listing): [string, string][] {
   return out.slice(0, 5);
 }
 
-/* Spans per field count that keep every divider on a drawn column line. */
+/* Spans per field count that keep every divider on a column line. */
 const SPANS: Record<number, string[]> = {
   3: ["md:col-span-4", "md:col-span-4", "md:col-span-4"],
   4: ["md:col-span-3", "md:col-span-3", "md:col-span-3", "md:col-span-3"],
@@ -103,7 +103,7 @@ export function Property({ l }: { l: Listing }) {
         </div>
 
         {/* five fields, one row, hairlines between */}
-        {/* three to five fields on the 12-column grid, spans chosen so every divider sits on a drawn column line */}
+        {/* three to five fields on the 12-column grid, spans chosen so every divider sits on a column line */}
         <dl className={`col-span-12 mt-12 ${GRID} border-y border-forest/14 lg:mt-16`}>
           {rows.map(([k, v], i) => (
             <div key={k} className={`${i === rows.length - 1 && rows.length % 2 ? "col-span-12" : "col-span-6"} flex flex-col-reverse gap-2 py-6 pr-4 ${i % 2 ? "border-l border-forest/14 pl-4" : ""} ${i >= 2 ? "border-t border-forest/14 md:border-t-0" : ""} ${i % 2 === 0 && !(i === rows.length - 1 && rows.length % 2) ? "-mr-4 md:mr-0" : ""} ${SPANS[rows.length][i]} md:border-l md:pl-4 md:first:border-l-0 md:first:pl-0`}>

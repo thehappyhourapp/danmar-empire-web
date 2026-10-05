@@ -96,13 +96,13 @@ components:
 
 The site reads like a file a careful firm would hand across a desk: a few chapters, each with one argument, set in Bodoni on forest and cream, with the evidence laid out in ruled rows rather than cards. It refuses the hero photograph, the search portal and the card grid. Proof is given by property, figures carry their basis, and every page ends in an invitation the visitor chooses to accept.
 
-Density is low and deliberate. A drawn twelve-column grid of hairlines sits behind every chapter, so the page always shows its structure; type sits on the column lines, and space is generous rather than decorative. Temperature, forest against cream, is the strongest move in the vocabulary and is rationed: Home makes exactly two cuts, inner pages hold one ground.
+Density is low and deliberate. A strict twelve-column grid places everything, though it is never drawn: type starts on the column lines, rows split on them, and space is generous rather than decorative. Temperature, forest against cream, is the strongest move in the vocabulary and is rationed: Home makes exactly two cuts, inner pages hold one ground.
 
 Motion is quiet and two-speed. Interface feedback is quick (180 to 300ms); narrative motion is slow (900ms to 1.6s); nothing sits between. Content is in the server HTML and readable with JavaScript off, and nothing waits on an animation.
 
 **Key Characteristics:**
 - Forest and cream grounds, brass only for labels, figures and the italic line.
-- A drawn 12-column hairline grid on every chapter; full-width rows on 1px rules; no cards, shadows or fills.
+- A 12-column layout grid that is felt, not drawn; full-width rows on 1px rules; no cards, shadows or fills.
 - Bodoni Moda 500 display with manual optical size; Libre Franklin 400 text; tracked uppercase labels.
 - Two motion clocks; temperature cuts that read as cuts, never fades.
 - Own listings only; flat placeholder frames until real photography exists.
@@ -111,7 +111,7 @@ Motion is quiet and two-speed. Interface feedback is quick (180 to 300ms); narra
 
 The interface clock runs 180 to 300ms on `cubic-bezier(0.25, 1, 0.5, 1)` (the `--ui` token): hairlines draw in 220ms, Collection rows swap in at 240ms (40ms apart, four steps at most), drawers slide from the right edge in 280ms and leave in 200ms, the client access dialog rises 8px in 200ms and leaves in 180ms, the mobile menu is drawn down from the top edge in 280ms and back up in 200ms, the SAVED badge settles from 1.12 to 1 in 240ms.
 
-The narrative clock runs 900ms to 1.6s. Headings rise line by line inside masks (1.1s on `cubic-bezier(0.16, 1, 0.3, 1)`, 120ms per line); rows and paragraphs rise 24px (1.1s); on Home, type and frames under 600px also sharpen from blur (focus lands over 1.6s on `cubic-bezier(0.5, 1, 0.89, 1)`; 10px of blur, 6px at 390). A title and its paragraph reveal as one group. The two Home cuts are clip-path wipes: the old ground, grid and all, is carried off by a hard edge over 1.0s on `cubic-bezier(0.7, 0, 0.3, 1)`, the only symmetric curve on the site, fired when the boundary reaches 60% of the viewport, and the chapter's first heading rises as the edge passes it. Follow motion (the hero lift, Home's frame parallax) is damped with k = 8 and travels at most 8%.
+The narrative clock runs 900ms to 1.6s. Headings rise line by line inside masks (1.1s on `cubic-bezier(0.16, 1, 0.3, 1)`, 120ms per line); rows and paragraphs rise 24px (1.1s); on Home, type and frames under 600px also sharpen from blur (focus lands over 1.6s on `cubic-bezier(0.5, 1, 0.89, 1)`; 10px of blur, 6px at 390). A title and its paragraph reveal as one group. The two Home cuts are clip-path wipes: the old ground is carried off by a hard edge over 1.0s on `cubic-bezier(0.7, 0, 0.3, 1)`, the only symmetric curve on the site, fired when the boundary reaches 60% of the viewport, and the chapter's first heading rises as the edge passes it. Follow motion (the hero lift, Home's frame parallax) is damped with k = 8 and travels at most 8%.
 
 Only transform, opacity, filter and clip-path animate. Every hidden start state hangs off `html[data-motion="on"]`, which is set after hydration and never under `prefers-reduced-motion: reduce`; under reduced motion every reveal resolves at once, overlays open and close without transition, and parallax is off.
 
@@ -138,8 +138,8 @@ Two grounds and one metal: a deep conifer green, a warm unbleached paper, and an
 - **Ink** (ink): running text on cream, at 80% for body and 70% for secondary text and labels.
 - **Forest Soft** (forest-soft): the prototype notice bar only. It goes when the notice goes.
 
-### Hairlines and grid
-Content rules (row breaks, dividers, the lens bar) are forest at 14% on cream and paper at 12% on forest. The drawn column grid is forest at 6% on cream and paper at 5% on forest, so it sits behind the rules. Control edges (form fields, outlined buttons) are stronger, forest at 55% on cream and paper at 45% on forest, so they meet 3:1.
+### Hairlines
+Content rules (row breaks, dividers, the lens bar, the cell dividers of the spec and numbers strips) are the only hairlines: forest at 14% on cream and paper at 12% on forest. No column grid is drawn. Control edges (form fields, outlined buttons) are stronger, forest at 55% on cream and paper at 45% on forest, so they meet 3:1.
 
 ### Grounds per route
 - Forest: `/asset-management`, `/investments`, `/firm`.
@@ -176,19 +176,19 @@ Content rules (row breaks, dividers, the lens bar) are forest at 14% on cream an
 
 ## Layout
 
-Twelve columns, 1440px wide at most. Margins are 16px at 390 and 48px from md; gutters 16px and 32px. The grid is drawn: twelve 1px column lines run the full height of every chapter, and the footer continues them. Text blocks start on a column line; lists of practices, services, offices, people and records are full-width rows with the title in columns 1 to 5 and the text in columns 7 to 12, a 1px rule above each.
+Twelve columns, 1440px wide at most. Margins are 16px at 390 and 48px from md; gutters 16px and 32px. The grid is a layout system, not a drawn element: no column lines are drawn on any chapter, the footer or the wipe overlays, but every position is set on it. Text blocks start on a column line; lists of practices, services, offices, people and records are full-width rows with the title in columns 1 to 5 and the text in columns 7 to 12, a 1px rule above each.
 
 Home's chapters pad 96px at 390 and 160px from lg, top and bottom, and run to at least the viewport's height. Inner pages set the visible gap between the bottom of the fixed nav and the H1 to 64px at 390 and 96px from lg (the listing page measures it from the bottom of its hero band), and close on 96px and 160px. The header's height is a token (`--nav-h`, 70px at 390 and 74px from md) and both the top padding and the sticky lens bar read it.
 
 Spacing is on an 8px scale. Rows pad 32px at 390 and 40px from md. At 390 a row's title takes the full width above its text; between md and lg a row's figure sits under its text, and only from lg in the right-hand two columns.
 
-**The Drawn Grid Rule.** The grid is drawn on every chapter of a page or on none; never skipped on a dark chapter.
+**The Invisible Grid Rule.** The 12-column grid places everything and is never drawn; the only lines on a page are content rules and control edges.
 
 **The Rows Not Cards Rule.** Collections of things are full-width rows on rules, never a grid of cards.
 
 ## Elevation & Depth
 
-Flat. There are no shadows anywhere on the site. Depth comes from temperature (forest against cream), from the drawn grid sitting behind the content rules, and from the one overlay layer: drawers and the client access dialog over a forest-deep backdrop at 60%.
+Flat. There are no shadows anywhere on the site. Depth comes from temperature (forest against cream), from the content rules, and from the one overlay layer: drawers and the client access dialog over a forest-deep backdrop at 60%.
 
 **The No Shadow Rule.** Nothing casts a shadow; a surface is separated by ground or by a rule.
 
@@ -231,7 +231,7 @@ Square. The base radius is 2px and is barely used; there are no pills and no rou
 
 ### Do:
 - **Do** keep brass to labels, figures, the italic line and the hairline, under 5% of a viewport.
-- **Do** draw the 12-column grid on every chapter, forest/6 on cream and paper/5 on forest, with content rules at forest/14 and paper/12.
+- **Do** set every position on the 12-column grid without drawing it, and keep content rules at forest/14 on cream and paper/12 on forest.
 - **Do** set running text at 48ch and labels at 60ch, so no line passes 75 characters.
 - **Do** keep text at 14px or larger at 390, `.meta` labels (10.5px) excepted.
 - **Do** keep figures in Bodoni 500 with lining tabular numerals, and give every figure its basis.
