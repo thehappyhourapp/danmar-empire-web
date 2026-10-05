@@ -47,16 +47,16 @@ function Drawer({ open, close, label, width, children }: {
   open: boolean; close: () => void; label: string; width: string; children: React.ReactNode;
 }) {
   const stage = usePresence(open, 200);
-  const panel = useRef<HTMLElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
   useFocusTrap(panel, open && stage !== null, close);
   if (!stage) return null;
   return (
     <div className="fixed inset-0 z-[70] flex justify-end">
       <div aria-hidden data-state={stage} className={`${m.backdrop} absolute inset-0 bg-forest-deep/60`} onClick={close} />
-      <aside ref={panel} tabIndex={-1} data-state={stage} role="dialog" aria-modal="true" aria-label={label}
+      <div ref={panel} tabIndex={-1} data-state={stage} role="dialog" aria-modal="true" aria-label={label}
         className={`${m.drawer} relative h-full w-full ${width} overflow-y-auto bg-paper outline-none thin`}>
         {children}
-      </aside>
+      </div>
     </div>
   );
 }
@@ -105,8 +105,9 @@ function Saved({ open, close, ids, toggle }: {
         </p>
       ) : items.map((l) => (
         <div key={l.id} className="flex gap-4 border-b border-forest/14 p-6">
-          <Link href={propertyHref(l.id)} onClick={close} className="shrink-0">
-            <ImageFrame src={l.photo} hue={l.hue} ratio="1/1" className="w-[80px]" alt={l.name} />
+          {/* the thumbnail repeats the title link beside it: one target for pointers only */}
+          <Link href={propertyHref(l.id)} onClick={close} className="shrink-0" aria-hidden tabIndex={-1}>
+            <ImageFrame hue={l.hue} ratio="1/1" className="w-[80px]" alt={l.name} fallback="flat" />
           </Link>
           <div className="min-w-0 flex-1">
             <Link href={propertyHref(l.id)} onClick={close} className="block text-left">
