@@ -16,6 +16,7 @@ const PRACTICE_LINKS: [string, string][] = [
   ["management", "Asset Management"],
   ["investments", "Investments"],
   ["leasing", "Executive Leasing"],
+  ["property", "Property Management"],
   ["relocating", "Relocating"],
 ];
 const SITE_LINKS: [string, string][] = [

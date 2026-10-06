@@ -82,6 +82,12 @@ export const SEO: Record<string, Meta> = {
       "Offices in Oakville and Vaughan. Start a conversation about a purchase, a sale, an executive lease or a portfolio mandate; someone from the desk replies inside one business day.",
     canonical: "/contact",
   },
+  property: {
+    title: `Property Management, Greater Toronto Area | ${SUFFIX}`,
+    description:
+      "Day-to-day management for owners of rental units, buildings and small portfolios across the GTA: rent collection, tenants, repairs, contractors and paperwork, with a monthly statement. A separate service from asset management, run by the same firm.",
+    canonical: "/property-management",
+  },
   notfound: {
     title: `Page Not Found | ${SUFFIX}`,
     description: "There is nothing at this address. The Collection and the rest of the site are a link away.",
