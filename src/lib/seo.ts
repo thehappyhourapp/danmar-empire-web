@@ -88,6 +88,17 @@ export const SEO: Record<string, Meta> = {
       "Day-to-day management for owners of rental units, buildings and small portfolios across the GTA: rent collection, tenants, repairs, contractors and paperwork, with a monthly statement. A separate service from asset management, run by the same firm.",
     canonical: "/property-management",
   },
+  capital: {
+    title: `Sale-Leaseback & Corporate Real Estate Advisory, Ontario | ${SUFFIX}`,
+    description:
+      "Danmar advises Ontario owner-occupier companies on sale-leasebacks, surplus property sales and lease restructuring. Book a confidential capital review.",
+    canonical: "/corporate-real-estate-capital",
+  },
+  privacy: {
+    title: `Privacy | ${SUFFIX}`,
+    description: "How Danmar Empire Real Estate Corp., Brokerage handles what you send through this site: what is collected, why, who sees it and how to ask for it to be removed.",
+    canonical: "/privacy",
+  },
   notfound: {
     title: `Page Not Found | ${SUFFIX}`,
     description: "There is nothing at this address. The Collection and the rest of the site are a link away.",

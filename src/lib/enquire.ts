@@ -1,9 +1,9 @@
-/* Client side of the one submission path. Both forms post here, show their
-   result inline, and never navigate. */
+/* Client side of the one submission path. Every form posts here, shows its
+   result inline, and never navigates. */
 
 export const DESK_EMAIL = "daniel@danmarempire.com";
 
-export type EnquiryKind = "enquiry" | "client-access";
+export type EnquiryKind = "enquiry" | "client-access" | "capital-review";
 
 export interface EnquiryPayload {
   kind: EnquiryKind;
@@ -12,6 +12,8 @@ export interface EnquiryPayload {
   firm?: string;
   note?: string;
   listingRef?: string;
+  /** labelled extras from a structured form, in the order they should read */
+  fields?: [label: string, value: string][];
   /** honeypot; left empty by people */
   website?: string;
 }

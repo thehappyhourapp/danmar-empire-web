@@ -31,7 +31,12 @@ export function Investments() {
         headline: "Tell us the return and the hold.",
         enquire: "Request a mandate call",
         login: "Investor login",
-        aside: <PracticeLink href={href("collection")} dark>Current mandates are in the Collection</PracticeLink>,
+        aside: (
+          <>
+            <PracticeLink href={href("collection")} dark>Current mandates are in the Collection</PracticeLink>
+            <PracticeLink href={href("capital")} dark>Own the building you operate from? Corporate real estate capital</PracticeLink>
+          </>
+        ),
       }}
       service={{ name: "Investment property sales and acquisition", type: "Real estate investment advisory", description: "Underwriting and execution on income property, land with approvals and net-leased assets across the Greater Toronto Area and Ontario." }}
     />

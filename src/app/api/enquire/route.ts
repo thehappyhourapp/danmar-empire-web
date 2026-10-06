@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-/* The one submission path for the site. The enquire drawer and the client access
-   request both POST here. Mail goes to the desk through Resend, from the address in
-   RESEND_FROM, with reply-to set to the visitor so a reply from any mail client
-   reaches them. Without RESEND_API_KEY and RESEND_FROM the route answers 503 and
-   the forms show the desk address as text instead. */
+/* The one submission path for the site. The enquire drawer, the client access
+   request and the capital review form all POST here. Mail goes to the desk through
+   Resend, from the address in RESEND_FROM, with reply-to set to the visitor so a
+   reply from any mail client reaches them. Without RESEND_API_KEY and RESEND_FROM
+   the route answers 503 and the forms show the desk address as text instead. */
 
 export const runtime = "nodejs";
 
 const TO = "daniel@danmarempire.com";
-const KINDS = { enquiry: "Enquiry", "client-access": "Client access request" } as const;
+const KINDS = { enquiry: "Enquiry", "client-access": "Client access request", "capital-review": "Capital review request" } as const;
 type Kind = keyof typeof KINDS;
 
 /* Per-IP limit: five submissions in ten minutes. In memory, so it is per server
@@ -31,6 +31,18 @@ const clean = (v: unknown, max: number) =>
   typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, max) : "";
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/** Labelled extras from a structured form (the capital review): an ordered list
+ *  of [label, value] pairs, capped in number and length. Values are text only. */
+function fields(v: unknown): [string, string][] {
+  if (!Array.isArray(v)) return [];
+  return v.slice(0, 40).flatMap((pair) => {
+    if (!Array.isArray(pair) || pair.length !== 2) return [];
+    const label = clean(pair[0], 60);
+    const value = clean(pair[1], 400);
+    return label && value ? [[label, value] as [string, string]] : [];
+  });
+}
+
 export async function POST(req: Request) {
   let body: Record<string, unknown>;
   try { body = (await req.json()) as Record<string, unknown>; } catch { return NextResponse.json({ error: "Invalid request." }, { status: 400 }); }
@@ -44,6 +56,7 @@ export async function POST(req: Request) {
   const firm = clean(body.firm, 120);
   const note = typeof body.note === "string" ? body.note.replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, " ").trim().slice(0, 2000) : "";
   const listingRef = clean(body.listingRef, 80);
+  const extra = fields(body.fields);
   if (!kind) return NextResponse.json({ error: "Unknown request type." }, { status: 400 });
   if (name.length < 2 || !EMAIL.test(email)) return NextResponse.json({ error: "A name and a valid email address are required." }, { status: 400 });
 
@@ -54,7 +67,7 @@ export async function POST(req: Request) {
   const from = process.env.RESEND_FROM;
   if (!key || !from) return NextResponse.json({ error: "unavailable" }, { status: 503 });
 
-  const subject = `${KINDS[kind]} from ${name}${listingRef ? ` (ref ${listingRef})` : ""}`;
+  const subject = `${KINDS[kind]} from ${name}${firm ? `, ${firm}` : ""}${listingRef ? ` (ref ${listingRef})` : ""}`;
   const text = [
     `${KINDS[kind]} via danmarempire.com`,
     "",
@@ -62,6 +75,7 @@ export async function POST(req: Request) {
     `Email: ${email}`,
     firm ? `Firm: ${firm}` : null,
     listingRef ? `Listing reference: ${listingRef}` : null,
+    ...extra.map(([k, v]) => `${k}: ${v}`),
     "",
     note || "(no note)",
   ].filter((l) => l !== null).join("\n");

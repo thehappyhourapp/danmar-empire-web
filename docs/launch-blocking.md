@@ -10,6 +10,10 @@ Set `RESEND_API_KEY` and `RESEND_FROM` in Vercel (every environment), and verify
 
 Needs substantiation before publication: the methodology behind the aggregate list value of transactions since 2016. The site says "Methodology on request"; that request has to be answerable.
 
+## Analytics provider
+
+The site has no analytics. The named events (capital review clicks, estimator use, form submissions, FAQ opens) call `track()` in `src/lib/analytics.ts`, which is a no-op. Choose a provider, wire it there and nowhere else, and keep personal data out of event payloads.
+
 ## Placeholder content
 
 - All 16 listings and their figures are placeholder until the PropTx DLA feed is wired and signed off.

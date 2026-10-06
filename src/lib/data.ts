@@ -398,6 +398,12 @@ export const PILLARS = [
     detail: "We qualify the guarantee behind the tenant, not a personal credit file. Corporate undertakings, parent-company covenants, diplomatic notes. Delivered furnished where the brief calls for it.",
     stats: [["Average lease", "$12,000+ / month"], ["Typical term", "12 – 36 months"], ["Furnishing", "+30% – 45% of base rent"]],
   },
+  {
+    n: "05", title: "Corporate Real Estate Capital",
+    line: "Sale-leasebacks, surplus property sales and lease restructuring for companies that own the buildings they operate from.",
+    detail: "A confidential capital review compares a sale-leaseback against refinancing, an outright sale and holding, in writing, before anything is decided. Danmar does not arrange mortgages; where refinancing is the better route, we refer you to a licensed mortgage brokerage.",
+    stats: [["For", "Owner-occupier companies"], ["Work", "Sale-leaseback · Surplus sales · Leases"], ["Market", "Ontario"]],
+  },
 ];
 
 /* Furnishing is a real revenue line and a real differentiator. Retailers are named

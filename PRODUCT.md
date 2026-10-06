@@ -12,12 +12,13 @@ web
 - **Relocating executives and principals** arriving from the United Kingdom, South Africa, the United States, Hong Kong and Singapore, Western Europe and the Gulf. They need the areas, leasing, lenders, schools and carrying costs answered before they commit, usually from abroad.
 - **Family offices, private holding companies and their advisors** placing real estate portfolios of $10M to $250M on a discretionary or advisory mandate, domestic and international.
 - **Corporate and diplomatic relocation departments, and the landlords on the other side**, for executive leases from $10,000 a month placed against a verified covenant.
+- **CFOs, owners and finance leads of mid-market Ontario companies that own the buildings they operate from**, weighing a sale-leaseback, a surplus sale or a lease restructuring against refinancing, usually arriving from a personal introduction.
 
 ## Product Purpose
 
 The website of Danmar Empire Real Estate Corp., Brokerage: a boutique, lawyer-led investment and real estate group, family-owned since 2016. It exists to establish the firm's judgement and track record well enough that the right visitor starts a private conversation. Every route invites an enquiry; none is built to capture leads.
 
-Success is measured as qualified private enquiries started from the site: contact form submissions and tracked telephone and email clicks, counted monthly by source page. Secondary measure: the pages for the four practices (asset management, investment, private sales, executive leasing) cited in AI answers for their target queries. Traffic and time on page are not success measures.
+Success is measured as qualified private enquiries started from the site: contact form submissions and tracked telephone and email clicks, counted monthly by source page. Secondary measure: the pages for the five practices (asset management, investment, private sales, executive leasing, corporate real estate capital) cited in AI answers for their target queries. Traffic and time on page are not success measures.
 
 ## Positioning
 
@@ -25,7 +26,7 @@ Success is measured as qualified private enquiries started from the site: contac
 - **The firm owns property in the markets it advises on.** It holds residential, multi-residential, commercial and land in those markets on its own account. "An opinion is worth roughly what the person giving it has at risk."
 - **Proof by property, not by total.** The track record publishes the houses with list prices, with consent, where competitors publish only a dollar figure.
 - **Own listings only.** The firm signs the TRREB Data License Agreement (DLA), deliberately not IDX or VOW. There is no MLS search and no map, by design: the curated book is the product. This supersedes the IDX and map recommendation in `danmar-launch-plan.md`.
-- **Four practices, one standard of diligence:** asset and portfolio management, investment, private sales, executive leasing.
+- **Five practices, one standard of diligence:** asset and portfolio management, investment, private sales, executive leasing, and corporate real estate capital (sale-leasebacks, surplus property sales and lease restructuring for owner-occupier companies). Property management is offered separately, as an operating service rather than a practice.
 
 ## Operating Context
 
@@ -38,7 +39,7 @@ Success is measured as qualified private enquiries started from the site: contac
 ## Capabilities and Constraints
 
 - **Stack:** Next.js 15 App Router, TypeScript, Tailwind 3, deployed on Vercel. Every route server-renders; per-page SEO comes from `src/lib/seo.ts`.
-- **Routes:** home, asset management, investments, executive leasing, the collection and listing detail, relocating, track record, the firm and person profiles, journal, areas.
+- **Routes:** home, asset management, investments, executive leasing, corporate real estate capital, property management, the collection and listing detail, relocating, track record, the firm and person profiles, journal, areas, contact, privacy.
 - **RECO:** no unsubstantiated superlatives; no sold prices without the parties' written consent. The track record shows list prices only. The registered name "Danmar Empire Real Estate Corp., Brokerage" appears in the footer on every page and never in the header.
 - **Disclaimers:** the firm does not provide legal services. Asset management is advisory and administrative, not an offer of securities or fund interests. CREA trademark attribution for MLS® and REALTOR® is required wherever the marks appear.
 - **Language:** "UHNW" and "ultra-high-net-worth" appear in metadata only, never in brand voice. Canadian spelling, no em dashes in copy.

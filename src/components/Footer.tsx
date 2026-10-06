@@ -17,6 +17,7 @@ const PRACTICE_LINKS: [string, string][] = [
   ["investments", "Investments"],
   ["leasing", "Executive Leasing"],
   ["property", "Property Management"],
+  ["capital", "Corporate Real Estate Capital"],
   ["relocating", "Relocating"],
 ];
 const SITE_LINKS: [string, string][] = [
@@ -120,7 +121,10 @@ export function Footer({ onEnquire, onAccess }: { onEnquire: () => void; onAcces
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
               <span className="meta text-paper/60">© {new Date().getFullYear()} Danmar Empire Real Estate Corp., Brokerage</span>
-              <span className="meta text-paper/60">Oakville · Vaughan · Toronto</span>
+              <span className="flex flex-wrap items-center gap-x-8 gap-y-2">
+                <Link href={href("privacy")} className={`${s.tlink} meta text-paper/60 hover:text-paper`}>Privacy</Link>
+                <span className="meta text-paper/60">Oakville · Vaughan · Toronto</span>
+              </span>
             </div>
           </div>
         </div>

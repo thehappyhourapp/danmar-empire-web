@@ -17,7 +17,7 @@ type Tone = "cream" | "forest" | "deep";
 
 const FEATURED = ["bronte-harbour", "namron-gate", "keele-wilson", "yorkville-penthouse"];
 const RECORD = ["t3", "t5", "t1", "t8", "t2", "t7"];
-const PRACTICE_ROUTES = ["management", "investments", "collection", "leasing"];
+const PRACTICE_ROUTES = ["management", "investments", "collection", "leasing", "capital"];
 
 const GRID = "grid grid-cols-12 gap-x-4 md:gap-x-8";
 const HEAD = "font-display font-medium text-[clamp(2.1rem,4.8vw,3.75rem)] leading-[1] tracking-[-.01em]";
