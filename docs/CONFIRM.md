@@ -43,3 +43,59 @@ fact and the line goes in; strike it and the entry goes.
 
 ## /asset-management and /property-management
 - Nothing in the brief was marked [CONFIRM]. The capital-at-work illustration and its assumptions (33% equity, 5.5 to 6% cap rate, roughly 6% debt cost) are rendered as the brief gives them, labelled as an illustration. The three software frames are reserved for screenshots at `public/photos/app/{holdings,cash,allocation}.jpg`; the platform's name and address are never shown.
+
+## /firm
+
+- **Founding year and place, "2016, Oakville".** Removed from the facts strip, the opening copy and the italic line ("Oakville first, since 2016"). The person pages, the footer and llms.txt no longer state a founding year either. Confirm the year and it goes back into the strip.
+- **"Est. 2016" on Home and `foundingDate` in the Organization JSON-LD.** Removed with the founding year; the Home eyebrow now reads "Oakville · King City · Toronto" alone. The "$1B+" figure's basis line ("2016 to date") is a separate claim, already in docs/launch-blocking.md, and is unchanged.
+- **"Oakville first."** Removed with the line above; the page says the firm keeps offices in Oakville and Vaughan (OFFICES data) and nothing about which came first.
+- **Testimonials permission line.** The brief's "Statements from clients of the brokerage, reproduced with permission." is not shown until Daniel confirms permission. The seven statements are reproduced verbatim from the previous site's testimonials page, attribution as published.
+- **Office photographs.** `Oakville.jpg` (the glass building marked 2010, taken as 2010 Winston Park Drive) is used for both Oakville rows; "Oakville 2.png" (a flex unit marked 10) is unused. Confirm the Oakville image is the right building, and whether 2380 Bristol Circle should carry its own photograph. `Vaughan.jpg` shows 9131 Keele Street; it carries a small watermark in its lower right corner and a tenant's sign, so confirm the firm holds the rights to publish it.
+
+## /firm/[slug]
+
+Deleted as unconfirmed on 7 Oct 2026. Nothing below is on the site; each line returns only if Daniel confirms it.
+
+### Martin Sheikhan
+- "Founded the firm in 2016." (line)
+- "Three decades in capital project delivery before real estate." (line) and "Martin spent thirty years delivering capital projects before he ever took a listing, and it is the reason this firm runs files the way it does. A project manager does not present a building without the numbers behind it, and does not accept a schedule they have not tested." (bio). The brief says "three decades" is wrong; the page now says "about forty-five years ago in tablet formulation" and "multi-billion-dollar projects in the pharmaceutical industry", from the supplied facts.
+- "As Broker of Record he signs every data agreement, owns the trust accounting, and is the final read on every file that leaves the office. He also holds the firm's builder relationships, which is how Danmar clients see new-construction inventory before it reaches a sales centre." (bio)
+- Focus "Brokerage compliance, Development, Builder relationships"; areas "Oakville · Vaughan · Ontario".
+- **Role.** Now "Broker of Record · Real Estate Broker · Partner" as the brief gives it. Confirm the RECO-registered category wording.
+- **Background paragraph.** Written from the supplied facts only, in plain prose, until Martin's own snippet arrives (photos-inbox/copy/martin-snippet.txt); it is then replaced verbatim.
+
+### Daniel Sheikhan
+- "Managing Partner & Broker" (role). Now "Partner · Barrister & Solicitor · Attorney · Real Estate Broker"; "Managing Partner" returns only if Daniel re-confirms it.
+- "Leads asset management, investment and the commercial practice." (line)
+- "Daniel is called to the bar in Ontario and admitted in New York and Minnesota, and holds a commerce degree alongside the law degree. He leads the firm's asset and portfolio management mandates and underwrites every investment file before it reaches a client." and "First place at the 2021 International Negotiation Competition, and a Minnesota Qualified Neutral. In practice that means the hard conversations in a transaction are the ones he is most comfortable having." (bio). The credentials themselves (bar admissions, B.Comm., J.D., the 2021 competition, Minnesota Qualified Neutral) were supplied earlier and stay as Certifications, Education and Achievements rows; the surrounding prose is gone until Daniel's own bio arrives (photos-inbox/copy/daniel-bio.txt).
+- Focus "Asset & portfolio management, Investment underwriting, Commercial and industrial"; areas "Greater Toronto Area · Ontario · Cross-border".
+- Kept: "He acts for clients of the firm as a real estate broker, not as their solicitor."
+
+### Sara Sheikhan
+- "Residential sales, and listing presentation across the firm." (line)
+- "Sara carries her own residential book and also sets the standard for how every Danmar listing is presented: photography direction, copy, and the campaign that goes around it." (bio)
+- Focus "Residential sales, Listing presentation, Photography direction"; areas "Oakville · Vaughan".
+- Role is now "Real Estate Salesperson · Property Manager"; /property-management names her as Property Manager. No portrait yet (emblem filler, temporary).
+
+### Anita Tayi
+- "Residential resale across Oakville, Burlington and Milton." (line)
+- "Anita runs the firm's Halton residential desk. She works a small number of files at a time and is known for knowing which street a family actually wants before they do." (bio)
+- Focus "Residential resale, First-time and move-up buyers, Halton region"; areas "Oakville · Burlington · Milton".
+- Her bio is empty until photos-inbox/copy/anita-bio.txt is dropped; it is then lifted verbatim.
+
+### Anna Shea
+- "New construction and builder inventory." (line)
+- "Anna handles the firm's new-construction practice: builder allocations, pre-construction agreements, and the diligence that should happen before an APS is signed rather than after." (bio)
+- Focus "New construction, Pre-construction assignments, Builder allocations"; areas "Greater Toronto Area".
+- No headshot by her choice: the emblem filler is deliberate.
+
+### Mahmoud Abu Hudra
+- "Leasing and investor services, Vaughan and north Toronto." (line)
+- "Mahmoud works the leasing desk and the investor side of the book out of the Vaughan office, covering the Keele and Highway 7 industrial corridors as well as executive residential." (bio)
+- Focus "Executive leasing, Investor services, Industrial and flex"; areas "Vaughan · North Toronto · York Region".
+
+### Marion Miral
+- Nothing deleted; name, role and portrait only.
+
+### Portraits
+- The @2x files are written at the source's own width where it is under 1600px (1086px for the studio portraits, 857px for Anita's landscape original), never upscaled. Supply larger originals if a true 1600px file is wanted.

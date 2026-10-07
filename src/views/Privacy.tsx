@@ -1,4 +1,5 @@
-import { Chapter, GRID } from "@/components/Chapter";
+import { Chapter } from "@/components/Chapter";
+import { GRID } from "@/lib/layout";
 
 /* A plain privacy page, cream, in the row pattern. Short and standard; marked
    for Daniel's review in docs/CONFIRM.md before launch. */

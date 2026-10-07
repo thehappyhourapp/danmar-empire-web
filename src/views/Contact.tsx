@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { OFFICES } from "@/lib/data";
 import { ORG_ID, REGISTERED_NAME, SITE, officeAddresses } from "@/lib/metadata";
 import { href } from "@/lib/routes";
-import { Chapter, GRID, HEAD, Lines, delay } from "@/components/Chapter";
+import { Chapter, Lines } from "@/components/Chapter";
+import { GRID, HEAD, delay } from "@/lib/layout";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { MotionController } from "@/components/MotionController";
 import s from "@/components/motion.module.css";
@@ -13,6 +15,8 @@ import s from "@/components/motion.module.css";
 const EMAIL = "info@danmarempire.com";
 
 const telHref = (t: string) => `tel:+1${t.replace(/\D/g, "")}`;
+/* one photograph per city; the two Oakville addresses share one */
+const OFFICE_PHOTO: Record<string, string> = { Oakville: "/photos/offices/oakville.jpg", Vaughan: "/photos/offices/vaughan.jpg" };
 
 export function Contact() {
   const jsonLd = {
@@ -45,7 +49,10 @@ export function Contact() {
         <div className="col-span-12 mt-16 lg:mt-24">
           {OFFICES.map((o, i) => (
             <div key={o.addr} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`} style={delay(i)}>
-              <h2 className="col-span-12 font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1] md:col-span-5">{o.city}</h2>
+              <div className="relative col-span-6 aspect-[16/10] overflow-hidden bg-forest/10 md:col-span-3">
+                {OFFICE_PHOTO[o.city] && <Image src={OFFICE_PHOTO[o.city]} alt={`${o.city} office, ${o.addr}`} fill sizes="(min-width: 768px) 25vw, 50vw" className="object-cover" />}
+              </div>
+              <h2 className="col-span-12 mt-4 font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1] md:col-span-2 md:col-start-4 md:mt-0">{o.city}</h2>
               <address className="col-span-12 mt-4 text-[15px] not-italic leading-[1.8] text-ink/80 md:col-span-3 md:col-start-7 md:mt-0">
                 {o.addr}<br />{o.post}
               </address>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSite } from "./SiteShell";
+import { useSite } from "./site-context";
 import s from "./motion.module.css";
 
 /** Opens the enquire drawer about one listing, with its reference prefilled.

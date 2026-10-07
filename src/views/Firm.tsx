@@ -1,19 +1,21 @@
+import Image from "next/image";
 import Link from "next/link";
-import { PRACTICES, TEAM } from "@/lib/data";
+import { PRACTICES, TEAM, TESTIMONIALS } from "@/lib/data";
 import { splitName } from "@/lib/people";
 import { href, personHref } from "@/lib/routes";
-import { Chapter, GRID, HEAD, Lines, delay } from "@/components/Chapter";
+import { Chapter, Lines } from "@/components/Chapter";
+import { GRID, HEAD, delay } from "@/lib/layout";
 import { ImageFrame } from "@/components/ImageFrame";
 import { MotionController } from "@/components/MotionController";
 import { EnquireButton } from "@/components/SiteShell";
 import s from "@/components/motion.module.css";
 
-/* The Firm: whole-page forest, line rise only. The firm's position
-   as short rows, the people as full-width rows linking to their pages, and the
-   related-practice disclosure where it can be seen. */
+/* The Firm: whole-page forest, line rise only. The one story the page has, Dan
+   and Mar, a father and a son, told plainly; the firm's position as short rows;
+   the people as rows linking to their pages; what clients have said; the
+   related-practice disclosure where it can be seen; the close. */
 
 const POSITION: [string, string][] = [
-  ["Founded", "2016, Oakville"],
   ["Ownership", "Family owned"],
   ["Registration", "RECO, Ontario"],
   ["Offices", "Oakville · Vaughan"],
@@ -32,25 +34,30 @@ export function Firm() {
         {/* ── head */}
         <div className="col-span-12 lg:col-span-8">
           <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em]">A family firm that runs files like a practice.</h1>
-          <p className="mt-4 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass-light">Oakville first, since 2016.</p>
+          <p className="mt-4 max-w-[30ch] font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass-light">Dan and Mar. A father, a son, and the firm they named after themselves.</p>
         </div>
         <div className="col-span-12 mt-10 space-y-6 text-paper/80 lg:col-span-6 lg:col-start-7 lg:mt-16">
           <p data-reveal className={`${s.rise} max-w-[48ch] text-[16px] leading-[1.85]`}>
-            Danmar Empire was founded in Oakville in 2016 by Martin Sheikhan, who spent three decades running
-            capital projects before he ever took a listing, and by his son Daniel, who is called to the bar in
-            Ontario and admitted in New York and Minnesota.
+            The name is the founders. Dan is Daniel Sheikhan. Mar is Martin Sheikhan, his father.
           </p>
           <p data-reveal className={`${s.rise} max-w-[48ch] text-[16px] leading-[1.85]`} style={delay(1)}>
-            That combination is the whole reason the firm looks the way it does. Project managers do not present
-            a building without the numbers behind it. Lawyers do not send a document out that has not been read
-            twice. Applied to real estate, those two habits produce a firm that turns down more mandates than it
-            takes and does not compete on listing volume.
+            Martin came to real estate from a career running large capital projects. He began about forty-five
+            years ago in tablet formulation and went on to head multi-billion-dollar projects in the
+            pharmaceutical industry. Daniel is a lawyer, called to the bar in Ontario and admitted in New York
+            and Minnesota, and a real estate broker.
           </p>
           <p data-reveal className={`${s.rise} max-w-[48ch] text-[16px] leading-[1.85]`} style={delay(2)}>
-            We work in four places: asset and portfolio management for private owners holding $10 million to
-            $250 million, investment property, private residential sales above $1.5 million, and executive
-            leasing. We are deliberately not a generalist shop. What we know well we know very well, and we say
-            so plainly when a file belongs somewhere else.
+            The firm's habit of running files like a practice comes from those two backgrounds. A project
+            manager does not present a building without the numbers behind it. A lawyer does not send out a
+            document that has not been read twice. Applied to real estate, those two habits produce a firm
+            that turns down more mandates than it takes and does not compete on listing volume.
+          </p>
+          <p data-reveal className={`${s.rise} max-w-[48ch] text-[16px] leading-[1.85]`} style={delay(3)}>
+            We work in five places: asset and portfolio management for private owners holding $10 million to
+            $250 million, investment property, private residential sales above $1.5 million, executive
+            leasing, and corporate real estate capital for companies that own the buildings they operate from.
+            We are deliberately not a generalist shop. What we know well we know very well, and we say so
+            plainly when a file belongs somewhere else.
           </p>
           <p data-reveal className={`${s.rise} max-w-[48ch] text-[16px] leading-[1.85]`} style={delay(3)}>
             It remains a family business. That is not sentiment: it means the people who answer for the advice
@@ -77,7 +84,13 @@ export function Firm() {
               return (
                 <div key={p.slug} data-reveal className={`${s.rise} ${s.row} ${GRID} border-t ${rule} py-8 last:border-b md:py-10`} style={delay(i)}>
                   <Link href={personHref(p.slug)} aria-label={name} className="col-span-4 self-center md:col-span-2">
-                    <ImageFrame ratio="4/5" alt="" fallback="flat" ground="forest" />
+                    {p.portrait ? (
+                      <span className="relative block aspect-[4/5] overflow-hidden bg-paper/5">
+                        <Image src={p.portrait} alt="" fill sizes="(min-width: 768px) 16vw, 33vw" className="object-cover" />
+                      </span>
+                    ) : (
+                      <ImageFrame ratio="4/5" alt="" fallback="flat" ground="forest" filler="emblem" />
+                    )}
                   </Link>
                   <div className="col-span-8 self-center md:col-span-6 md:col-start-4">
                     <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">
@@ -88,13 +101,27 @@ export function Firm() {
                       {designations && <><span className="mx-2 hidden opacity-40 md:inline">/</span><span className="block md:inline">{designations}</span></>}
                     </p>
                   </div>
-                  {p.line && <p className="col-span-12 mt-4 max-w-[48ch] text-[15px] leading-[1.8] text-paper/80 md:col-span-6 md:col-start-4 md:mt-2">{p.line}</p>}
-                  <div className="col-span-12 mt-4 md:col-span-2 md:col-start-11 md:row-span-2 md:row-start-1 md:mt-0 md:self-center md:text-right">
+                  <div className="col-span-12 mt-4 md:col-span-2 md:col-start-11 md:row-start-1 md:mt-0 md:self-center md:text-right">
                     <Link href={personHref(p.slug)} className={`${s.tlink} meta text-paper/70 hover:text-paper`}>Profile</Link>
                   </div>
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* ── what clients say: statements by clients, verbatim, as rows */}
+        <div className="col-span-12 mt-20 lg:mt-28">
+          <Lines lines={["What clients say."]} className={`${HEAD} mb-10 lg:mb-14`} />
+          <div>
+            {TESTIMONIALS.map((t, i) => (
+              <figure key={t.name} data-reveal className={`${s.rise} ${GRID} border-t ${rule} py-8 last:border-b md:py-10`} style={delay(i)}>
+                <blockquote className="col-span-12 max-w-[44ch] font-display text-[clamp(1.15rem,1.6vw,1.4rem)] font-medium leading-[1.4] text-paper md:col-span-6 md:col-start-7">
+                  {t.quote}
+                </blockquote>
+                <figcaption className="meta col-span-12 mt-4 text-brass-light md:col-span-6 md:col-start-7">{t.name}</figcaption>
+              </figure>
+            ))}
           </div>
         </div>
 

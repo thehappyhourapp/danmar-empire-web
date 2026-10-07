@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { LISTINGS } from "@/lib/data";
 import { apply, EXAMPLES, isEmpty, parse, readback, suggestions, money } from "@/lib/parse";
 import type { Query } from "@/lib/parse";
-import { useSite } from "./SiteShell";
+import { useSite } from "./site-context";
 import m from "./motion.module.css";
 
 /**
@@ -21,13 +21,14 @@ export function IntelBar({
   value?: string;
   onValue?: (s: string) => void;
 }) {
-  const [text, setText] = useState(value ?? "");
+  // controlled when `value` is given, otherwise local
+  const [local, setLocal] = useState("");
+  const text = value ?? local;
   const [focus, setFocus] = useState(false);
   const [ph, setPh] = useState(0);
   const ref = useRef<HTMLInputElement>(null);
   const dark = tone === "dark";
 
-  useEffect(() => { if (value !== undefined) setText(value); }, [value]);
   useEffect(() => {
     if (text || focus) return;
     const t = setInterval(() => setPh((p) => (p + 1) % EXAMPLES.length), 4200);
@@ -42,7 +43,7 @@ export function IntelBar({
   const sugg = suggestions(q, hits.length);
   const live = text.trim().length > 2 && focus;
 
-  const set = (s: string) => { setText(s); onValue?.(s); };
+  const set = (s: string) => { setLocal(s); onValue?.(s); };
 
   return (
     <div className="relative w-full">

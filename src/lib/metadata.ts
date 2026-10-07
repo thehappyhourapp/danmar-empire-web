@@ -26,7 +26,6 @@ export const ORGANIZATION = {
   logo: `${SITE}/marks/seal-cream.svg`,
   telephone: "+1 905 901 5011",
   email: "info@danmarempire.com",
-  foundingDate: "2016",
   address: officeAddresses(),
   areaServed: { "@type": "AdministrativeArea", name: "Ontario" },
   sameAs: ["https://instagram.com/danmarempire", "https://linkedin.com/company/danmar-empire-group"],

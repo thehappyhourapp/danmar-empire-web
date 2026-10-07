@@ -65,9 +65,9 @@ export const SEO: Record<string, Meta> = {
     canonical: "/track-record",
   },
   firm: {
-    title: `The Firm: Lawyer-Led, Family-Owned Since 2016 | ${SUFFIX}`,
+    title: `The Firm: Lawyer-Led and Family-Owned | ${SUFFIX}`,
     description:
-      "A boutique investment and real estate group in Oakville and Vaughan, led by a principal called to the bar in Ontario, New York and Minnesota. Family-owned since 2016.",
+      "A boutique investment and real estate group in Oakville and Vaughan, named for its founders, a father and a son, and led by a principal called to the bar in Ontario, New York and Minnesota. Family-owned.",
     canonical: "/firm",
   },
   journal: {

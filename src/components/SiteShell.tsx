@@ -1,8 +1,26 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from "react";
 
 const SAVED_KEY = "danmar:saved";
+
+/* The shortlist store: localStorage when it is available, memory for the visit
+   when it is not. Writes notify every subscriber, and a change in another tab
+   arrives through the storage event. */
+let savedMemory = "[]";
+const savedListeners = new Set<() => void>();
+function readSaved() { try { return localStorage.getItem(SAVED_KEY) ?? savedMemory; } catch { return savedMemory; } }
+function writeSaved(next: string) {
+  savedMemory = next;
+  try { localStorage.setItem(SAVED_KEY, next); } catch { /* storage unavailable: memory holds it */ }
+  savedListeners.forEach((l) => l());
+}
+function subscribeSaved(cb: () => void) {
+  savedListeners.add(cb);
+  const onStorage = (e: StorageEvent) => { if (e.key === SAVED_KEY) cb(); };
+  window.addEventListener("storage", onStorage);
+  return () => { savedListeners.delete(cb); window.removeEventListener("storage", onStorage); };
+}
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LISTINGS } from "@/lib/data";
@@ -14,30 +32,12 @@ import { Footer } from "./Footer";
 import { ImageFrame } from "./ImageFrame";
 import { TypeSwitch } from "./TypeSwitch";
 import { ClientAccess } from "./ClientAccess";
-import { usePresence } from "./MotionController";
+import { usePresence } from "./usePresence";
 import { useFocusTrap } from "./useFocusTrap";
 import m from "./motion.module.css";
+import { SiteCtx, useSite } from "./site-context";
 import { EnquiryForm } from "./EnquiryForm";
 import type { ListingRef } from "./EnquiryForm";
-
-/* Visit-level state that used to live in App.tsx. It sits in the root layout, so it
-   survives client-side navigation between routes exactly as it did in the SPA. */
-interface Site {
-  saved: Set<string>;
-  toggleSave: (id: string) => void;
-  enquire: (listing?: ListingRef) => void;
-  requestAccess: () => void;
-  q: Query; setQ: (q: Query) => void;
-  text: string; setText: (s: string) => void;
-  search: (q: Query, t: string) => void;
-}
-
-const Ctx = createContext<Site | null>(null);
-export function useSite() {
-  const s = useContext(Ctx);
-  if (!s) throw new Error("useSite outside SiteShell");
-  return s;
-}
 
 /* ───────────────── Drawer shell: the right edge, on the interface clock ───────────────── */
 /* The backdrop fades and the panel slides in from the right edge over 280ms, and
@@ -131,22 +131,12 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [q, setQ] = useState<Query>(EMPTY);
   const [text, setText] = useState("");
-  const [saved, setSaved] = useState<Set<string>>(new Set());
-  /* The shortlist persists in localStorage. It is read after mount so the server
-     and first client render agree (an empty set), and nothing is written back
-     until that read has happened. */
-  const savedLoaded = useRef(false);
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(SAVED_KEY);
-      if (raw) setSaved(new Set(JSON.parse(raw) as string[]));
-    } catch { /* storage unavailable: the shortlist lasts the visit */ }
-    savedLoaded.current = true;
-  }, []);
-  useEffect(() => {
-    if (!savedLoaded.current) return;
-    try { localStorage.setItem(SAVED_KEY, JSON.stringify([...saved])); } catch { /* ignore */ }
-  }, [saved]);
+  /* The shortlist persists in localStorage, read through an external-store
+     subscription: the server snapshot is empty, the client snapshot is the stored
+     list, so the first client render matches the server and the stored list shows
+     on hydration without a second pass. */
+  const raw = useSyncExternalStore(subscribeSaved, readSaved, () => "[]");
+  const saved = useMemo(() => { try { return new Set(JSON.parse(raw) as string[]); } catch { return new Set<string>(); } }, [raw]);
   const [enq, setEnq] = useState(false);
   const [enqListing, setEnqListing] = useState<ListingRef | null>(null);
   const [access, setAccess] = useState(false);
@@ -159,7 +149,8 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   // counts toggles only, so the nav badge acknowledges a save and not a restore
   const [savedPulse, setSavedPulse] = useState(0);
   const toggleSave = (id: string) => {
-    setSaved((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+    const n = new Set(saved); if (n.has(id)) n.delete(id); else n.add(id);
+    writeSaved(JSON.stringify([...n]));
     setSavedPulse((p) => p + 1);
   };
   const search = (nq: Query, t: string) => { setQ(nq); setText(t); router.push("/collection"); };
@@ -168,7 +159,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   const closeAccess = useCallback(() => setAccess(false), []);
 
   return (
-    <Ctx.Provider value={{ saved, toggleSave, enquire, requestAccess, q, setQ, text, setText, search }}>
+    <SiteCtx.Provider value={{ saved, toggleSave, enquire, requestAccess, q, setQ, text, setText, search }}>
       <div className="min-h-screen bg-paper antialiased">
         {notice && (
           <aside aria-label="Prototype notice" className="sticky top-0 z-[80] flex h-9 items-center gap-3 overflow-hidden bg-forest-soft px-4 text-paper sm:gap-4 sm:px-5">
@@ -192,7 +183,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         <ClientAccess open={access} close={closeAccess} />
         <Saved open={savedOpen} close={() => setSavedOpen(false)} ids={saved} toggle={toggleSave} />
       </div>
-    </Ctx.Provider>
+    </SiteCtx.Provider>
   );
 }
 

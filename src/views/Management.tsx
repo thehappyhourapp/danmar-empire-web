@@ -1,11 +1,13 @@
 import { PILLARS } from "@/lib/data";
 import { photo } from "@/lib/photos";
 import { href } from "@/lib/routes";
-import { GRID, delay } from "@/components/Chapter";
-import { FaqRows, faqJsonLd } from "@/components/Faq";
-import type { Faq } from "@/components/Faq";
+import { GRID, delay } from "@/lib/layout";
+import { FaqRows } from "@/components/Faq";
+import { faqJsonLd } from "@/lib/faq";
+import type { Faq } from "@/lib/faq";
 import { ImageFrame } from "@/components/ImageFrame";
-import { Practice, PracticeLink, practiceTones } from "@/components/Practice";
+import { Practice, PracticeLink } from "@/components/Practice";
+import { practiceTones } from "@/components/practiceTones";
 import s from "@/components/motion.module.css";
 
 /* Asset and portfolio management: the page Daniel sends to accountants, bankers

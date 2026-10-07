@@ -27,8 +27,19 @@ function limited(ip: string) {
   return recent.length > LIMIT;
 }
 
+/* Control characters become spaces. Single-line fields lose them all; a note keeps
+   its tabs, newlines and carriage returns. */
+function stripControl(v: string, keepBreaks: boolean) {
+  let out = "";
+  for (const ch of v) {
+    const c = ch.charCodeAt(0);
+    const control = c < 32 || c === 127;
+    out += control && !(keepBreaks && (c === 9 || c === 10 || c === 13)) ? " " : ch;
+  }
+  return out;
+}
 const clean = (v: unknown, max: number) =>
-  typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, max) : "";
+  typeof v === "string" ? stripControl(v, false).replace(/\s+/g, " ").trim().slice(0, max) : "";
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /** Labelled extras from a structured form (the capital review): an ordered list
@@ -54,7 +65,7 @@ export async function POST(req: Request) {
   const name = clean(body.name, 120);
   const email = clean(body.email, 200);
   const firm = clean(body.firm, 120);
-  const note = typeof body.note === "string" ? body.note.replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, " ").trim().slice(0, 2000) : "";
+  const note = typeof body.note === "string" ? stripControl(body.note, true).trim().slice(0, 2000) : "";
   const listingRef = clean(body.listingRef, 80);
   const extra = fields(body.fields);
   if (!kind) return NextResponse.json({ error: "Unknown request type." }, { status: 400 });

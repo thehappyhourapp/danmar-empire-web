@@ -1,6 +1,7 @@
 import { COVENANTS, FURNISHING, PILLARS } from "@/lib/data";
 import { href } from "@/lib/routes";
-import { GRID, Lines, HEAD, delay } from "@/components/Chapter";
+import { Lines } from "@/components/Chapter";
+import { GRID, HEAD, delay } from "@/lib/layout";
 import { Practice, PracticeLink } from "@/components/Practice";
 import s from "@/components/motion.module.css";
 

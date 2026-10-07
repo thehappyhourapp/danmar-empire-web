@@ -1,7 +1,8 @@
 import { OWNERSHIP, RELOCATION } from "@/lib/data";
 import { href } from "@/lib/routes";
 import { SITE } from "@/lib/metadata";
-import { Chapter, GRID, HEAD, Lines, delay } from "@/components/Chapter";
+import { Chapter, Lines } from "@/components/Chapter";
+import { GRID, HEAD, delay } from "@/lib/layout";
 import { MotionController } from "@/components/MotionController";
 import { EnquireButton } from "@/components/SiteShell";
 import s from "@/components/motion.module.css";

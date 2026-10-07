@@ -5,7 +5,7 @@ import { propertyHref } from "@/lib/routes";
 import { ImageFrame } from "./ImageFrame";
 import { SaveLink } from "./SaveLink";
 import { EnquireLink } from "./EnquireLink";
-import { GRID, delay } from "./Chapter";
+import { GRID, delay } from "@/lib/layout";
 import s from "./motion.module.css";
 
 /**

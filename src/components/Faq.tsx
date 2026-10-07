@@ -1,21 +1,12 @@
-import { GRID } from "./Chapter";
+import { GRID } from "@/lib/layout";
+import type { Faq } from "@/lib/faq";
 import { FaqRow } from "./FaqRow";
-import { practiceTones } from "./Practice";
+import { practiceTones } from "./practiceTones";
 
 /* FAQ as rows. Every answer is in the server HTML; details/summary only decides
    what is open. The question is the row's title column and the answer its text
    column, so an open FAQ reads like every other row on the page. The matching
    FAQPage JSON-LD is built with faqJsonLd(). */
-
-export type Faq = [question: string, answer: string];
-
-export function faqJsonLd(items: Faq[]) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: items.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
-  };
-}
 
 export function FaqRows({ tone, items, heading }: { tone: "forest" | "cream"; items: Faq[]; heading?: React.ReactNode }) {
   const t = practiceTones(tone);

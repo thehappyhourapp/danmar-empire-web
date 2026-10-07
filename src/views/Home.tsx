@@ -73,8 +73,6 @@ export function Home() {
             <div className={GRID}>
               <p className="meta col-span-12 text-paper/60 md:col-span-6">
                 <span className="block md:inline">Oakville <span className="mx-2 opacity-50">·</span> King City <span className="mx-2 opacity-50">·</span> Toronto</span>
-                <span className="mx-4 hidden opacity-40 md:inline">/</span>
-                <span className="mt-2 block md:mt-0 md:inline">Est. 2016</span>
               </p>
             </div>
 

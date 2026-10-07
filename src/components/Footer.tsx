@@ -4,7 +4,7 @@ import Link from "next/link";
 import { OFFICES } from "@/lib/data";
 import { href } from "@/lib/routes";
 import { sealCream } from "@/lib/marks";
-import { GRID } from "./Chapter";
+import { GRID } from "@/lib/layout";
 import { Wordmark } from "./Nav";
 import s from "./motion.module.css";
 
@@ -30,6 +30,7 @@ const SITE_LINKS: [string, string][] = [
   ["contact", "Contact"],
 ];
 
+const YEAR = new Date().getFullYear();
 const link = `${s.tlink} text-[14px] text-paper/80 hover:text-paper`;
 
 function Links({ title, items }: { title: string; items: [string, string][] }) {
@@ -120,7 +121,7 @@ export function Footer({ onEnquire, onAccess }: { onEnquire: () => void; onAcces
               without notice. Not intended to solicit properties currently under contract.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-              <span className="meta text-paper/60">© {new Date().getFullYear()} Danmar Empire Real Estate Corp., Brokerage</span>
+              <span className="meta text-paper/60">© {YEAR} Danmar Empire Real Estate Corp., Brokerage</span>
               <span className="flex flex-wrap items-center gap-x-8 gap-y-2">
                 <Link href={href("privacy")} className={`${s.tlink} meta text-paper/60 hover:text-paper`}>Privacy</Link>
                 <span className="meta text-paper/60">Oakville · Vaughan · Toronto</span>

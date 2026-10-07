@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 /**
  * Motion controller for a route. Renders nothing. Hero lift, scroll cue and parallax hooks are optional; a page without them gets reveals and wipes only.
@@ -229,31 +229,4 @@ export function MotionController({ rootId }: { rootId: string }) {
   }, [rootId]);
 
   return null;
-}
-
-export type Presence = "enter" | "open" | "exit" | null;
-
-/**
- * Mount state for an overlay (drawer, dialog, menu) on the interface clock.
- * Opening mounts it at "enter" and moves it to "open" two frames later, so the
- * CSS transition has a start state to run from. Closing holds it at "exit" for
- * exitMs, then unmounts. Under reduced motion it mounts and unmounts at once.
- */
-export function usePresence(open: boolean, exitMs = 200): Presence {
-  const [stage, setStage] = useState<Presence>(null);
-  useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (open) {
-      if (reduce) { setStage("open"); return; }
-      setStage("enter");
-      let r2 = 0;
-      const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(() => setStage("open")); });
-      return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
-    }
-    if (reduce) { setStage(null); return; }
-    setStage((s) => (s ? "exit" : null));
-    const t = window.setTimeout(() => setStage(null), exitMs);
-    return () => window.clearTimeout(t);
-  }, [open, exitMs]);
-  return stage;
 }

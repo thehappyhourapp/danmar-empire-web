@@ -2,21 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { NAV } from "@/lib/nav";
 import { href } from "@/lib/routes";
 import { emblemCream, emblemForest } from "@/lib/marks";
-import { usePresence } from "./MotionController";
+import { usePresence } from "./usePresence";
 import { useFocusTrap } from "./useFocusTrap";
 import m from "./motion.module.css";
 
-export const NAV = [
-  { id: "management", label: "Asset Management" },
-  { id: "investments", label: "Investments" },
-  { id: "leasing", label: "Executive Leasing" },
-  { id: "collection", label: "The Collection" },
-  { id: "relocating", label: "Relocating" },
-  { id: "track", label: "Track Record" },
-  { id: "firm", label: "The Firm" },
-];
 
 /** The building emblem from Daniel's seal, without the ring lettering, which cannot
  *  resolve at header size. Forest on cream, cream on forest. The full seal is used
@@ -85,7 +77,9 @@ export function Nav({
     window.addEventListener("resize", f, { passive: true });
     return () => { window.removeEventListener("scroll", f); window.removeEventListener("resize", f); cancelAnimationFrame(raf); };
   }, [home]);
-  useEffect(() => setOpen(false), [page]);
+  // a route change closes the menu, adopted during render
+  const [seenPage, setSeenPage] = useState(page);
+  if (page !== seenPage) { setSeenPage(page); setOpen(false); }
 
   const tone: Tone = home ? (solid ? under ?? "forest" : "clear") : ground;
   const light = tone !== "cream";

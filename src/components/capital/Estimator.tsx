@@ -4,11 +4,11 @@ import { useEffect, useId, useRef } from "react";
 import { AREAS } from "@/lib/data";
 import { track } from "@/lib/analytics";
 import { DEFAULTS, LIMITS, PROPERTY_TYPES, estimate, money, valueBand } from "@/lib/estimator";
-import { GRID } from "@/components/Chapter";
+import { GRID } from "@/lib/layout";
 import s from "@/components/motion.module.css";
 import { Bars } from "./Bars";
-import { useCapital } from "./CapitalContext";
-import type { PropertyType } from "./CapitalContext";
+import { useCapital } from "./store";
+import type { PropertyType } from "./store";
 import c from "./capital.module.css";
 
 /* The estimator: client-side only, results update as the inputs change, nothing

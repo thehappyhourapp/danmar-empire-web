@@ -1,6 +1,6 @@
 "use client";
 
-import { useSite } from "./SiteShell";
+import { useSite } from "./site-context";
 import s from "./motion.module.css";
 
 /** Save to shortlist as a text link. State lives in SiteShell and persists in

@@ -12,7 +12,7 @@ const FOCUSABLE = "a[href], button:not([disabled]), input:not([type='hidden']), 
  */
 export function useFocusTrap(panel: React.RefObject<HTMLElement | null>, active: boolean, onEscape: () => void, initial?: string) {
   const escape = useRef(onEscape);
-  escape.current = onEscape;
+  useEffect(() => { escape.current = onEscape; });
 
   useEffect(() => {
     if (!active) return;

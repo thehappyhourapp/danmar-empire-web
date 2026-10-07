@@ -1,4 +1,5 @@
-import { Chapter, Lines, HEAD } from "@/components/Chapter";
+import { Chapter, Lines } from "@/components/Chapter";
+import { HEAD } from "@/lib/layout";
 import { MotionController } from "@/components/MotionController";
 import { listingPhotos } from "@/lib/photos";
 import { CollectionList } from "./CollectionList";

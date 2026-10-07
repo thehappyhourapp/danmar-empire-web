@@ -1,12 +1,9 @@
+import { GRID } from "@/lib/layout";
 import s from "./motion.module.css";
 
 /* Page primitives for inner pages: the 12-column layout grid (a layout system;
    nothing is drawn), a line-mask heading, and the chapter that holds them. Server components; the motion
    classes they emit are inert until MotionController switches them on. */
-
-export const GRID = "grid grid-cols-12 gap-x-4 md:gap-x-8";
-export const HEAD = "font-display font-medium text-[clamp(2.1rem,4.8vw,3.75rem)] leading-[1] tracking-[-.01em]";
-export const delay = (i: number) => ({ ["--d" as string]: `${Math.min(i, 3) * 120}ms` }) as React.CSSProperties;
 
 /** A heading set one authored line per mask box, so each line rises on its own. */
 export function Lines({ lines, as = "h2", className = "" }: { lines: string[]; as?: "h1" | "h2" | "h3" | "p"; className?: string }) {

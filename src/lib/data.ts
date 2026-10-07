@@ -256,85 +256,99 @@ export const JOURNAL = [
 
 /** Only slug, name and role are required. Leave a field out rather than fill it
  *  with anything the person has not confirmed; the pages omit what is absent. */
+/** A person of the firm. Only slug, name and role are required. Every other field
+ *  holds what the person or Daniel supplied, in their words; nothing is written
+ *  for them, and the pages omit what is absent. Unconfirmed lines are kept in
+ *  docs/CONFIRM.md, not here. */
 export interface Person {
-  slug: string; name: string; role: string; line?: string;
-  creds?: string[]; focus?: string[]; areas?: string; bio?: string[]; tel?: string; email?: string;
+  slug: string; name: string; role: string;
+  /** one line under the name in lists */
+  line?: string;
+  /** paragraphs, in the person's own words */
+  bio?: string[];
+  /** paragraphs, plain prose, from supplied facts */
+  background?: string[];
+  /** one line each: "J.D., <school>", only what is supplied */
+  education?: string[];
+  /** licences and designations; `creds` is kept as an alias of this */
+  certifications?: string[];
+  creds?: string[];
+  experience?: string[];
+  achievements?: string[];
+  links?: { label: string; href: string }[];
+  /** "/photos/people/<slug>.jpg"; absent means the emblem filler */
+  portrait?: string;
+  tel?: string; email?: string;
 }
 
+/* Order is the order on /firm. */
 export const TEAM: Person[] = [
   {
-    slug: "martin-sheikhan", name: "Martin Sheikhan, PMP", role: "Broker of Record",
-    line: "Founded the firm in 2016. Three decades in capital project delivery before real estate.",
-    creds: ["Broker of Record", "Project Management Professional (PMP)"],
-    focus: ["Brokerage compliance", "Development", "Builder relationships"],
-    areas: "Oakville · Vaughan · Ontario",
+    slug: "martin-sheikhan", name: "Martin Sheikhan, PMP", role: "Broker of Record · Real Estate Broker · Partner",
     tel: "647 273 5177", email: "martin@danmarempire.com",
-    bio: [
-      "Martin spent thirty years delivering capital projects before he ever took a listing, and it is the reason this firm runs files the way it does. A project manager does not present a building without the numbers behind it, and does not accept a schedule they have not tested.",
-      "As Broker of Record he signs every data agreement, owns the trust accounting, and is the final read on every file that leaves the office. He also holds the firm's builder relationships, which is how Danmar clients see new-construction inventory before it reaches a sales centre.",
+    portrait: "/photos/people/martin-sheikhan.jpg",
+    background: [
+      "Martin began about forty-five years ago in tablet formulation and went on to head multi-billion-dollar projects in the pharmaceutical industry. He is a Project Management Professional and a published author. The firm's habit of running every file like a capital project, with the numbers tested before anything is presented, is his.",
     ],
+    certifications: ["Broker of Record", "Project Management Professional (PMP)"],
+    experience: ["Headed multi-billion-dollar projects in the pharmaceutical industry"],
+    achievements: ["Published author"],
   },
   {
-    slug: "daniel-sheikhan", name: "Daniel Sheikhan, B.Comm., J.D.", role: "Managing Partner & Broker",
-    line: "Leads asset management, investment and the commercial practice.",
-    creds: ["Broker", "Barrister & Solicitor (Ontario)", "Attorney at Law (New York)", "Attorney at Law (Minnesota)", "B.Comm."],
-    focus: ["Asset & portfolio management", "Investment underwriting", "Commercial and industrial"],
-    areas: "Greater Toronto Area · Ontario · Cross-border",
+    slug: "daniel-sheikhan", name: "Daniel Sheikhan, B.Comm., J.D.", role: "Partner · Barrister & Solicitor · Attorney · Real Estate Broker",
     tel: "647 705 6476", email: "daniel@danmarempire.com",
-    bio: [
-      "Daniel is called to the bar in Ontario and admitted in New York and Minnesota, and holds a commerce degree alongside the law degree. He leads the firm's asset and portfolio management mandates and underwrites every investment file before it reaches a client.",
-      "First place at the 2021 International Negotiation Competition, and a Minnesota Qualified Neutral. In practice that means the hard conversations in a transaction are the ones he is most comfortable having.",
-      "He acts for clients of the firm as a real estate broker, not as their solicitor.",
-    ],
+    portrait: "/photos/people/daniel-sheikhan.jpg",
+    bio: ["He acts for clients of the firm as a real estate broker, not as their solicitor."],
+    certifications: ["Real Estate Broker", "Barrister & Solicitor (Ontario)", "Attorney at Law (New York)", "Attorney at Law (Minnesota)", "Minnesota Qualified Neutral"],
+    education: ["J.D.", "B.Comm."],
+    achievements: ["First place, International Negotiation Competition, 2021"],
+    links: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/danielsheikhan/" }],
+  },
+  {
+    slug: "sara-sheikhan", name: "Sara Sheikhan", role: "Real Estate Salesperson · Property Manager",
+    tel: "905 901 5011", email: "sara@danmarempire.com",
+    certifications: ["Real Estate Salesperson"],
   },
   {
     slug: "anita-tayi", name: "Anita Tayi", role: "Sales Representative",
-    line: "Residential resale across Oakville, Burlington and Milton.",
-    creds: ["Sales Representative"],
-    focus: ["Residential resale", "First-time and move-up buyers", "Halton region"],
-    areas: "Oakville · Burlington · Milton",
     tel: "647 308 2996", email: "anitatayi@danmarempire.com",
-    bio: [
-      "Anita runs the firm's Halton residential desk. She works a small number of files at a time and is known for knowing which street a family actually wants before they do.",
+    portrait: "/photos/people/anita-tayi.jpg",
+    certifications: ["Sales Representative"],
+    links: [
+      { label: "Instagram", href: "https://www.instagram.com/anitatayi/" },
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/anita-tayi-61168912a/" },
     ],
   },
   {
     slug: "anna-shea", name: "Anna Shea", role: "Sales Representative",
-    line: "New construction and builder inventory.",
-    creds: ["Sales Representative"],
-    focus: ["New construction", "Pre-construction assignments", "Builder allocations"],
-    areas: "Greater Toronto Area",
     tel: "647 502 2482", email: "anna@danmarempire.com",
-    bio: [
-      "Anna handles the firm's new-construction practice: builder allocations, pre-construction agreements, and the diligence that should happen before an APS is signed rather than after.",
-    ],
+    certifications: ["Sales Representative"],
   },
   {
     slug: "mahmoud-abu-hudra", name: "Mahmoud Abu Hudra", role: "Sales Representative",
-    line: "Leasing and investor services, Vaughan and north Toronto.",
-    creds: ["Sales Representative"],
-    focus: ["Executive leasing", "Investor services", "Industrial and flex"],
-    areas: "Vaughan · North Toronto · York Region",
     tel: "647 808 2706", email: "mahmoud@danmarempire.com",
-    bio: [
-      "Mahmoud works the leasing desk and the investor side of the book out of the Vaughan office, covering the Keele and Highway 7 industrial corridors as well as executive residential.",
-    ],
-  },
-  {
-    slug: "sara-sheikhan", name: "Sara Sheikhan", role: "Sales Representative",
-    line: "Residential sales, and listing presentation across the firm.",
-    creds: ["Sales Representative"],
-    focus: ["Residential sales", "Listing presentation", "Photography direction"],
-    areas: "Oakville · Vaughan",
-    tel: "905 901 5011", email: "sara@danmarempire.com",
-    bio: [
-      "Sara carries her own residential book and also sets the standard for how every Danmar listing is presented: photography direction, copy, and the campaign that goes around it.",
-    ],
+    portrait: "/photos/people/mahmoud-abu-hudra.jpg",
+    certifications: ["Sales Representative"],
   },
   {
     slug: "marion-miral", name: "Marion Miral", role: "Administration",
+    portrait: "/photos/people/marion-miral.jpg",
   },
 ];
+
+/* Client statements, lifted verbatim from the firm's previous site. Attribution
+   exactly as published. `about` tags the ones that name Martin. */
+export interface Testimonial { quote: string; name: string; about?: "martin-sheikhan" }
+export const TESTIMONIALS: Testimonial[] = [
+  { quote: "I thank you for all your advice, your time and kindness to us. I know words of thanks and appreciation is not enough for someone who has given so much.", name: "Mark B." },
+  { quote: "As a sales professional in the IT arena, I was very impressed with Martin's approach and the results he was able to deliver in a relatively short time. I would strongly recommend him for leasing or selling your home.", name: "Neil D.", about: "martin-sheikhan" },
+  { quote: "We LOVE the sold sign on our front lawn, super exciting! You are a very kind man-you live up to your outstanding reputation! Thanks again Martin-you are the absolute best. Choosing to work with you meant choosing to get things done exceeding far beyond our expectations. We couldn't be happier!", name: "Holly & Rafael M.", about: "martin-sheikhan" },
+  { quote: "We were very impressed with your achievements and insights. Thank you again for your hard work and dedication.", name: "Min G." },
+  { quote: "Your positive attitude and professionalism helped to put this deal together with a minimal amount of stress, not only for our clients but ourselves as well!", name: "Judy S, Realtor" },
+  { quote: "Once again I like to take this opportunity to thank you for getting my listing sold, with professionalism and utmost courtesy. My Clients and I really appreciated it thank you.", name: "Nasir M, Realtor\u00ae" },
+  { quote: "If there is ONE word that describes Martin Sheikhan, the word is a 'GEM' in the Real Estate profession. My husband and I met Martin by chance at an 'open house', a total stranger who immediately gave us solid advice and prevented us from making a poor decision that might have hurt us in our late life. Martin is a professional in every sense of the word. He works relentlessly to assist and to satisfy his clients. His warm, easy, unassuming, quiet, caring attitude is the magnet that draws people to his business. This is Martin's success factor. It is not what you do in life that is so important, but it is HOW you do it.'A GREAT MAN SHOWS HIS GREATNESS BY THE WAY HE TREATS LITTLE MEN'.Also, business goes where it is invited and stays where it is well treated. Martin later became our real estate agent who sold our house at a very good price. GOD COULD NOT BE EVERYWHERE, SO HE SENT 'ST. MARTIN' to protect and take care of those who needs his help. Martin, for all the kindness and help that you give to others, may it return to you and your family in 10-folds. As the flame of the candle goes upwards, so too, may your life and your business go in the upward direction. -With grateful thanks.", name: "Mala & Bunnie N.", about: "martin-sheikhan" },
+];
+
 
 export const OFFICES = [
   { city: "Oakville", addr: "2010 Winston Park Drive, Suite 200", post: "Oakville, ON  L6H 6P5", tel: "905 901 5011" },

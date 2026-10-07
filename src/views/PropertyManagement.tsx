@@ -14,6 +14,7 @@ const INCLUDED = [
 ];
 
 const TERMS = [
+  { title: "Who runs it.", text: "Sara Sheikhan, Real Estate Salesperson and Property Manager, with the brokerage's administration behind her." },
   { title: "Who it suits.", text: "Owners with one unit to a few buildings who want the phone to ring somewhere else. Larger portfolios usually combine this with asset management." },
   { title: "How we are paid.", text: "A management fee set out in writing before we start, charged monthly." },
 ];

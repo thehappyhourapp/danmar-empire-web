@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { AREAS } from "@/lib/data";
 import { track } from "@/lib/analytics";
 import { DESK_ADDRESS_CLASS, DESK_EMAIL, submitEnquiry } from "@/lib/enquire";
 import type { SubmitResult } from "@/lib/enquire";
 import { DRIVERS, OWNERS, PROPERTY_TYPES, TIMING, VALUE_BANDS } from "@/lib/estimator";
 import { href } from "@/lib/routes";
-import { GRID } from "@/components/Chapter";
+import { GRID } from "@/lib/layout";
 import s from "@/components/motion.module.css";
-import { useCapital } from "./CapitalContext";
-import type { PropertyType } from "./CapitalContext";
+import { useCapital } from "./store";
+import type { PropertyType } from "./store";
 
 /* The capital review form. Posts to /api/enquire as kind "capital-review" with
    the visitor's answers, the UTM parameters and the estimator's inputs as
@@ -44,11 +44,13 @@ export function CapitalForm() {
   const [type, setType] = useState<PropertyType | "">("");
   const [city, setCity] = useState("");
   const [band, setBand] = useState("");
-  const [utm, setUtm] = useState<Record<string, string>>({});
+  // attribution is read once, on the client; it only travels in the payload, never in the markup
+  const [utm] = useState<Record<string, string>>(() => (typeof window === "undefined" ? {} : readUtm()));
   const form = useRef<HTMLFormElement>(null);
 
-  useEffect(() => { setUtm(readUtm()); }, []);
-  useEffect(() => { if (prefill) { setType(prefill.type); setCity(prefill.location); setBand(prefill.band); } }, [prefill]);
+  // adopt a new pre-fill from the estimator during render, once per request
+  const [seen, setSeen] = useState<number | null>(null);
+  if (prefill && prefill.at !== seen) { setSeen(prefill.at); setType(prefill.type); setCity(prefill.location); setBand(prefill.band); }
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

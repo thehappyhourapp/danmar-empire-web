@@ -16,7 +16,7 @@ web
 
 ## Product Purpose
 
-The website of Danmar Empire Real Estate Corp., Brokerage: a boutique, lawyer-led investment and real estate group, family-owned since 2016. It exists to establish the firm's judgement and track record well enough that the right visitor starts a private conversation. Every route invites an enquiry; none is built to capture leads.
+The website of Danmar Empire Real Estate Corp., Brokerage: a boutique, lawyer-led investment and real estate group, family-owned and named for its founders, a father and a son. It exists to establish the firm's judgement and track record well enough that the right visitor starts a private conversation. Every route invites an enquiry; none is built to capture leads.
 
 Success is measured as qualified private enquiries started from the site: contact form submissions and tracked telephone and email clicks, counted monthly by source page. Secondary measure: the pages for the five practices (asset management, investment, private sales, executive leasing, corporate real estate capital) cited in AI answers for their target queries. Traffic and time on page are not success measures.
 

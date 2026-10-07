@@ -1,12 +1,12 @@
 "use client";
 
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { LISTINGS } from "@/lib/data";
 import { apply, EMPTY, isEmpty, readback } from "@/lib/parse";
 import type { Query } from "@/lib/parse";
 import { IntelBar } from "@/components/IntelBar";
 import { ListingRow } from "@/components/ListingRow";
-import { useSite } from "@/components/SiteShell";
+import { useSite } from "@/components/site-context";
 import s from "@/components/motion.module.css";
 
 /* Progressive enhancement over the server-rendered list: the first render is
@@ -30,15 +30,14 @@ export function CollectionList({ photos }: { photos: Record<string, string> }) {
   const sig = JSON.stringify(q);
   const list = useRef<HTMLDivElement>(null);
   const bar = useRef<HTMLDivElement>(null);
-  const changed = useRef(false);
-  const firstSig = useRef(sig);
-  if (sig !== firstSig.current) changed.current = true;
+  const [firstSig] = useState(sig);
+  const changed = sig !== firstSig;
   useLayoutEffect(() => {
-    if (!changed.current || !list.current || !bar.current) return;
+    if (!changed || !list.current || !bar.current) return;
     const barBottom = bar.current.getBoundingClientRect().bottom;
     const top = list.current.getBoundingClientRect().top;
     if (top < barBottom) window.scrollTo({ top: window.scrollY + top - barBottom, behavior: "instant" });
-  }, [sig]);
+  }, [sig, changed]);
 
   const activeLens =
     LENSES.find((l) => (l.patch.lens ?? null) === (q.lens ?? null) && (l.patch.intent ?? null) === (q.intent ?? null))?.id
@@ -61,7 +60,7 @@ export function CollectionList({ photos }: { photos: Record<string, string> }) {
             </button>
           ))}
           <span className="meta ml-auto overflow-hidden text-ink/70" aria-live="polite">
-            <span key={sig} className={`inline-block ${changed.current ? s.swapText : ""}`}>{results.length} {results.length === 1 ? "property" : "properties"}</span>
+            <span key={sig} className={`inline-block ${changed ? s.swapText : ""}`}>{results.length} {results.length === 1 ? "property" : "properties"}</span>
           </span>
         </div>
         {!isEmpty(q) && (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { emblemCream, emblemForest } from "@/lib/marks";
 
 /**
  * Photography carries this design. Where a photograph has not loaded yet (or the
@@ -8,7 +9,7 @@ import { useEffect, useId, useRef, useState } from "react";
  * architectural field rather than a grey box, so the page never looks broken.
  */
 export function ImageFrame({
-  src, hue = 30, ratio = "4/3", className = "", alt = "", tone = "dark", fallback = "art", ground = "cream", children,
+  src, hue = 30, ratio = "4/3", className = "", alt = "", tone = "dark", fallback = "art", ground = "cream", filler, children,
 }: {
   src?: string; hue?: number; ratio?: string; className?: string; alt?: string;
   tone?: "dark" | "light";
@@ -16,6 +17,9 @@ export function ImageFrame({
   fallback?: "art" | "flat";
   /** The page ground under a flat frame: forest/10 reads on cream, paper/5 on forest. */
   ground?: "cream" | "forest";
+  /** `emblem` sets the building mark, single colour, centred at low opacity on a flat frame:
+   *  the deliberate stand-in for a person without a published portrait. */
+  filler?: "emblem";
   children?: React.ReactNode;
 }) {
   const [ok, setOk] = useState(false);
@@ -53,6 +57,10 @@ export function ImageFrame({
           </g>
         </svg>
       )}
+      {flat && filler === "emblem" && (
+        <img src={ground === "forest" ? emblemCream : emblemForest} alt="" aria-hidden
+          className="absolute left-1/2 top-1/2 h-[36%] w-auto -translate-x-1/2 -translate-y-1/2 opacity-[.08]" />
+      )}
       {src && (
         <img
           ref={img} src={src} alt={alt} loading="lazy" decoding="async"
@@ -64,19 +72,4 @@ export function ImageFrame({
       {children}
     </div>
   );
-}
-
-/** Fires once when the element first enters the viewport. */
-export function useReveal<T extends HTMLElement>() {
-  const ref = useRef<T | null>(null);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const io = new IntersectionObserver(
-      (es) => es.forEach((e) => { if (e.isIntersecting) { el.classList.add("in"); io.unobserve(el); } }),
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.06 }
-    );
-    el.classList.add("rv"); io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return ref;
 }

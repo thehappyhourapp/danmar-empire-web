@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { SITE } from "@/lib/metadata";
-import { Chapter, GRID, HEAD, Lines, delay } from "./Chapter";
+import { Chapter, Lines } from "./Chapter";
+import { GRID, HEAD, delay } from "@/lib/layout";
 import { MotionController } from "./MotionController";
 import { ClientAccessButton, EnquireButton } from "./SiteShell";
 import s from "./motion.module.css";
+import { practiceTones } from "./practiceTones";
 
 /* The practice page template. Asset Management set it; Investments, Executive
    Leasing, Property Management and Corporate Real Estate Capital are built from
@@ -55,19 +57,6 @@ export interface PracticeProps {
   jsonLd?: object[];
 }
 
-/** The page's own styling tokens, for custom blocks built outside the template. */
-export function practiceTones(tone: "forest" | "cream") {
-  const dark = tone === "forest";
-  return {
-    dark,
-    body: dark ? "text-paper/80" : "text-ink/80",
-    meta: dark ? "text-paper/70" : "text-ink/70",
-    rule: dark ? "border-paper/12" : "border-forest/14",
-    brass: dark ? "text-brass-light" : "text-brass",
-    link: dark ? "text-paper" : "text-forest",
-  };
-}
-
 /** Rows in the template's own pattern: index figure, title in columns 2 to 5, text in 7 to 12. */
 export function PracticeRows({ tone, items, numbered = true, start = 1 }: { tone: "forest" | "cream"; items: PracticeItem[]; numbered?: boolean; start?: number }) {
   const t = practiceTones(tone);
@@ -112,7 +101,16 @@ export function Practice(p: PracticeProps) {
   };
   const ld = (o: object) => JSON.stringify(o).replace(/</g, "\\u003c");
 
-  let n = 0;
+  // each numbered section's first index, derived once: numbering runs on across
+  // sections unless a section restarts it
+  const starts = p.sections.reduce<number[]>((acc, sec, i) => {
+    const prev = i === 0 ? 0 : acc[i - 1];
+    if ("node" in sec) { acc.push(prev); return acc; }
+    const base = sec.restart ? 0 : prev;
+    acc.push(base + ((sec.numbered ?? true) ? sec.items.length : 0));
+    return acc;
+  }, []);
+  const startOf = (i: number) => (i === 0 ? 0 : starts[i - 1]) + 1;
   return (
     <div id={p.id}>
       <MotionController rootId={p.id} />
@@ -161,9 +159,7 @@ export function Practice(p: PracticeProps) {
         {p.sections.map((sec, si) => {
           if ("node" in sec) return <div key={si} className="contents">{sec.node}</div>;
           const numbered = sec.numbered ?? true;
-          if (sec.restart) n = 0;
-          const start = n + 1;
-          if (numbered) n += sec.items.length;
+          const start = sec.restart ? 1 : startOf(si);
           return (
             <div key={si} className="col-span-12 mt-20 lg:mt-28">
               {sec.heading && <Lines lines={[sec.heading]} className={`${HEAD} mb-10 max-w-[22ch] lg:mb-14`} />}

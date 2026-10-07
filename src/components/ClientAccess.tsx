@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { DESK_ADDRESS_CLASS, DESK_EMAIL, submitEnquiry } from "@/lib/enquire";
 import type { SubmitResult } from "@/lib/enquire";
-import { usePresence } from "./MotionController";
+import { usePresence } from "./usePresence";
 import { useFocusTrap } from "./useFocusTrap";
 import m from "./motion.module.css";
 
@@ -24,7 +24,8 @@ export function ClientAccess({ open, close }: { open: boolean; close: () => void
   const active = open && stage !== null;
   // land on the first field; the close button is reachable by Shift+Tab or Escape
   useFocusTrap(panel, active, close, "input:not([tabindex='-1'])");
-  useEffect(() => { if (open) setState("idle"); }, [open]);
+  const [seenOpen, setSeenOpen] = useState(open);
+  if (open !== seenOpen) { setSeenOpen(open); if (open) setState("idle"); }
 
   if (!stage) return null;
 
