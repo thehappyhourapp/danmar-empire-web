@@ -29,13 +29,19 @@ export function ListingRow({ l, index, save = true, photo, level = 3 }: { l: Lis
           <Link href={propertyHref(l.id)} className={s.rowlink}>{l.name}</Link>
         </H>
         <p className="meta mt-4 text-ink/70">
-          <span className="block md:inline">{l.address}</span>
-          <span className="mx-2 hidden opacity-40 md:inline">/</span>
-          <span className="block md:inline">{l.region}, {l.city}</span>
+          {/* feed listings are titled by their address, so the line does not repeat it */}
+          {(l.addressWithheld || l.address !== l.name) && <>
+            <span className="block md:inline">{l.addressWithheld ? "Address available on enquiry" : l.address}</span>
+            <span className="mx-2 hidden opacity-40 md:inline">/</span>
+          </>}
+          <span className="block md:inline">{[l.region, l.city].filter(Boolean).join(", ")}</span>
           {l.tier && <><span className="mx-2 hidden opacity-40 md:inline">/</span><span className="block text-brass md:inline">{l.tier}</span></>}
         </p>
       </div>
-      <p className="col-span-12 mt-4 max-w-[48ch] text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-5 md:mt-0 md:self-start md:pt-2">{l.standfirst}</p>
+      <div className="col-span-12 mt-4 max-w-[48ch] md:col-span-6 md:col-start-5 md:mt-0 md:self-start md:pt-2">
+        {l.standfirst && <p className="text-[15px] leading-[1.8] text-ink/75">{l.standfirst}</p>}
+        <p className={`meta text-ink/70 ${l.standfirst ? "mt-3" : ""}`}>{l.mls ? `MLS\u00ae ${l.mls} · ` : ""}Listed by Danmar Empire Real Estate Corp., Brokerage</p>
+      </div>
       <div className="col-span-12 mt-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 md:col-span-8 md:col-start-5 lg:col-span-2 lg:col-start-11 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:block lg:self-center lg:text-right">
         <span className="fig block text-[clamp(1.5rem,1.8vw,1.7rem)] text-brass">{money(l.price, lease)}</span>
         <span className="meta mt-2 block text-ink/70">{lease ? "To lease" : "For sale"} · {l.kind}</span>

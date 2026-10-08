@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { AREAS, LISTINGS } from "@/lib/data";
+import { AREAS } from "@/lib/data";
+import { getListings } from "@/lib/listings";
 import { href } from "@/lib/routes";
 import { Chapter, Lines } from "@/components/Chapter";
 import { GRID, HEAD, delay } from "@/lib/layout";
@@ -16,7 +17,8 @@ const TIERS: { t: 1 | 2 | 3; label: string; blurb: string }[] = [
   { t: 3, label: "Ontario-wide", blurb: "Recreational and specialist markets we are licensed and equipped to act in." },
 ];
 
-export function Areas() {
+export async function Areas() {
+  const listings = await getListings();
   return (
     <div id="areas">
       <MotionController rootId="areas" />
@@ -41,7 +43,7 @@ export function Areas() {
                 <p className="meta col-span-12 mt-4 max-w-[52ch] leading-[1.9] text-ink/70 md:col-span-5 md:col-start-8 md:mt-0 md:self-end">{tier.blurb}</p>
               </div>
               {list.map((a, i) => {
-                const count = LISTINGS.filter((l) => l.city === a.name).length;
+                const count = listings.filter((l) => l.city === a.name).length;
                 return (
                   <div key={a.slug} data-reveal className={`${s.rise} ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`} style={delay(i)}>
                     <div className="col-span-12 md:col-span-5">

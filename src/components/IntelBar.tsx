@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LISTINGS } from "@/lib/data";
 import { apply, EXAMPLES, isEmpty, parse, readback, suggestions, money } from "@/lib/parse";
 import type { Query } from "@/lib/parse";
 import { useSite } from "./site-context";
@@ -38,7 +37,8 @@ export function IntelBar({
 
   const q: Query = parse(text);
   const empty = isEmpty(q);
-  const hits = empty ? [] : apply(LISTINGS, q);
+  const { listings } = useSite();
+  const hits = empty ? [] : apply(listings, q);
   const read = readback(q);
   const sugg = suggestions(q, hits.length);
   const live = text.trim().length > 2 && focus;

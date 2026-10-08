@@ -116,7 +116,9 @@ export function Footer({ onEnquire, onAccess }: { onEnquire: () => void; onAcces
               The Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA.
               The trademarks MLS<sup>®</sup>, Multiple Listing Service<sup>®</sup> and the associated logos are owned by CREA and
               identify the quality of services provided by real estate professionals who are members of CREA.
-              Every listing on this site is listed by Danmar Empire Real Estate Corp., Brokerage. Listing information is
+              Every listing on this site is listed by Danmar Empire Real Estate Corp., Brokerage. MLS<sup>®</sup>, REALTOR<sup>®</sup> and the
+              associated logos are trademarks of The Canadian Real Estate Association. Listing data provided under licence by the Toronto
+              Regional Real Estate Board (TRREB) through PropTx. Information deemed reliable but not guaranteed. Listing information is
               deemed reliable but is not guaranteed accurate. Prices shown are list prices and are subject to change
               without notice. Not intended to solicit properties currently under contract.
             </p>

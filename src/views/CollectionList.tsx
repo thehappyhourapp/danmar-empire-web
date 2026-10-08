@@ -1,12 +1,13 @@
 "use client";
 
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
-import { LISTINGS } from "@/lib/data";
+import type { Listing } from "@/lib/data";
 import { apply, EMPTY, isEmpty, readback } from "@/lib/parse";
 import type { Query } from "@/lib/parse";
 import { IntelBar } from "@/components/IntelBar";
 import { ListingRow } from "@/components/ListingRow";
 import { useSite } from "@/components/site-context";
+import { EnquireButton } from "@/components/SiteShell";
 import s from "@/components/motion.module.css";
 
 /* Progressive enhancement over the server-rendered list: the first render is
@@ -20,9 +21,9 @@ const LENSES: { id: string; label: string; patch: Partial<Query> }[] = [
   { id: "lease", label: "Executive Leasing", patch: { intent: "lease", lens: null } },
 ];
 
-export function CollectionList({ photos }: { photos: Record<string, string> }) {
+export function CollectionList({ listings, photos }: { listings: Listing[]; photos: Record<string, string> }) {
   const { q, setQ, text, setText } = useSite();
-  const results = useMemo(() => apply(LISTINGS, q), [q]);
+  const results = useMemo(() => apply(listings, q), [listings, q]);
   // A lens change swaps the list: the keyed container remounts its rows, and
   // MotionController enters them on the interface clock ([data-swap]). If the
   // lens bar is stuck, the reader is put at the top of the new results before
@@ -73,7 +74,13 @@ export function CollectionList({ photos }: { photos: Record<string, string> }) {
       </div>
 
       <div ref={list} key={sig} data-swap className="col-span-12 [&>div:first-child]:border-t-0">
-        {results.length ? results.map((l, i) => <ListingRow key={l.id} l={l} index={i} photo={photos[l.id]} level={2} />) : (
+        {listings.length === 0 ? (
+          <div className="border-y border-forest/14 py-20">
+            <p className="max-w-[30ch] font-display text-[26px] font-medium leading-[1.2] text-ink/80">No properties are listed publicly today.</p>
+            <p className="mt-4 max-w-[48ch] text-[15px] leading-[1.8] text-ink/70">Private and off-market properties are available by enquiry.</p>
+            <EnquireButton className={`${s.tlink} mt-6 inline-block text-[15px] text-forest`}>Enquire</EnquireButton>
+          </div>
+        ) : results.length ? results.map((l, i) => <ListingRow key={l.id} l={l} index={i} photo={photos[l.id]} level={2} />) : (
           <div className="border-y border-forest/14 py-20">
             <p className="font-display text-[26px] font-medium text-ink/80">Nothing on the books matches that brief.</p>
             <p className="mt-4 max-w-[48ch] text-[14px] leading-[1.8] text-ink/70">

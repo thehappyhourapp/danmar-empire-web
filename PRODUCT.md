@@ -71,14 +71,13 @@ Binding, as given by the owner. The full visual specification lives in **CLAUDE.
 ## Evidence on Hand
 
 - **Real:**
+  - the Collection's listings, read live from the PropTx (TRREB) feed under the brokerage's Data License Agreement; nothing from the feed is stored, and AI crawlers are kept off the listing pages as the licence requires;
   - firm history and positioning copy, practice descriptions, relocation questions, the ownership argument, office addresses and telephone numbers (all in `src/lib/data.ts`);
   - seven team profiles;
   - the seal, wreath and lockup marks, exported from Canva (`src/lib/marks.ts`);
   - the related-practice disclosures.
 - **Placeholder, must not ship as fact:**
-  - all 16 listings and their figures (pending the PropTx feed and sign-off);
   - track record entries (pending written consent);
-  - listing photography (Unsplash stand-ins);
   - journal articles (titles and summaries only).
 - **Claimed, needs substantiation before publication:** "$1B+ transacted since 2016". The site states "methodology on request".
 - **Absent, do not fabricate:** testimonials, client names, press coverage, awards, rankings.

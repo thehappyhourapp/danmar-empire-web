@@ -23,9 +23,10 @@ function subscribeSaved(cb: () => void) {
 }
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LISTINGS } from "@/lib/data";
+import type { Listing } from "@/lib/data";
 import { EMPTY, money } from "@/lib/parse";
 import type { Query } from "@/lib/parse";
+import { photoSrc } from "@/lib/listings";
 import { groundFor, pageFor, propertyHref } from "@/lib/routes";
 import { Nav } from "./Nav";
 import { Footer } from "./Footer";
@@ -87,10 +88,10 @@ function Enquire({ open, close, listing }: { open: boolean; close: () => void; l
 }
 
 /* ───────────────────────────── Saved drawer ───────────────────────────── */
-function Saved({ open, close, ids, toggle }: {
-  open: boolean; close: () => void; ids: Set<string>; toggle: (id: string) => void;
+function Saved({ open, close, ids, toggle, listings }: {
+  open: boolean; close: () => void; ids: Set<string>; toggle: (id: string) => void; listings: Listing[];
 }) {
-  const items = LISTINGS.filter((l) => ids.has(l.id));
+  const items = listings.filter((l) => ids.has(l.id));
   return (
     <Drawer open={open} close={close} label="Saved" width="max-w-[440px]">
       <div className="flex items-center justify-between border-b border-forest/14 p-8">
@@ -107,7 +108,7 @@ function Saved({ open, close, ids, toggle }: {
         <div key={l.id} className="flex gap-4 border-b border-forest/14 p-6">
           {/* the thumbnail repeats the title link beside it: one target for pointers only */}
           <Link href={propertyHref(l.id)} onClick={close} className="shrink-0" aria-hidden tabIndex={-1}>
-            <ImageFrame hue={l.hue} ratio="1/1" className="w-[80px]" alt={l.name} fallback="flat" />
+            <ImageFrame src={l.photo ? photoSrc(l.photo) : undefined} hue={l.hue} ratio="1/1" className="w-[80px]" alt={l.name} fallback="flat" />
           </Link>
           <div className="min-w-0 flex-1">
             <Link href={propertyHref(l.id)} onClick={close} className="block text-left">
@@ -126,7 +127,7 @@ function Saved({ open, close, ids, toggle }: {
 }
 
 /* ───────────────────────────────── Shell ───────────────────────────────── */
-export function SiteShell({ children }: { children: React.ReactNode }) {
+export function SiteShell({ children, listings }: { children: React.ReactNode; listings: Listing[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const [q, setQ] = useState<Query>(EMPTY);
@@ -137,6 +138,8 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
      on hydration without a second pass. */
   const raw = useSyncExternalStore(subscribeSaved, readSaved, () => "[]");
   const saved = useMemo(() => { try { return new Set(JSON.parse(raw) as string[]); } catch { return new Set<string>(); } }, [raw]);
+  // the badge counts only listings still on the books; a saved id whose listing has since left the feed is kept but not counted
+  const savedLive = useMemo(() => [...saved].filter((id) => listings.some((l) => l.id === id)).length, [saved, listings]);
   const [enq, setEnq] = useState(false);
   const [enqListing, setEnqListing] = useState<ListingRef | null>(null);
   const [access, setAccess] = useState(false);
@@ -159,7 +162,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   const closeAccess = useCallback(() => setAccess(false), []);
 
   return (
-    <SiteCtx.Provider value={{ saved, toggleSave, enquire, requestAccess, q, setQ, text, setText, search }}>
+    <SiteCtx.Provider value={{ listings, saved, toggleSave, enquire, requestAccess, q, setQ, text, setText, search }}>
       <div className="min-h-screen bg-paper antialiased">
         {notice && (
           <aside aria-label="Prototype notice" className="sticky top-0 z-[80] flex h-9 items-center gap-3 overflow-hidden bg-forest-soft px-4 text-paper sm:gap-4 sm:px-5">
@@ -173,7 +176,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         )}
 
         <div style={{ ["--stick" as string]: `calc(${noticeH}px + var(--nav-h))` } as React.CSSProperties}>
-          <Nav page={pageFor(pathname)} ground={groundFor(pathname)} saved={saved.size} savedPulse={savedPulse} onSaved={() => setSavedOpen(true)} onEnquire={enquire} offset={noticeH} />
+          <Nav page={pageFor(pathname)} ground={groundFor(pathname)} saved={savedLive} savedPulse={savedPulse} onSaved={() => setSavedOpen(true)} onEnquire={enquire} offset={noticeH} />
           <main>{children}</main>
           <Footer onEnquire={() => enquire()} onAccess={requestAccess} />
         </div>
@@ -181,7 +184,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         <TypeSwitch />
         <Enquire open={enq} close={() => setEnq(false)} listing={enqListing} />
         <ClientAccess open={access} close={closeAccess} />
-        <Saved open={savedOpen} close={() => setSavedOpen(false)} ids={saved} toggle={toggleSave} />
+        <Saved open={savedOpen} close={() => setSavedOpen(false)} ids={saved} toggle={toggleSave} listings={listings} />
       </div>
     </SiteCtx.Provider>
   );

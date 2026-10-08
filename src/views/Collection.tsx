@@ -1,6 +1,7 @@
 import { Chapter, Lines } from "@/components/Chapter";
 import { HEAD } from "@/lib/layout";
 import { MotionController } from "@/components/MotionController";
+import { getListings } from "@/lib/listings";
 import { listingPhotos } from "@/lib/photos";
 import { CollectionList } from "./CollectionList";
 
@@ -9,7 +10,8 @@ import { CollectionList } from "./CollectionList";
    boutique firm is judged on. One cream ground, no temperature cuts, line rise only.
    The full list is in the server HTML; the brief bar and the lenses only narrow it. */
 
-export function Collection() {
+export async function Collection() {
+  const listings = await getListings();
   return (
     <div id="collection">
       <MotionController rootId="collection" />
@@ -22,7 +24,7 @@ export function Collection() {
           photographed and written by us before it was priced. We do not republish the rest of the board,
           because a list of everything is not an opinion about anything.
         </p>
-        <CollectionList photos={listingPhotos()} />
+        <CollectionList listings={listings} photos={listingPhotos(listings)} />
       </Chapter>
     </div>
   );

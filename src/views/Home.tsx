@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { LISTINGS, OWNERSHIP, PILLARS, TRACK } from "@/lib/data";
+import { OWNERSHIP, PILLARS, TRACK } from "@/lib/data";
+import { getListings } from "@/lib/listings";
 import { money } from "@/lib/parse";
 import { listingPhoto } from "@/lib/photos";
 import { href, propertyHref } from "@/lib/routes";
@@ -15,7 +16,6 @@ import m from "@/components/motion.module.css";
 
 type Tone = "cream" | "forest" | "deep";
 
-const FEATURED = ["bronte-harbour", "namron-gate", "keele-wilson", "yorkville-penthouse"];
 const RECORD = ["t3", "t5", "t1", "t8", "t2", "t7"];
 const PRACTICE_ROUTES = ["management", "investments", "collection", "leasing", "capital"];
 
@@ -58,8 +58,9 @@ function Chapter({ tone, wipeFrom, className = "", inner = "", children }: {
   );
 }
 
-export function Home() {
-  const featured = FEATURED.map((id) => LISTINGS.find((l) => l.id === id)!);
+export async function Home() {
+  // the three highest-priced active listings; an empty feed shows one line instead
+  const featured = [...(await getListings())].sort((a, b) => b.price - a.price).slice(0, 3);
   const record = RECORD.map((id) => TRACK.find((t) => t.id === id)!);
 
   return (
@@ -145,6 +146,13 @@ export function Home() {
           </div>
         </div>
         <div className="col-span-12 mt-16 lg:mt-24">
+          {featured.length === 0 && (
+            <div className="border-y border-forest/14 py-12">
+              <p className="max-w-[30ch] font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.2] text-ink/80">No properties are listed publicly today.</p>
+              <p className="mt-4 max-w-[48ch] text-[15px] leading-[1.8] text-ink/70">Private and off-market properties are available by enquiry.</p>
+              <Link href={href("contact")} className={`${m.tlink} meta mt-6 inline-block text-forest`}>Enquire</Link>
+            </div>
+          )}
           {featured.map((l, i) => {
             const lease = l.intent === "lease";
             return (
@@ -156,7 +164,7 @@ export function Home() {
                 <div className={`col-span-5 self-center md:col-span-3 md:row-span-2 ${i % 2 ? "md:col-start-2" : ""}`}>
                   <div className="overflow-hidden">
                     <div className={s.plx} data-parallax>
-                      <ImageFrame src={listingPhoto(l.id)} hue={l.hue} ratio={i % 2 ? "3/4" : "4/5"} alt={l.name} fallback="flat" />
+                      <ImageFrame src={listingPhoto(l.id, l.photo)} hue={l.hue} ratio={i % 2 ? "3/4" : "4/5"} alt={l.name} fallback="flat" />
                     </div>
                   </div>
                 </div>
@@ -165,10 +173,13 @@ export function Home() {
                     <span className={m.rowlink}>{l.name}</span>
                   </h3>
                   <p className="meta mt-4 text-ink/70">
-                    {l.address} <span className="mx-2 opacity-40">/</span> {l.region}, {l.city}
+                    {(l.addressWithheld || l.address !== l.name) && <>{l.addressWithheld ? "Address available on enquiry" : l.address} <span className="mx-2 opacity-40">/</span> </>}{[l.region, l.city].filter(Boolean).join(", ")}
                   </p>
                 </div>
-                <p className="col-span-12 mt-4 max-w-[48ch] text-[15px] leading-[1.8] text-ink/75 md:col-span-6 md:col-start-5 md:mt-0 md:self-start md:pt-2">{l.standfirst}</p>
+                <div className="col-span-12 mt-4 max-w-[48ch] md:col-span-6 md:col-start-5 md:mt-0 md:self-start md:pt-2">
+                  {l.standfirst && <p className="text-[15px] leading-[1.8] text-ink/75">{l.standfirst}</p>}
+                  <p className={`meta text-ink/70 ${l.standfirst ? "mt-3" : ""}`}>{l.mls ? `MLS\u00ae ${l.mls} · ` : ""}Listed by Danmar Empire Real Estate Corp., Brokerage</p>
+                </div>
                 <div className="col-span-12 mt-6 flex items-baseline justify-between md:col-span-8 md:col-start-5 lg:col-span-2 lg:col-start-11 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:block lg:self-center lg:text-right">
                   <span className="fig block text-[clamp(1.5rem,1.8vw,1.7rem)] text-brass">{money(l.price, lease)}</span>
                   <span className="meta mt-2 block text-ink/70">{lease ? "To lease" : "For sale"} · {l.kind}</span>

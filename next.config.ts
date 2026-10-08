@@ -30,6 +30,14 @@ const LEGACY: [string, string][] = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  /* Listing photographs come from the feed's CDN. The hosts are allow-listed here
+     for next/image and again in /api/photo, which the pages actually use. */
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "**.ampre.ca" },
+      { protocol: "https", hostname: "**.proptx.ca" },
+    ],
+  },
   async redirects() {
     return LEGACY.map(([source, destination]) => ({ source, destination, permanent: true }));
   },

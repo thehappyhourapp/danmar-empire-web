@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { LISTINGS } from "@/lib/data";
 import type { Listing } from "@/lib/data";
+import { photoSrc } from "@/lib/listings";
 import { money } from "@/lib/parse";
 import { href, propertyHref } from "@/lib/routes";
 import { SITE } from "@/lib/metadata";
@@ -16,10 +16,11 @@ import s from "@/components/motion.module.css";
 
 const BROKERAGE = "Danmar Empire Real Estate Corp., Brokerage";
 
-/** Three to five fields from the listing's own data, never one that repeats what
- *  the page already shows. Land has type, tenure and status; nothing is invented. */
+/** Two to five fields from the listing's own data, never one that repeats what
+ *  the page already shows, and nothing invented. */
 function specs(l: Listing): [string, string][] {
-  const out: [string, string][] = [["Type", l.kind], ["Tenure", l.tenure]];
+  const out: [string, string][] = [["Type", l.kind]];
+  if (l.tenure) out.push(["Tenure", l.tenure]);
   if (l.beds) out.push(["Bedrooms", String(l.beds)]);
   if (l.baths) out.push(["Bathrooms", String(l.baths)]);
   if (l.sqft) out.push(["Area", `${l.sqft.toLocaleString("en-CA")} sq ft`]);
@@ -31,6 +32,7 @@ function specs(l: Listing): [string, string][] {
 
 /* Spans per field count that keep every divider on a column line. */
 const SPANS: Record<number, string[]> = {
+  2: ["md:col-span-6", "md:col-span-6"],
   3: ["md:col-span-4", "md:col-span-4", "md:col-span-4"],
   4: ["md:col-span-3", "md:col-span-3", "md:col-span-3", "md:col-span-3"],
   5: ["md:col-span-3", "md:col-span-2", "md:col-span-2", "md:col-span-2", "md:col-span-3"],
@@ -39,19 +41,21 @@ const SPANS: Record<number, string[]> = {
 function jsonLd(l: Listing, photo?: string) {
   const lease = l.intent === "lease";
   const available = l.status === "Available" || l.status === "Conditional";
+  const abs = (u: string) => (u.startsWith("/") ? `${SITE}${u}` : u);
   return {
     "@context": "https://schema.org",
     "@type": "RealEstateListing",
     name: l.name,
-    description: l.standfirst,
+    description: l.standfirst || l.body[0] || "",
     url: `${SITE}${propertyHref(l.id)}`,
-    ...(photo ? { image: `${SITE}${photo}` } : {}),
+    ...(photo ? { image: abs(photo) } : {}),
     offers: {
       "@type": "Offer",
       itemOffered: {
         "@type": l.useClass === "residential" ? "SingleFamilyResidence" : "Place",
         name: l.name,
-        address: { "@type": "PostalAddress", streetAddress: l.address, addressLocality: l.city, addressRegion: "ON", addressCountry: "CA" },
+        // an address the seller has asked to withhold does not appear here either
+        ...(l.addressWithheld ? {} : { address: { "@type": "PostalAddress", streetAddress: l.address, addressLocality: l.city, addressRegion: "ON", addressCountry: "CA" } }),
       },
       price: l.price,
       priceCurrency: "CAD",
@@ -63,11 +67,14 @@ function jsonLd(l: Listing, photo?: string) {
   };
 }
 
-export function Property({ l }: { l: Listing }) {
+export function Property({ l, all }: { l: Listing; all: Listing[] }) {
   const lease = l.intent === "lease";
-  const photo = listingPhoto(l.id);
-  const more = LISTINGS.filter((x) => x.id !== l.id && x.tier !== "Off-Market" && (x.city === l.city || x.useClass === l.useClass)).slice(0, 3);
+  const photo = listingPhoto(l.id, l.photo);
+  const gallery = (l.photos ?? []).slice(0, 6).map(photoSrc);
+  const more = all.filter((x) => x.id !== l.id && x.tier !== "Off-Market" && (x.city === l.city || x.useClass === l.useClass)).slice(0, 3);
   const rows = specs(l);
+  const where = [l.region, l.city].filter(Boolean).join(", ");
+  const heroAlt = l.addressWithheld ? `${l.kind} in ${where}` : `${l.address}, ${l.city}`;
 
   return (
     <div id="property">
@@ -77,7 +84,7 @@ export function Property({ l }: { l: Listing }) {
       {/* ───────── Hero: full-bleed, the LCP element. Paints at full opacity and never animates. */}
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-forest/10 md:aspect-[21/10] lg:max-h-[62svh]">
         {photo ? (
-          <Image src={photo} alt={`${l.name}, ${l.address}, ${l.city}`} fill priority sizes="100vw" className="object-cover" />
+          <Image src={photo} alt={heroAlt} fill priority sizes="100vw" className="object-cover" unoptimized={photo.startsWith("/api/")} />
         ) : (
           <span className="sr-only">Photography to follow</span>
         )}
@@ -88,23 +95,22 @@ export function Property({ l }: { l: Listing }) {
           <Link href={href("collection")} className={`${s.tlink} meta text-ink/70 hover:text-forest`}>The Collection</Link>
         </nav>
 
-        {/* name alone, then one line of data */}
+        {/* the address as the title, or the city when the seller has asked for the address to be withheld */}
         <header className="col-span-12 mt-6 lg:col-span-8">
-          <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1] tracking-[-.015em]">{l.address}</h1>
+          <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1] tracking-[-.015em]">{l.addressWithheld ? l.city : l.address}</h1>
           <p className="meta mt-6 text-ink/70">
-            <span className="block md:inline">{l.name}</span>
+            {l.addressWithheld ? <span className="block md:inline">Address available on enquiry</span> : <span className="block md:inline">{l.kind}</span>}
             <span className="mx-2 hidden opacity-40 md:inline">/</span>
-            <span className="block md:inline">{l.region}, {l.city}</span>
+            <span className="block md:inline">{where}</span>
             {l.tier && <><span className="mx-2 hidden opacity-40 md:inline">/</span><span className="block text-brass md:inline">{l.tier}</span></>}
           </p>
         </header>
         <div className="col-span-12 mt-8 lg:col-span-3 lg:col-start-10 lg:mt-10 lg:self-end lg:text-right">
           <p className="fig text-[clamp(1.75rem,2.6vw,2.4rem)] text-brass">{money(l.price, lease)}</p>
-          <p className="meta mt-2 text-ink/70">{lease ? "To lease, per month" : "For sale"} · Listed by the brokerage</p>
+          <p className="meta mt-2 text-ink/70">{lease ? "To lease, per month" : "For sale"}{l.mls ? ` · MLS® ${l.mls}` : ""}</p>
         </div>
 
-        {/* five fields, one row, hairlines between */}
-        {/* three to five fields on the 12-column grid, spans chosen so every divider sits on a column line */}
+        {/* two to five fields on the 12-column grid, spans chosen so every divider sits on a column line */}
         <dl className={`col-span-12 mt-12 ${GRID} border-y border-forest/14 lg:mt-16`}>
           {rows.map(([k, v], i) => (
             <div key={k} className={`${i === rows.length - 1 && rows.length % 2 ? "col-span-12" : "col-span-6"} flex flex-col-reverse gap-2 py-6 pr-4 ${i % 2 ? "border-l border-forest/14 pl-4" : ""} ${i >= 2 ? "border-t border-forest/14 md:border-t-0" : ""} ${i % 2 === 0 && !(i === rows.length - 1 && rows.length % 2) ? "-mr-4 md:mr-0" : ""} ${SPANS[rows.length][i]} md:border-l md:pl-4 md:first:border-l-0 md:first:pl-0`}>
@@ -114,17 +120,19 @@ export function Property({ l }: { l: Listing }) {
           ))}
         </dl>
 
-        {/* prose before specification, the standfirst first */}
-        <p data-reveal className={`${s.rise} col-span-12 mt-16 max-w-[30ch] font-display text-[clamp(1.5rem,3vw,2.4rem)] font-medium leading-[1.18] tracking-[-.01em] lg:col-span-7 lg:mt-24`}>
-          {l.standfirst}
-        </p>
-        <div className="col-span-12 mt-8 space-y-6 lg:col-span-6 lg:mt-10">
+        {/* the pull-quote row only where there is one; feed listings have none */}
+        {l.standfirst && (
+          <p data-reveal className={`${s.rise} col-span-12 mt-16 max-w-[30ch] font-display text-[clamp(1.5rem,3vw,2.4rem)] font-medium leading-[1.18] tracking-[-.01em] lg:col-span-7 lg:mt-24`}>
+            {l.standfirst}
+          </p>
+        )}
+        <div className={`col-span-12 space-y-6 lg:col-span-6 ${l.standfirst ? "mt-8 lg:mt-10" : "mt-16 lg:mt-24"}`}>
           {l.body.map((p, i) => (
             <p key={i} data-reveal className={`${s.rise} max-w-[48ch] text-[15.5px] leading-[1.9] text-ink/80`} style={delay(i)}>{p}</p>
           ))}
-          <p className="meta pt-4 text-ink/70">Listed by {BROKERAGE}</p>
+          <p className="meta pt-4 text-ink/70">{l.mls ? `MLS® ${l.mls} · ` : ""}Listed by {BROKERAGE}</p>
         </div>
-        <aside className="col-span-12 mt-12 lg:col-span-4 lg:col-start-9 lg:mt-10">
+        <aside className={`col-span-12 mt-12 lg:col-span-4 lg:col-start-9 ${l.standfirst ? "lg:mt-10" : "lg:mt-24"}`}>
           {l.features.length > 0 && (
             <>
               <h2 className="meta text-brass">Notable</h2>
@@ -148,6 +156,17 @@ export function Property({ l }: { l: Listing }) {
             Measured floorplans and the full brochure are released with the viewing confirmation.
           </p>
         </aside>
+
+        {/* the rest of the photographs, as frames */}
+        {gallery.length > 0 && (
+          <div className={`col-span-12 mt-16 ${GRID} gap-y-8 lg:mt-24`}>
+            {gallery.map((src, i) => (
+              <div key={src} data-reveal className={`${s.rise} relative col-span-12 aspect-[3/2] overflow-hidden bg-forest/10 md:col-span-6`} style={delay(i)}>
+                <Image src={src} alt={`${heroAlt}, photograph ${i + 2}`} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" unoptimized={src.startsWith("/api/")} />
+              </div>
+            ))}
+          </div>
+        )}
       </Chapter>
 
       {/* related, as rows */}
@@ -160,7 +179,7 @@ export function Property({ l }: { l: Listing }) {
             </p>
           </div>
           <div className="col-span-12 mt-10">
-            {more.map((m, i) => <ListingRow key={m.id} l={m} index={i} photo={listingPhoto(m.id)} />)}
+            {more.map((m, i) => <ListingRow key={m.id} l={m} index={i} photo={listingPhoto(m.id, m.photo)} />)}
           </div>
         </Chapter>
       )}

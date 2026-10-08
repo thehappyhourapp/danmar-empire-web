@@ -1,12 +1,15 @@
 "use client";
 
 import { createContext, useContext } from "react";
+import type { Listing } from "@/lib/data";
 import type { Query } from "@/lib/parse";
 import type { ListingRef } from "./EnquiryForm";
 
 /* Visit-level state that used to live in App.tsx. It sits in the root layout, so it
    survives client-side navigation between routes exactly as it did in the SPA. */
 interface Site {
+  /** the active listings, from the server shell */
+  listings: Listing[];
   saved: Set<string>;
   toggleSave: (id: string) => void;
   enquire: (listing?: ListingRef) => void;

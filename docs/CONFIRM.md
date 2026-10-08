@@ -38,6 +38,20 @@ fact and the line goes in; strike it and the entry goes.
 ### Metadata
 - **Title tail.** The brief's title ends "| Danmar"; the page uses the site's pattern and ends with the registered name, as every other route does. Confirm or change in `src/lib/seo.ts`.
 
+## /collection and /collection/[slug] (the PropTx feed)
+
+The feed is wired against the fixture only; nothing was read from the live Property or Media resources in this pass. These need Daniel, or PropTx, before launch.
+
+- **Read cadence versus the 24-hour clause.** The DLA's replication language speaks of pulling data once every 24 hours. The site reads the brokerage's own active listings on demand, cached for an hour (`REVALIDATE` in `src/lib/proptx.ts`), plus a manual refresh route. Confirm with PropTx that this sits within the agreement; if they want 24 hours, the one constant changes.
+- **Field names are unconfirmed against `$metadata`.** The schema endpoint answered 401 both with no token and with the X placeholder, so the field names come from the RESO Data Dictionary and AMPRE's public docs, not from the live schema. `docs/LIVE-CHECK.md` step 1 is the real test. In particular:
+  - the active filter is `StandardStatus eq 'Active'`; AMPRE's own examples filter on `ContractStatus eq 'Available'`;
+  - display permission reads `InternetEntireListingDisplayYN`, falling back to a `perm_adv` style field if the schema carries one; address permission reads `InternetAddressDisplayYN`, falling back to `disp_addr`. A record that carries neither is treated as displayable with its address; a record with either set to N is withheld. Confirm that the feed populates the RESO names;
+  - photos are selected with `ImageSizeDescription eq 'Large'`, which AMPRE documents (Thumbnail, Medium, Large, Largest);
+  - the office filter is `ListOfficeKey eq '<PROPTX_OFFICE_KEY>'` when the key is set, otherwise `contains(ListOfficeName,'DANMAR')`. Supply the key.
+- **Attribution wording.** The footer now carries: "MLS®, REALTOR® and the associated logos are trademarks of The Canadian Real Estate Association. Listing data provided under licence by the Toronto Regional Real Estate Board (TRREB) through PropTx. Information deemed reliable but not guaranteed." Confirm against the DLA's exact required text; the sentence lives once, in `src/components/Footer.tsx`.
+- **The empty state.** With no token (or no active listings) the Collection shows "No properties are listed publicly today." and the enquiry line. Confirm the wording.
+- **Photo URLs.** Media URLs are proxied through `/api/photo` and allow-listed to `ampre.ca` and `proptx.ca`; if the live URLs sit on another host, or carry an expiry signature, step 3 of the live check catches it.
+
 ## /privacy
 - **The policy text.** A short standard policy written for the form's consent link, covering what is collected, why, who sees it, retention, the visitor's choices and the governing law (PIPEDA, CASL, RECO record-keeping). Review every line before launch; adjust the retention statement to the brokerage's actual record-keeping policy.
 
@@ -81,7 +95,7 @@ Deleted as unconfirmed on 7 Oct 2026. Nothing below is on the site; each line re
 - "Residential resale across Oakville, Burlington and Milton." (line)
 - "Anita runs the firm's Halton residential desk. She works a small number of files at a time and is known for knowing which street a family actually wants before they do." (bio)
 - Focus "Residential resale, First-time and move-up buyers, Halton region"; areas "Oakville · Burlington · Milton".
-- Her bio is empty until photos-inbox/copy/anita-bio.txt is dropped; it is then lifted verbatim.
+- Her bio is now the three paragraphs of photos-inbox/copy/anita-bio.txt, verbatim.
 
 ### Anna Shea
 - "New construction and builder inventory." (line)
