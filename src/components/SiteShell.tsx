@@ -31,7 +31,6 @@ import { groundFor, pageFor, propertyHref } from "@/lib/routes";
 import { Nav } from "./Nav";
 import { Footer } from "./Footer";
 import { ImageFrame } from "./ImageFrame";
-import { TypeSwitch } from "./TypeSwitch";
 import { ClientAccess } from "./ClientAccess";
 import { usePresence } from "./usePresence";
 import { useFocusTrap } from "./useFocusTrap";
@@ -144,10 +143,6 @@ export function SiteShell({ children, listings }: { children: React.ReactNode; l
   const [enqListing, setEnqListing] = useState<ListingRef | null>(null);
   const [access, setAccess] = useState(false);
   const [savedOpen, setSavedOpen] = useState(false);
-  const [notice, setNotice] = useState(true);
-  /* The notice bar sits in the flow at a fixed 36px, so its height is in the server
-     HTML and nothing shifts after hydration. Hiding it is a user action. */
-  const noticeH = notice ? 36 : 0;
 
   // counts toggles only, so the nav badge acknowledges a save and not a restore
   const [savedPulse, setSavedPulse] = useState(0);
@@ -164,24 +159,12 @@ export function SiteShell({ children, listings }: { children: React.ReactNode; l
   return (
     <SiteCtx.Provider value={{ listings, saved, toggleSave, enquire, requestAccess, q, setQ, text, setText, search }}>
       <div className="min-h-screen bg-paper antialiased">
-        {notice && (
-          <aside aria-label="Prototype notice" className="sticky top-0 z-[80] flex h-9 items-center gap-3 overflow-hidden bg-forest-soft px-4 text-paper sm:gap-4 sm:px-5">
-            <span className="meta shrink-0">Prototype</span>
-            <span className="min-w-0 truncate text-[11.5px] leading-none text-paper/90 sm:text-[12px]">
-              <span className="sm:hidden">Placeholder content. Do not publish as-is.</span>
-              <span className="hidden sm:inline">Design prototype. Listings, transactions and figures are placeholder content pending the PropTx feed and your sign-off. Do not publish as-is.</span>
-            </span>
-            <button onClick={() => setNotice(false)} className="meta -my-2 ml-auto shrink-0 py-2 text-paper/80 hover:text-paper">Hide</button>
-          </aside>
-        )}
-
-        <div style={{ ["--stick" as string]: `calc(${noticeH}px + var(--nav-h))` } as React.CSSProperties}>
-          <Nav page={pageFor(pathname)} ground={groundFor(pathname)} saved={savedLive} savedPulse={savedPulse} onSaved={() => setSavedOpen(true)} onEnquire={enquire} offset={noticeH} />
+        <div style={{ ["--stick" as string]: "var(--nav-h)" } as React.CSSProperties}>
+          <Nav page={pageFor(pathname)} ground={groundFor(pathname)} saved={savedLive} savedPulse={savedPulse} onSaved={() => setSavedOpen(true)} onEnquire={enquire} />
           <main>{children}</main>
           <Footer onEnquire={() => enquire()} onAccess={requestAccess} />
         </div>
 
-        <TypeSwitch />
         <Enquire open={enq} close={() => setEnq(false)} listing={enqListing} />
         <ClientAccess open={access} close={closeAccess} />
         <Saved open={savedOpen} close={() => setSavedOpen(false)} ids={saved} toggle={toggleSave} listings={listings} />

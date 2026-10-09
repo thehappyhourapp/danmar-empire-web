@@ -36,7 +36,8 @@ export function Person({ p }: { p: P }) {
     "@type": "Person",
     name,
     ...(designations ? { honorificSuffix: designations } : {}),
-    jobTitle: p.role,
+    // RECO category Broker, registered as Broker of Record
+    jobTitle: p.slug === "martin-sheikhan" ? "Broker of Record" : p.role,
     url: `${SITE}${personHref(p.slug)}`,
     ...(p.portrait ? { image: `${SITE}${p.portrait}` } : {}),
     ...(p.email ? { email: p.email } : {}),

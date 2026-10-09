@@ -26,7 +26,6 @@ const SITE_LINKS: [string, string][] = [
   ["track", "Track Record"],
   ["firm", "The Firm"],
   ["areas", "Areas"],
-  ["journal", "Journal"],
   ["contact", "Contact"],
 ];
 
@@ -89,8 +88,8 @@ export function Footer({ onEnquire, onAccess }: { onEnquire: () => void; onAcces
             <p className="meta mb-6 text-paper/60">Contact</p>
             <ul className="space-y-4">
               <li><a href="tel:+19059015011" className={link}>905 901 5011</a></li>
-              <li><a href="tel:+18773262671" className={link}>1 877 DANMAR 1</a></li>
-              <li><a href="mailto:info@danmarempire.com" className={link}>info@danmarempire.com</a></li>
+              <li><a href="tel:+18773266271" className={link}>1 877 DANMAR 1</a></li>
+              <li><a href="mailto:daniel@danmarempire.com" className={link}>daniel@danmarempire.com</a></li>
               <li><button onClick={() => onAccess()} className={link}>Client access</button></li>
             </ul>
             <p className="meta mb-4 mt-10 text-paper/60">Follow</p>

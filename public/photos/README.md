@@ -1,4 +1,3 @@
-# Listing photography
+# Photography
 
-One file per listing, named by its id in src/lib/data.ts: `bronte-harbour.jpg`, `namron-gate.jpg`, and so on.
-Until a file exists the page shows a flat forest block with the aspect ratio reserved.
+Committed outputs of `scripts/photos.mjs`, produced from the gitignored `photos-inbox/`: `people/` (portraits, 4:5), `offices/` (16:10, one per city) and `app/` (three 16:10 screens of the reporting platform's sample account). Listing photography comes from the PropTx feed and is never stored here; `fixture/` holds the flat colour fields the fixture feed uses outside production.

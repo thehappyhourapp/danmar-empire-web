@@ -16,6 +16,7 @@ import s from "@/components/motion.module.css";
    related-practice disclosure where it can be seen; the close. */
 
 const POSITION: [string, string][] = [
+  ["Founded", "2016, Oakville"],
   ["Ownership", "Family owned"],
   ["Registration", "RECO, Ontario"],
   ["Offices", "Oakville · Vaughan"],
@@ -123,6 +124,7 @@ export function Firm() {
               </figure>
             ))}
           </div>
+          <p className="meta mt-6 max-w-[60ch] leading-[1.9] text-paper/60">Statements from clients of the brokerage, reproduced with permission.</p>
         </div>
 
         {/* ── related practices, a disclosure placed where it can be seen */}

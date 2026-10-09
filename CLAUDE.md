@@ -6,7 +6,7 @@ Next.js 15 App Router, TypeScript, Tailwind 3. Deployed on Vercel. `npm run buil
 
 - `src/app/` holds one route per file. Every page is server-rendered and exports `generateMetadata`.
 - `src/views/` holds the page bodies. Do not name it `src/pages`, because Next treats that as the Pages Router.
-- `src/components/SiteShell.tsx` is the client shell: prototype notice bar, nav, footer, enquiry and saved drawers, and visit state (saved listings, collection query).
+- `src/components/SiteShell.tsx` is the client shell: nav, footer, enquiry and saved drawers, and visit state (saved listings, collection query).
 - `src/lib/seo.ts` is the single source of truth for each page's title, description and canonical. Pages read it through `src/lib/metadata.ts`. Never hard-code a title in a route.
 - `src/lib/routes.ts` maps page ids (the `seo.ts` keys) to URLs.
 - `src/lib/data.ts`, `parse.ts` and `marks.ts` hold content, the brief-bar parser and the Canva marks as data URIs.
@@ -23,7 +23,7 @@ Next.js 15 App Router, TypeScript, Tailwind 3. Deployed on Vercel. `npm run buil
 
 - Bodoni Moda (display, figures) and Libre Franklin (text, meta) are self-hosted as `.woff2` in `public/fonts/` and kept in the repo. `src/fonts.css` declares them with `font-display: swap`, plus metric-matched local fallbacks (`Bodoni Moda Fallback` on Georgia, `Libre Franklin Fallback` on Arial) so the swap does not move the layout. The two regular faces are preloaded in `src/app/layout.tsx`; italics load on demand.
 - Never swap them for a Google Fonts link or `next/font/google`. The site then falls back to a default serif whenever the CDN is unreachable.
-- The only CDN fonts are the prototype-only alternates in `TypeSwitch`.
+- There are no CDN fonts. The prototype-only `TypeSwitch` alternates were removed on 9 Oct 2026.
 
 ## Header
 
@@ -118,6 +118,6 @@ Merged from four `/taste` analyses (full data in `docs/taste/`). Loam House and 
 - Heading weight stays fixed within a page; only size changes. [Leome: Brockmann 500 at 88, 48 to 64, 24 to 32px.]
 - Not inherited from Leome: giant single words scattered across an empty viewport as a hero, a full-screen preloader, or mint-on-green as an accent pairing.
 
-## Prototype
+## Listings
 
-Listings and figures are placeholder until the PropTx feed is wired and signed off. The prototype notice bar stays until then.
+The Collection reads the brokerage's own active listings from the PropTx (TRREB) feed through `getListings()` in `src/lib/listings.ts`. Nothing from the feed is stored, AI crawlers are kept off the listing pages, and a listing whose address display flag is off never shows a street. The prototype notice bar and the fictional listings were removed on 9 Oct 2026; `docs/launch-blocking.md` holds what remains before launch.

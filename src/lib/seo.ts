@@ -11,7 +11,7 @@
    the occasional sub-heading on the pages where it is literally true
    (asset management, relocation, $5M+ private sales) and nowhere else. */
 
-export interface Meta { title: string; description: string; canonical: string; }
+export interface Meta { title: string; description: string; canonical: string; noindex?: boolean; }
 
 const SUFFIX = "Danmar Empire Real Estate Corp., Brokerage";
 
@@ -19,7 +19,7 @@ export const SEO: Record<string, Meta> = {
   home: {
     title: `Lawyer-Led Real Estate & Investment Group | Oakville, King City & Toronto | ${SUFFIX}`,
     description:
-      "Lawyer-led real estate brokerage and investment group. Over $1 billion transacted since 2016. Private sales, executive leasing from $10,000/month, income property and portfolio management across Oakville, King City, Toronto and the GTA.",
+      "Lawyer-led real estate brokerage and investment group, Oakville since 2016. Over $1 billion in sale and lease transactions across the principals' careers. Private sales, executive leasing from $10,000/month, income property and portfolio management across Oakville, King City, Toronto and the GTA.",
     canonical: "/",
   },
   management: {
@@ -61,13 +61,13 @@ export const SEO: Record<string, Meta> = {
   track: {
     title: `Track Record: Over $1 Billion in Ontario Real Estate Sold & Leased | ${SUFFIX}`,
     description:
-      "Selected residential, commercial and land transactions completed by the firm since 2016, with locations and list prices, published with client consent.",
+      "Selected residential, commercial and land transactions in which the firm acted, with locations and list prices, published with client consent.",
     canonical: "/track-record",
   },
   firm: {
     title: `The Firm: Lawyer-Led and Family-Owned | ${SUFFIX}`,
     description:
-      "A boutique investment and real estate group in Oakville and Vaughan, named for its founders, a father and a son, and led by a principal called to the bar in Ontario, New York and Minnesota. Family-owned.",
+      "A boutique investment and real estate group founded in Oakville in 2016, with offices in Oakville and Vaughan, named for its founders, a father and a son, and led by a principal called to the bar in Ontario, New York and Minnesota. Family-owned.",
     canonical: "/firm",
   },
   journal: {
@@ -75,6 +75,7 @@ export const SEO: Record<string, Meta> = {
     description:
       "What the firm actually thinks about Ontario real estate: yields, lending conditions, lease covenants and the high-end market in Oakville, King City and Toronto.",
     canonical: "/journal",
+    noindex: true, // nothing published yet; out of the nav and the sitemap until the first article
   },
   contact: {
     title: `Contact: Oakville & Vaughan Offices | ${SUFFIX}`,

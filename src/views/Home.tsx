@@ -73,7 +73,7 @@ export async function Home() {
           <div className="relative z-10 flex flex-1 flex-col px-4 pb-16 pt-28 md:px-12 md:pb-20 md:pt-36">
             <div className={GRID}>
               <p className="meta col-span-12 text-paper/60 md:col-span-6">
-                <span className="block md:inline">Oakville <span className="mx-2 opacity-50">·</span> King City <span className="mx-2 opacity-50">·</span> Toronto</span>
+                <span className="block md:inline">Est. 2016 <span className="mx-2 opacity-50">·</span> Oakville <span className="mx-2 opacity-50">·</span> King City <span className="mx-2 opacity-50">·</span> Toronto</span>
               </p>
             </div>
 
@@ -204,7 +204,7 @@ export async function Home() {
             </p>
           </div>
           <p data-reveal className={`${s.reveal} meta col-span-12 mt-6 max-w-[60ch] leading-[1.9] text-ink/70 lg:col-span-5`} style={delay(3)}>
-            Aggregate list value of transactions the firm acted in, sale and lease, 2016 to date. Methodology on request.
+            Aggregate value of sale and lease transactions in which the principals have acted over their careers. Methodology on request.
           </p>
         </div>
 

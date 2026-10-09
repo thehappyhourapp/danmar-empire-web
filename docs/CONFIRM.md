@@ -4,6 +4,11 @@ Lines marked [CONFIRM] in the briefs are never rendered. Each is listed here by
 page and section, with what the page shows in its place. Confirm or correct the
 fact and the line goes in; strike it and the entry goes.
 
+Struck on 9 Oct 2026 after Daniel's answers of 8 Oct (see docs/briefs/launch-pass.md):
+the toll-free number, the public email, the legal name, the founding year and place,
+the $1B+ basis, Martin's and Daniel's RECO forms, the testimonials permission line
+and the Vaughan photograph. What follows is still open.
+
 ## /corporate-real-estate-capital
 
 ### Context and audience
@@ -21,7 +26,6 @@ fact and the line goes in; strike it and the entry goes.
 - **Timeline "4 to 6 months".** Omitted; no timeline line is shown.
 
 ### 10. One advisor across the whole transaction
-- **RECO-registered name and category, "Daniel Sheikhan, Broker".** The page shows the name as the rest of the site does, "Daniel Sheikhan", with the role held in `src/lib/data.ts` ("Managing Partner & Broker") and the registered brokerage name beside it. Confirm the exact registered form and the page will carry it.
 - **First place, International Negotiation Competition, 2021.** Omitted on this page until the full name, organiser and category are confirmed. (The person page under /firm already carries a version of this line from the team data; confirm both together.)
 - **Representative experience rows** (re-leased an industrial unit after a tenant default; a five-year commercial lease with stepped rent and a rent-free fixturing period; sold multiple commercial and residential assets from a family office portfolio; assessed and documented market rent for a lease dispute). All omitted until each is confirmed as anonymized and cleared.
 
@@ -56,15 +60,13 @@ The feed is wired against the fixture only; nothing was read from the live Prope
 - **The policy text.** A short standard policy written for the form's consent link, covering what is collected, why, who sees it, retention, the visitor's choices and the governing law (PIPEDA, CASL, RECO record-keeping). Review every line before launch; adjust the retention statement to the brokerage's actual record-keeping policy.
 
 ## /asset-management and /property-management
-- Nothing in the brief was marked [CONFIRM]. The capital-at-work illustration and its assumptions (33% equity, 5.5 to 6% cap rate, roughly 6% debt cost) are rendered as the brief gives them, labelled as an illustration. The three software frames are reserved for screenshots at `public/photos/app/{holdings,cash,allocation}.jpg`; the platform's name and address are never shown.
+- The capital-at-work illustration and its assumptions (33% equity, 5.5 to 6% cap rate, roughly 6% debt cost) are rendered as the brief gives them, labelled as an illustration.
+- **The platform header in the three screens.** The launch brief asked for the screenshots cropped from the top with the header kept, and that is how `public/photos/app/` is cut. The header carries the platform's wordmark and a sample advisor address, which the asset-management brief had said are never shown. Confirm which rule stands; cropping below the header is a one-line change to `screen()` in `scripts/photos.mjs`.
 
 ## /firm
 
-- **Founding year and place, "2016, Oakville".** Removed from the facts strip, the opening copy and the italic line ("Oakville first, since 2016"). The person pages, the footer and llms.txt no longer state a founding year either. Confirm the year and it goes back into the strip.
-- **"Est. 2016" on Home and `foundingDate` in the Organization JSON-LD.** Removed with the founding year; the Home eyebrow now reads "Oakville · King City · Toronto" alone. The "$1B+" figure's basis line ("2016 to date") is a separate claim, already in docs/launch-blocking.md, and is unchanged.
-- **"Oakville first."** Removed with the line above; the page says the firm keeps offices in Oakville and Vaughan (OFFICES data) and nothing about which came first.
-- **Testimonials permission line.** The brief's "Statements from clients of the brokerage, reproduced with permission." is not shown until Daniel confirms permission. The seven statements are reproduced verbatim from the previous site's testimonials page, attribution as published.
-- **Office photographs.** `Oakville.jpg` (the glass building marked 2010, taken as 2010 Winston Park Drive) is used for both Oakville rows; "Oakville 2.png" (a flex unit marked 10) is unused. Confirm the Oakville image is the right building, and whether 2380 Bristol Circle should carry its own photograph. `Vaughan.jpg` shows 9131 Keele Street; it carries a small watermark in its lower right corner and a tenant's sign, so confirm the firm holds the rights to publish it.
+- **The italic line.** "Dan and Mar. A father, a son, and the firm they named after themselves." stays without the year; the facts strip now carries "Founded · 2016, Oakville". Say if the line should carry the year as well.
+- **Office photographs.** `Oakville.jpg` (the glass building marked 2010, taken as 2010 Winston Park Drive) is used for both Oakville rows; "Oakville 2.png" (a flex unit marked 10) is unused. Confirm the Oakville image is the right building, and whether 2380 Bristol Circle should carry its own photograph. `Vaughan.jpg` is now cropped to leave out the watermark and the tenant's sign; confirm the firm holds the rights to publish the photograph itself.
 
 ## /firm/[slug]
 
@@ -75,11 +77,9 @@ Deleted as unconfirmed on 7 Oct 2026. Nothing below is on the site; each line re
 - "Three decades in capital project delivery before real estate." (line) and "Martin spent thirty years delivering capital projects before he ever took a listing, and it is the reason this firm runs files the way it does. A project manager does not present a building without the numbers behind it, and does not accept a schedule they have not tested." (bio). The brief says "three decades" is wrong; the page now says "about forty-five years ago in tablet formulation" and "multi-billion-dollar projects in the pharmaceutical industry", from the supplied facts.
 - "As Broker of Record he signs every data agreement, owns the trust accounting, and is the final read on every file that leaves the office. He also holds the firm's builder relationships, which is how Danmar clients see new-construction inventory before it reaches a sales centre." (bio)
 - Focus "Brokerage compliance, Development, Builder relationships"; areas "Oakville · Vaughan · Ontario".
-- **Role.** Now "Broker of Record · Real Estate Broker · Partner" as the brief gives it. Confirm the RECO-registered category wording.
 - **Background paragraph.** Written from the supplied facts only, in plain prose, until Martin's own snippet arrives (photos-inbox/copy/martin-snippet.txt); it is then replaced verbatim.
 
 ### Daniel Sheikhan
-- "Managing Partner & Broker" (role). Now "Partner · Barrister & Solicitor · Attorney · Real Estate Broker"; "Managing Partner" returns only if Daniel re-confirms it.
 - "Leads asset management, investment and the commercial practice." (line)
 - "Daniel is called to the bar in Ontario and admitted in New York and Minnesota, and holds a commerce degree alongside the law degree. He leads the firm's asset and portfolio management mandates and underwrites every investment file before it reaches a client." and "First place at the 2021 International Negotiation Competition, and a Minnesota Qualified Neutral. In practice that means the hard conversations in a transaction are the ones he is most comfortable having." (bio). The credentials themselves (bar admissions, B.Comm., J.D., the 2021 competition, Minnesota Qualified Neutral) were supplied earlier and stay as Certifications, Education and Achievements rows; the surrounding prose is gone until Daniel's own bio arrives (photos-inbox/copy/daniel-bio.txt).
 - Focus "Asset & portfolio management, Investment underwriting, Commercial and industrial"; areas "Greater Toronto Area · Ontario · Cross-border".

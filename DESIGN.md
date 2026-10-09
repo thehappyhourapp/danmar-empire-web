@@ -136,7 +136,7 @@ Two grounds and one metal: a deep conifer green, a warm unbleached paper, and an
 ### Neutral
 - **Paper** (paper): the cream ground of every inner page and Home's middle chapters; paper type on forest.
 - **Ink** (ink): running text on cream, at 80% for body and 70% for secondary text and labels.
-- **Forest Soft** (forest-soft): the prototype notice bar only. It goes when the notice goes.
+- **Forest Soft** (forest-soft): kept as a token; unused since the prototype notice bar went on 9 Oct 2026.
 
 ### Hairlines
 Content rules (row breaks, dividers, the lens bar, the cell dividers of the spec and numbers strips) are the only hairlines: forest at 14% on cream and paper at 12% on forest. No column grid is drawn. Control edges (form fields, outlined buttons) are stronger, forest at 55% on cream and paper at 45% on forest, so they meet 3:1.
@@ -251,4 +251,4 @@ Canadian spelling (colour, neighbourhood, centre, licence as a noun) and no em d
 
 ## Launch-blocking
 
-What must be resolved before this site goes live is kept in `docs/launch-blocking.md`: the form backend (Resend keys and the sending domain), the "$1B+ transacted" claim and its methodology, and the placeholder content (listings, transactions, journal articles, photography) that the prototype notice covers until then.
+What must be resolved before this site goes live is kept in `docs/launch-blocking.md`: the form backend (the Resend key), the live check of the PropTx feed, the Vercel framework switch and DNS. Facts still awaiting Daniel are in `docs/CONFIRM.md`.

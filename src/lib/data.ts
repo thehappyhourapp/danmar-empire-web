@@ -37,17 +37,6 @@ export interface Listing {
   addressWithheld?: boolean;
 }
 
-export const JOURNAL = [
-  { id: "prime-report", kind: "Market Report", date: "September 2026", title: "The Prime Report: Greater Toronto, Autumn 2026",
-    dek: "Our twice-yearly read on the top decile of the GTA market, written for owners rather than for headlines.", read: "18 min" },
-  { id: "five-year-hold", kind: "Analysis", date: "August 2026", title: "What the rate path actually does to a five-year hold",
-    dek: "Three financing scenarios run against the same Oakville detached, and why the middle one is the one to underwrite.", read: "9 min" },
-  { id: "tarion", kind: "Field Notes", date: "July 2026", title: "Reading a builder's Tarion record before you sign the APS",
-    dek: "The public registry tells you more than the sales centre will. Here is where to look and what the numbers mean.", read: "7 min" },
-  { id: "ravine", kind: "Field Notes", date: "June 2026", title: "Ravine lots, conservation setbacks, and what the view costs",
-    dek: "A premium that is real, a buildable envelope that is often smaller than the survey suggests.", read: "6 min" },
-];
-
 /** Only slug, name and role are required. Leave a field out rather than fill it
  *  with anything the person has not confirmed; the pages omit what is absent. */
 /** A person of the firm. Only slug, name and role are required. Every other field

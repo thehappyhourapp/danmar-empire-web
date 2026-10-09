@@ -11,7 +11,7 @@ const SECTIONS: [string, string[]][] = [
     "The site does not use analytics or advertising cookies.",
   ]],
   ["Why", ["To reply to you, to arrange the conversation you asked for, and to keep a record of it. We do not sell personal information, and we do not add you to a mailing list without asking."]],
-  ["Who sees it", ["People at Danmar Empire Real Estate Corp., Brokerage who handle your enquiry. Messages sent through the site are delivered by an email service provider acting on our instructions."]],
+  ["Who sees it", ["People at Danmar Empire Real Estate Corp. who handle your enquiry. Messages sent through the site are delivered by an email service provider acting on our instructions."]],
   ["How long we keep it", ["As long as the enquiry and any work that follows it are open, and afterwards for as long as the law and our regulator require brokerage records to be kept."]],
   ["Your choices", ["You can ask what we hold about you, ask us to correct it, or ask us to delete it where we are not required to keep it. You can withdraw consent to be contacted at any time. Write to the desk and we will act on it."]],
   ["The law", ["We handle personal information under Canada's Personal Information Protection and Electronic Documents Act and Canada's Anti-Spam Legislation, and under the record-keeping requirements of the Real Estate Council of Ontario."]],
@@ -25,7 +25,7 @@ export function Privacy() {
           <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em]">Privacy.</h1>
         </div>
         <p className="col-span-12 mt-10 max-w-[48ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-16">
-          How Danmar Empire Real Estate Corp., Brokerage handles what you send through this site.
+          How Danmar Empire Real Estate Corp. handles what you send through this site.
         </p>
         <div className="col-span-12 mt-16 lg:mt-24">
           {SECTIONS.map(([title, paras]) => (

@@ -157,7 +157,7 @@ function Advisor() {
           <ImageFrame ratio="4/5" alt="" fallback="flat" ground="forest" />
         </div>
         <div className="col-span-12 mt-8 md:col-span-8 md:col-start-5 md:mt-0">
-          <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">Daniel Sheikhan</h3>
+          <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">Daniel Sheikhan, Broker</h3>
           <p className={`meta mt-3 ${t.meta}`}>{d.role}<span className="mx-2 opacity-40">/</span>{BROKERAGE}</p>
           <div className={`mt-6 max-w-[48ch] space-y-5 text-[16px] leading-[1.85] ${t.body}`}>
             <p>A finance degree, and a background in real estate investment and portfolio management.</p>
@@ -215,8 +215,8 @@ export function Capital() {
             <TrackLink href="#estimator" location="hero" className="meta text-paper/70">Estimate your capital unlock</TrackLink>
           </>
         }
-        numbers={[["Transacted since 2016", "$1B+"], ["Lead advisor trained in law and finance", "Ontario brokerage"]]}
-        numbersNote="Aggregate list value of transactions the firm acted in, sale and lease, 2016 to date. Methodology on request."
+        numbers={[["Transacted", "$1B+"], ["Lead advisor trained in law and finance", "Ontario brokerage"]]}
+        numbersNote="Aggregate value of sale and lease transactions in which the principals have acted over their careers. Methodology on request."
         sections={[
           { heading: "When CFOs call us.", items: TRIGGERS, numbered: false },
           { node: <p className={`meta col-span-12 mt-6 ${t.meta}`}>Best fit: owner-occupied properties in Ontario.</p> },

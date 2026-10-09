@@ -31,7 +31,7 @@ export function Track() {
         <div className="col-span-12 mt-16 lg:col-span-5 lg:mt-24">
           <p className="fig text-[clamp(3.25rem,7.5vw,6.5rem)] leading-[0.9] tracking-[-.02em] text-brass">$1B+</p>
           <p className="meta mt-6 max-w-[60ch] leading-[1.9] text-ink/70">
-            Aggregate list value of transactions the firm acted in, sale and lease, 2016 to date. Methodology on request.
+            Aggregate value of sale and lease transactions in which the principals have acted over their careers. Methodology on request.
           </p>
         </div>
         <p className="col-span-12 mt-8 max-w-[48ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-24 lg:self-end">

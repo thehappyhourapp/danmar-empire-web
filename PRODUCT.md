@@ -71,6 +71,9 @@ Binding, as given by the owner. The full visual specification lives in **CLAUDE.
 ## Evidence on Hand
 
 - **Real:**
+  - founded in Oakville in 2016; the "$1B+" figure is the aggregate value of sale and lease transactions in which the principals have acted over their careers, with the methodology available on request (confirmed 8 Oct 2026);
+  - seven client statements, reproduced verbatim with permission;
+  - three screens of the firm's own reporting platform, from a sample account, on /asset-management;
   - the Collection's listings, read live from the PropTx (TRREB) feed under the brokerage's Data License Agreement; nothing from the feed is stored, and AI crawlers are kept off the listing pages as the licence requires;
   - firm history and positioning copy, practice descriptions, relocation questions, the ownership argument, office addresses and telephone numbers (all in `src/lib/data.ts`);
   - seven team profiles;
@@ -78,9 +81,7 @@ Binding, as given by the owner. The full visual specification lives in **CLAUDE.
   - the related-practice disclosures.
 - **Placeholder, must not ship as fact:**
   - track record entries (pending written consent);
-  - journal articles (titles and summaries only).
-- **Claimed, needs substantiation before publication:** "$1B+ transacted since 2016". The site states "methodology on request".
-- **Absent, do not fabricate:** testimonials, client names, press coverage, awards, rankings.
+- **Absent, do not fabricate:** client names, press coverage, awards, rankings, journal articles (the route answers with no entries and is noindex until the first one).
 
 ## Product Principles
 

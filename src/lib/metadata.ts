@@ -6,6 +6,8 @@ import { OFFICES } from "./data";
 export const SITE = "https://danmarempire.com";
 const SUFFIX = "Danmar Empire Real Estate Corp., Brokerage";
 export const REGISTERED_NAME = SUFFIX;
+/** The corporate legal name, where a legal name rather than the RECO advertising name is wanted. */
+export const LEGAL_NAME = "Danmar Empire Real Estate Corp.";
 export const ORG_ID = `${SITE}/#organization`;
 
 const postal = (addr: string, post: string) => {
@@ -21,11 +23,13 @@ export const ORGANIZATION = {
   "@type": "RealEstateAgent",
   "@id": ORG_ID,
   name: "Danmar Empire",
-  legalName: REGISTERED_NAME,
+  legalName: LEGAL_NAME,
+  foundingDate: "2016",
+  foundingLocation: { "@type": "Place", name: "Oakville, Ontario" },
   url: SITE,
   logo: `${SITE}/marks/seal-cream.svg`,
   telephone: "+1 905 901 5011",
-  email: "info@danmarempire.com",
+  email: "daniel@danmarempire.com",
   address: officeAddresses(),
   areaServed: { "@type": "AdministrativeArea", name: "Ontario" },
   sameAs: ["https://instagram.com/danmarempire", "https://linkedin.com/company/danmar-empire-group"],
@@ -39,6 +43,7 @@ export function toMetadata(m: Meta): Metadata {
     title: m.title,
     description: m.description,
     alternates: { canonical: m.canonical },
+    ...(m.noindex ? { robots: { index: false, follow: false } } : {}),
     // A page-level openGraph object replaces the parent's, file-based image
     // included, so the default share image is named here for every route.
     openGraph: { title: m.title, description: m.description, url: m.canonical, siteName: SUFFIX, locale: "en_CA", type: "website", images: [OG_IMAGE] },

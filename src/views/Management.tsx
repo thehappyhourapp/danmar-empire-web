@@ -1,11 +1,10 @@
 import { PILLARS } from "@/lib/data";
-import { photo } from "@/lib/photos";
+import Image from "next/image";
 import { href } from "@/lib/routes";
 import { GRID, delay } from "@/lib/layout";
 import { FaqRows } from "@/components/Faq";
 import { faqJsonLd } from "@/lib/faq";
 import type { Faq } from "@/lib/faq";
-import { ImageFrame } from "@/components/ImageFrame";
 import { Practice, PracticeLink } from "@/components/Practice";
 import { practiceTones } from "@/components/practiceTones";
 import s from "@/components/motion.module.css";
@@ -44,10 +43,13 @@ const CAPITAL: [string, string][] = [
   ["C", "The difference: principal paydown and appreciation now work on $3,000,000 instead of $1,000,000. Leverage triples what works for you and what works against you. Whether to do it is the question we are paid to answer. This page does not recommend it."],
 ];
 
-const SCREENS: [file: string, caption: string][] = [
-  ["holdings", "Every holding, its debt and its net equity on one page."],
-  ["cash", "Cash position projected thirty and ninety days out."],
-  ["allocation", "Allocation by sector, owner and geography."],
+/* Three screens of a sample account on the firm's own platform, from
+   public/photos/app/ (scripts/photos.mjs). The alt text describes the screen and
+   carries no figures. */
+const SCREENS: [file: string, caption: string, alt: string][] = [
+  ["dashboard", "Family dashboard: net worth, liquidity and debt in one view.", "The dashboard screen: a one-year net worth chart with liquidity, real estate value and debt summaries beneath it."],
+  ["properties", "Property register: value, cost base and gain by holding and owner.", "The property register screen: a table of holdings with type, city, owner, value, cost base and unrealised gain columns."],
+  ["reports", "Reports: statements and exports on demand.", "The reports screen: a list of standard reports with generate buttons, and the most recent exports beside it."],
 ];
 
 const FAQ: Faq[] = [
@@ -86,15 +88,18 @@ function Software() {
           We built the reporting platform we use. Each family sees its own portfolio, nothing else, and the quarterly report is produced from it rather than from a spreadsheet.
         </p>
       </div>
-      {/* three 16:10 frames, flat until the screenshots exist in public/photos/app/ */}
-      <div className={`${GRID} gap-y-10 border-b ${t.rule} pb-10`}>
-        {SCREENS.map(([file, caption], i) => (
+      {/* three 16:10 frames, lazy: they sit far below the fold */}
+      <div className={`${GRID} gap-y-10`}>
+        {SCREENS.map(([file, caption, alt], i) => (
           <figure key={file} data-reveal className={`${s.rise} col-span-12 md:col-span-4`} style={delay(i)}>
-            <ImageFrame src={photo(`/photos/app/${file}.jpg`)} ratio="16/10" alt={caption} fallback="flat" ground="forest" />
+            <div className="relative aspect-[16/10] overflow-hidden bg-paper/5">
+              <Image src={`/photos/app/${file}.jpg`} alt={alt} fill sizes="(min-width: 768px) 30vw, 100vw" className="object-cover object-top" />
+            </div>
             <figcaption className={`meta mt-4 ${t.meta}`}>{caption}</figcaption>
           </figure>
         ))}
       </div>
+      <p className={`meta mt-6 border-b ${t.rule} pb-10 ${t.meta}`}>Sample account. Figures are illustrative.</p>
     </div>
   );
 }

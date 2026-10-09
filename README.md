@@ -21,8 +21,9 @@ npm start        # serve the production build
   is unreachable, which is how the design was mis-reviewed for weeks.
 - **Marks** live in `src/lib/marks.ts` as base64 SVG data URIs, exported from the
   brand's Canva artwork.
-- **Listings are placeholder** until the TRREB/PropTx DLA feed is signed and wired.
-  The prototype notice bar says so; remove it only once that is true.
+- **Listings come from the TRREB/PropTx DLA feed** (`src/lib/proptx.ts`); nothing from
+  it is stored. Without a token the Collection shows its empty state; `PROPTX_FIXTURE=1`
+  builds against the invented fixture outside production.
 - **Own listings only.** The firm signs the DLA and deliberately not IDX or VOW.
   There is no MLS search or map, by design.
 - `src/lib/seo.ts` is the single source of truth for per-page title, description

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { OFFICES } from "@/lib/data";
-import { ORG_ID, REGISTERED_NAME, SITE, officeAddresses } from "@/lib/metadata";
+import { LEGAL_NAME, ORG_ID, SITE, officeAddresses } from "@/lib/metadata";
 import { href } from "@/lib/routes";
 import { Chapter, Lines } from "@/components/Chapter";
 import { GRID, HEAD, delay } from "@/lib/layout";
@@ -12,7 +12,7 @@ import s from "@/components/motion.module.css";
 /* Contact: cream, line rise only. The offices as rows, then the enquiry form
    inline, posting through the same path and states as the drawer. */
 
-const EMAIL = "info@danmarempire.com";
+const EMAIL = "daniel@danmarempire.com";
 
 const telHref = (t: string) => `tel:+1${t.replace(/\D/g, "")}`;
 /* one photograph per city; the two Oakville addresses share one */
@@ -24,7 +24,7 @@ export function Contact() {
     "@type": "RealEstateAgent",
     "@id": ORG_ID,
     name: "Danmar Empire",
-    legalName: REGISTERED_NAME,
+    legalName: LEGAL_NAME,
     url: SITE,
     email: EMAIL,
     telephone: `+1 ${OFFICES[0].tel}`,
