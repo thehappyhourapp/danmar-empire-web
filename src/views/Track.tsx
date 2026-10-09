@@ -35,12 +35,22 @@ export function Track() {
           </p>
         </div>
         <p className="col-span-12 mt-8 max-w-[48ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-24 lg:self-end">
-          Selected sale and lease transactions in which the firm acted for a party. Figures shown are list
-          prices at the time of the transaction, published with the written consent of the parties involved.
+          Sale and lease transactions in which the firm acted for a party are listed here one at a time, with the
+          list price at the time of the transaction, each published with the written consent of the parties involved.
         </p>
 
         {/* ── the gallery, as rows */}
         <div className="col-span-12 mt-16 lg:mt-24">
+          {TRACK.length === 0 && (
+            <div className={`${GRID} border-y border-forest/14 py-8 md:py-10`}>
+              <p className="col-span-12 max-w-[48ch] text-[16px] leading-[1.85] text-ink/80 md:col-span-6">
+                Sold and leased properties appear here as consents are confirmed. Representative transactions on request.
+              </p>
+              <div className="col-span-12 mt-6 md:col-span-5 md:col-start-8 md:mt-0 md:self-end md:text-right">
+                <EnquireButton className={`${s.tlink} meta text-forest`}>Request transactions</EnquireButton>
+              </div>
+            </div>
+          )}
           {TRACK.map((t, i) => {
             const odd = i % 2 === 1;
             return (
@@ -64,23 +74,23 @@ export function Track() {
               </div>
             );
           })}
-          <p className="meta mt-6 max-w-[60ch] leading-[2] text-ink/70">
+          {TRACK.length > 0 && <p className="meta mt-6 max-w-[60ch] leading-[2] text-ink/70">
             Transactions are published with the written consent of the relevant party. Figures shown are list prices
             at the time of the transaction and are not sale prices. Danmar Empire Real Estate Corp., Brokerage acted
             for one or more parties in each transaction shown; acting for a party does not imply the firm acted for
             all parties. Not intended to solicit properties currently under contract.
-          </p>
+          </p>}
         </div>
 
         {/* ── close */}
         <div className={`col-span-12 mt-20 ${GRID} border-t border-forest/14 pt-12 lg:mt-28 lg:pt-16`}>
           <div className="col-span-12 lg:col-span-6">
-            <Lines lines={["Most of what we transact", "is never published at all."]} className={`${HEAD} max-w-[18ch]`} />
+            <Lines lines={["Some of what we transact", "is never published at all."]} className={`${HEAD} max-w-[18ch]`} />
           </div>
           <div className="col-span-12 mt-8 flex flex-col items-start gap-6 lg:col-span-5 lg:col-start-7 lg:mt-2">
             <p className="max-w-[46ch] text-[15px] leading-[1.8] text-ink/80">
-              Roughly one file in four is off-market, and those are not shown here at any price. If discretion
-              matters more than exposure, that is the conversation to have.
+              Off-market files are not shown here at any price. If discretion matters more than exposure, that is
+              the conversation to have.
             </p>
             <EnquireButton className={`${s.tlink} font-display text-[1.35rem] font-medium leading-tight text-forest`}>Speak privately</EnquireButton>
             <Link href={href("collection")} className={`${s.tlink} meta text-ink/70`}>The Collection</Link>

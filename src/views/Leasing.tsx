@@ -1,4 +1,4 @@
-import { COVENANTS, FURNISHING, PILLARS } from "@/lib/data";
+import { COVENANTS, FURNISHING } from "@/lib/data";
 import { href } from "@/lib/routes";
 import { Lines } from "@/components/Chapter";
 import { GRID, HEAD, delay } from "@/lib/layout";
@@ -42,8 +42,6 @@ function Extras() {
       <div data-reveal className={`${s.rise} col-span-12 mt-20 ${GRID} border-y border-forest/14 py-10 lg:mt-28`}>
         <div className="col-span-12 md:col-span-5">
           <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">Furnished, where the brief calls for it</h3>
-          <p className="fig mt-6 text-[clamp(1.6rem,2.6vw,2.4rem)] text-brass">+{FURNISHING.uplift}</p>
-          <p className="meta mt-2 text-ink/70">of base rent, fully furnished and installed</p>
         </div>
         <div className="col-span-12 mt-6 md:col-span-6 md:col-start-7 md:mt-0">
           <p className="max-w-[48ch] text-[15px] leading-[1.85] text-ink/80">{FURNISHING.note}</p>
@@ -57,7 +55,6 @@ function Extras() {
 }
 
 export function Leasing() {
-  const pillar = PILLARS[3];
   return (
     <Practice
       tone="cream"
@@ -69,8 +66,6 @@ export function Leasing() {
       intro={[
         "We act on both sides of the executive lease: for landlords who want the rent to arrive without a monthly conversation about it, and for relocation departments who want the search finished before the family lands.",
       ]}
-      // the furnishing figure alone; its unit words are in the furnishing row below
-      numbers={[...pillar.stats.filter(([k]) => k !== "Furnishing"), ["Entry point", "$10,000 per month"], ["Furnishing", `+${FURNISHING.uplift.replace(" to ", " – ")}`]]}
       sections={[
         { heading: "For landlords.", items: FOR_LANDLORDS },
         { heading: "For relocation departments.", items: FOR_RELOCATION },

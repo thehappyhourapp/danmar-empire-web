@@ -80,7 +80,7 @@ Binding, as given by the owner. The full visual specification lives in **CLAUDE.
   - the seal, wreath and lockup marks, exported from Canva (`src/lib/marks.ts`);
   - the related-practice disclosures.
 - **Placeholder, must not ship as fact:**
-  - track record entries (pending written consent);
+  - track record entries: none published; entries arrive through docs/briefs/track-record-intake.md with consent on file;
 - **Absent, do not fabricate:** client names, press coverage, awards, rankings, journal articles (the route answers with no entries and is noindex until the first one).
 
 ## Product Principles

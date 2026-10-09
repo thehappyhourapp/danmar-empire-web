@@ -37,7 +37,7 @@ export const SEO: Record<string, Meta> = {
   leasing: {
     title: `Executive & Luxury Home Leasing from $10,000/Month | Oakville, Toronto, King City | ${SUFFIX}`,
     description:
-      "Executive leasing for corporate and diplomatic relocation, $10,000 per month and up. Fully furnished for an additional 30% to 45% of base rent. Covenant-qualified tenants placed across Oakville, King City and Toronto.",
+      "Executive leasing for corporate and diplomatic relocation, $10,000 per month and up. Fully furnished where the brief calls for it. Covenant-qualified tenants placed across Oakville, King City and Toronto.",
     canonical: "/executive-leasing",
   },
   relocating: {

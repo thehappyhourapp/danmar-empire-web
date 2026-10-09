@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { OWNERSHIP, PILLARS, TRACK } from "@/lib/data";
+import { OWNERSHIP, PILLARS } from "@/lib/data";
+import { EnquireButton } from "@/components/SiteShell";
 import { getListings } from "@/lib/listings";
 import { money } from "@/lib/parse";
 import { listingPhoto } from "@/lib/photos";
@@ -16,7 +17,6 @@ import m from "@/components/motion.module.css";
 
 type Tone = "cream" | "forest" | "deep";
 
-const RECORD = ["t3", "t5", "t1", "t8", "t2", "t7"];
 const PRACTICE_ROUTES = ["management", "investments", "collection", "leasing", "capital"];
 
 const GRID = "grid grid-cols-12 gap-x-4 md:gap-x-8";
@@ -61,7 +61,6 @@ function Chapter({ tone, wipeFrom, className = "", inner = "", children }: {
 export async function Home() {
   // the three highest-priced active listings; an empty feed shows one line instead
   const featured = [...(await getListings())].sort((a, b) => b.price - a.price).slice(0, 3);
-  const record = RECORD.map((id) => TRACK.find((t) => t.id === id)!);
 
   return (
     <div id="home">
@@ -199,8 +198,8 @@ export async function Home() {
           <div className="col-span-12 mt-12 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:self-end">
             <Lines d={1} lines={["The number, and", "the properties behind it."]} className={HEAD} />
             <p data-reveal style={delay(2)} className={`${s.reveal} mt-6 max-w-[48ch] text-[15.5px] leading-[1.85] text-ink/80`}>
-              A total is easy to publish. These are some of the properties behind ours, with what they were asking,
-              published only with the parties' written consent.
+              A total is easy to publish. The properties behind ours appear one at a time, with what they were
+              asking, and only with the parties' written consent.
             </p>
           </div>
           <p data-reveal className={`${s.reveal} meta col-span-12 mt-6 max-w-[60ch] leading-[1.9] text-ink/70 lg:col-span-5`} style={delay(3)}>
@@ -208,22 +207,16 @@ export async function Home() {
           </p>
         </div>
 
+        {/* no published entries yet: one honest row, the same line as /track-record */}
         <div className="col-span-12 mt-16 lg:mt-24">
-          {record.map((t, i) => (
-            <div key={t.id} data-reveal className={`${s.reveal} ${GRID} items-baseline border-t border-forest/14 py-6 last:border-b md:py-6`} style={delay(i)}>
-              <h3 className="col-span-8 font-display text-[1.25rem] font-medium leading-[1.15] md:col-span-4">{t.place}</h3>
-              <p className="fig col-span-4 text-right text-[14px] text-forest md:order-last md:col-span-2 md:col-start-11">
-                {t.kind === "Leased" ? `$${t.list.toLocaleString("en-CA")}/mo` : money(t.list)}
-              </p>
-              <p className="meta col-span-8 mt-2 text-ink/70 md:col-span-4 md:col-start-5 md:mt-0">
-                {t.city} <span className="mx-2 opacity-40">/</span> {t.type}
-              </p>
-              <p className="meta col-span-4 mt-2 text-right text-ink/70 md:col-span-2 md:col-start-9 md:mt-0 md:text-left">{t.kind} {t.year}</p>
+          <div data-reveal className={`${s.reveal} ${GRID} border-y border-forest/14 py-8 md:py-10`}>
+            <p className="col-span-12 max-w-[48ch] text-[16px] leading-[1.85] text-ink/80 md:col-span-6">
+              Sold and leased properties appear here as consents are confirmed. Representative transactions on request.
+            </p>
+            <div className="col-span-12 mt-6 flex flex-wrap items-baseline gap-x-10 gap-y-4 md:col-span-5 md:col-start-8 md:mt-0 md:self-end md:justify-end">
+              <EnquireButton className={`${m.tlink} meta text-forest`}>Request transactions</EnquireButton>
+              <Link href={href("track")} className={`${m.tlink} meta text-forest`}>The full record</Link>
             </div>
-          ))}
-          <div className="mt-6 flex flex-wrap items-baseline justify-between gap-x-10 gap-y-4">
-            <p className="meta max-w-[60ch] leading-[1.9] text-ink/70">List prices at the time of the transaction, not sale prices.</p>
-            <Link href={href("track")} className={`${m.tlink} meta text-forest`}>The full record</Link>
           </div>
         </div>
 
@@ -239,14 +232,14 @@ export async function Home() {
                 </div>
                 <div className="col-span-12 mt-6 md:col-span-6 md:col-start-7 md:mt-0">
                   <p className="max-w-[48ch] text-[14.5px] leading-[1.9] text-ink/70">{p.detail}</p>
-                  <dl className="mt-8 grid grid-cols-1 gap-y-4 border-t border-forest/14 pt-4 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-0">
-                    {p.stats.filter(([k]) => k !== "Furnishing").map(([k, v]) => (
+                  {p.stats.length >= 2 && <dl className="mt-8 grid grid-cols-1 gap-y-4 border-t border-forest/14 pt-4 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-0">
+                    {p.stats.map(([k, v]) => (
                       <div key={k} className="flex flex-col-reverse">
                         <dt className="meta mt-2 text-ink/70">{k}</dt>
                         <dd className="fig text-[14px] text-forest">{v}</dd>
                       </div>
                     ))}
-                  </dl>
+                  </dl>}
                 </div>
               </div>
             ))}

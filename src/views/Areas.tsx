@@ -29,7 +29,7 @@ export async function Areas() {
         </div>
         <p className="col-span-12 mt-10 max-w-[48ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-16">
           The firm keeps offices in Oakville and Vaughan and is licensed across Ontario. Oakville is where the
-          depth is: it is our home market, our largest book, and the town we know street by street. Beyond it we
+          depth is: it is our home market and the town we know street by street. Beyond it we
           act throughout the Greater Toronto Area and in the province&apos;s recreational and specialist markets.
         </p>
 

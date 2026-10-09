@@ -186,19 +186,19 @@ export const PILLARS = [
     n: "02", title: "Investment",
     line: "Income property, land with approvals, and single-tenant net lease across Ontario.",
     detail: "Rent roll, stabilised pro forma, environmental and zoning, done before you see it. A buyer who discovers those things during conditions is a buyer who renegotiates.",
-    stats: [["Going-in yields", "4.6% – 6.1%"], ["Asset classes", "Multi-res · Net lease · Land"], ["Diligence", "Released under NDA"]],
+    stats: [["Asset classes", "Multi-res · Net lease · Land"], ["Diligence", "Released under NDA"]],
   },
   {
     n: "03", title: "Private Sales",
     line: "Freehold and estate residential from $1.5 million, including off-market inventory that is never syndicated to the portals.",
     detail: "Photographed and written before they are priced. Held off-market where discretion serves the seller. Taken to a shortlist, not a crowd.",
-    stats: [["Median list", "$2.38M"], ["Off-market share", "Roughly one in four"], ["Core markets", "Oakville · Toronto · Vaughan"]],
+    stats: [], // one confirmed cell (core markets) is not a strip
   },
   {
     n: "04", title: "Executive Leasing",
     line: "Corporate and diplomatic relocation at $10,000 per month and above, placed against verified covenants.",
     detail: "We qualify the guarantee behind the tenant, not a personal credit file. Corporate undertakings, parent-company covenants, diplomatic notes. Delivered furnished where the brief calls for it.",
-    stats: [["Average lease", "$12,000+ / month"], ["Typical term", "12 – 36 months"], ["Furnishing", "+30% – 45% of base rent"]],
+    stats: [], // the $10,000 floor is in the hero line; one cell is not a strip
   },
   {
     n: "05", title: "Corporate Real Estate Capital",
@@ -212,9 +212,8 @@ export const PILLARS = [
    as the sourcing route, never with logos and never implying a partnership or
    an affiliate arrangement that does not exist. */
 export const FURNISHING = {
-  uplift: "30% to 45%",
   sources: ["CB2", "Crate & Barrel", "Anthropologie", "RH"],
-  note: "Delivered fully furnished for an additional 30% to 45% of base rent. We specify and install it ourselves, through CB2, Crate & Barrel, Anthropologie and RH. A family arriving with suitcases needs nothing on day one.",
+  note: "Delivered fully furnished where the brief calls for it, at a furnishing charge set out in the lease. We specify and install it ourselves, through CB2, Crate & Barrel, Anthropologie and RH. A family arriving with suitcases needs nothing on day one.",
 };
 
 /* Tenant profile is described by covenant, not by employer logo.
@@ -236,16 +235,16 @@ export interface Area { slug: string; name: string; region: string; tier: 1 | 2 
 
 export const AREAS: Area[] = [
   { slug: "oakville", name: "Oakville", region: "Halton", tier: 1,
-    note: "Our home market and our deepest book. Lakefront, ravine and estate lots, and the executive-lease stock that serves the corporate corridor.",
+    note: "Our home market. Lakefront, ravine and estate lots, and the executive-lease stock that serves the corporate corridor.",
     pockets: ["Old Oakville", "Bronte", "Joshua Creek", "Southwest Oakville", "Morrison", "Eastlake", "Glen Abbey"] },
   { slug: "toronto", name: "Toronto", region: "City of Toronto", tier: 1,
     note: "Estate residential and the executive lease market. Central ravine neighbourhoods, and the downtown towers where corporate relocations land.",
     pockets: ["The Bridle Path", "Forest Hill", "Rosedale", "Yorkville", "Lawrence Park", "Hoggs Hollow", "The Kingsway", "King West"] },
   { slug: "vaughan", name: "Vaughan", region: "York", tier: 2,
-    note: "Our second office, and the centre of the commercial and industrial book along the Keele and Highway 7 corridors. Estate residential concentrated in Kleinburg.",
+    note: "Our second office. Commercial and industrial property along the Keele and Highway 7 corridors, and estate residential concentrated in Kleinburg.",
     pockets: ["Kleinburg", "Woodbridge", "Vaughan Enterprise Zone"] },
   { slug: "king-city", name: "King City", region: "King Township", tier: 1,
-    note: "Ten-acre minimums, equestrian properties, the Oak Ridges Moraine. The least liquid and most privately traded market in the GTA.",
+    note: "Ten-acre minimums, equestrian properties, the Oak Ridges Moraine.",
     pockets: ["King City", "Nobleton", "Schomberg", "Oak Ridges Moraine"] },
   { slug: "mississauga", name: "Mississauga", region: "Peel", tier: 2,
     note: "Lorne Park and Mineola for estate residential; Airport Corporate and Cooksville for income property.",
@@ -257,7 +256,7 @@ export const AREAS: Area[] = [
     note: "Acreage, hobby farms and the estate subdivisions on the moraine.",
     pockets: ["Caledon East", "Palgrave", "Aurora Estates", "South Richvale"] },
   { slug: "muskoka", name: "Muskoka", region: "Cottage Country", tier: 3,
-    note: "The Big Three lakes. Boathouse frontage, shoreline road allowance and the assignment market, each with rules of its own.",
+    note: "The Big Three lakes. Boathouse frontage and shoreline road allowance, each with rules of its own.",
     pockets: ["Lake Joseph", "Lake Rosseau", "Lake Muskoka", "Port Carling", "Windermere"] },
   { slug: "niagara", name: "Niagara & Prince Edward County", region: "Southern Ontario", tier: 3,
     note: "Estate wineries, agricultural land with severance potential, and the hospitality assets attached to both.",
@@ -274,16 +273,9 @@ export const AREAS: Area[] = [
    this section becomes the strongest page on the site. */
 export interface Record_ { id: string; place: string; city: string; list: number; kind: "Sold" | "Leased"; year: string; type: string; hue: number; photo: string; note: string; }
 
-export const TRACK: Record_[] = [
-  { id: "t1", place: "Park Lane Circle", city: "The Bridle Path, Toronto", list: 14800000, kind: "Sold", year: "2025", type: "Estate residence", hue: 148, photo: "", note: "Represented the vendor. Sold privately, never listed on the system." },
-  { id: "t2", place: "Lake Joseph", city: "Muskoka Lakes", list: 9250000, kind: "Sold", year: "2025", type: "Waterfront cottage", hue: 190, photo: "", note: "Two-slip boathouse with sleeping cabin above." },
-  { id: "t3", place: "Lakeshore Road West", city: "Southwest Oakville", list: 7400000, kind: "Sold", year: "2026", type: "Lakefront residence", hue: 186, photo: "", note: "Represented the purchaser against three competing offers." },
-  { id: "t4", place: "The Kleinburg Estate", city: "Kleinburg, Vaughan", list: 6100000, kind: "Sold", year: "2024", type: "Estate residence", hue: 96, photo: "", note: "Ten acres on the Humber, sold to an end user." },
-  { id: "t5", place: "Scollard Street", city: "Yorkville, Toronto", list: 22000, kind: "Leased", year: "2026", type: "Penthouse, furnished", hue: 34, photo: "", note: "Three-year corporate covenant. Furnished by us." },
-  { id: "t6", place: "Post Road", city: "The Bridle Path, Toronto", list: 28500, kind: "Leased", year: "2025", type: "Estate residence", hue: 120, photo: "", note: "Diplomatic tenancy. Full furnishing and staff quarters." },
-  { id: "t7", place: "Lorne Park Road", city: "Lorne Park, Mississauga", list: 4850000, kind: "Sold", year: "2025", type: "Estate residence", hue: 108, photo: "", note: "Represented the vendor. Nine days on market." },
-  { id: "t8", place: "Old Colony Road", city: "Hoggs Hollow, Toronto", list: 16500, kind: "Leased", year: "2026", type: "Detached, furnished", hue: 168, photo: "", note: "Bank secondment, two-year term with a renewal." },
-];
+/** Published transactions. Empty until Daniel supplies entries with written consent
+ *  on file; the intake fields are in docs/briefs/track-record-intake.md. */
+export const TRACK: Record_[] = [];
 
 /* Related practices. This is a conflict disclosure, not a marketing line: RECO and the
    LSO both require that a registrant disclose a financial interest in a service they
