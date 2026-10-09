@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { FIXTURE_MEDIA, FIXTURE_PROPERTIES } from "./__fixtures__/proptx.ts";
-import { areaFrom, displayAllowed, featuresOf, kebab, kindOf, mapProperty, orderMedia, slugFor, tenureOf, yn } from "./proptx.ts";
+import { ACTIVE_FILTER, activeFilter, areaFrom, displayAllowed, featuresOf, isActive, kebab, kindOf, looksLikeOfficeKey, looksLikeToken, mapProperty, orderMedia, slugFor, tenureOf, yn } from "./proptx.ts";
 import type { PropTxProperty } from "./proptx.ts";
 
 const by = (key: string) => FIXTURE_PROPERTIES.find((p) => p.ListingKey === key)!;
@@ -86,4 +86,23 @@ test("media: the preferred photograph first, then by Order", () => {
   const house = mapAll().find((l) => l.key === "FIX0001")!;
   assert.equal(house.photo, "/photos/fixture/a.jpg");
   assert.deepEqual(house.photos, ["/photos/fixture/b.jpg", "/photos/fixture/c.jpg"]);
+});
+
+test("the on-market filter is StandardStatus Active, and the fixture's six records all pass it", () => {
+  assert.equal(ACTIVE_FILTER, "StandardStatus eq 'Active'");
+  assert.equal(FIXTURE_PROPERTIES.filter(isActive).length, FIXTURE_PROPERTIES.length);
+  assert.equal(isActive({ StandardStatus: "Expired" }), false);
+  assert.equal(isActive({ StandardStatus: undefined }), false);
+  // what goes on the wire: percent-encoded spaces, never '+'
+  assert.equal(encodeURIComponent(ACTIVE_FILTER), "StandardStatus%20eq%20'Active'");
+});
+
+test("the office clause uses a plain ListOfficeKey and ignores anything else", () => {
+  assert.equal(activeFilter("249200"), "StandardStatus eq 'Active' and ListOfficeKey eq '249200'");
+  assert.equal(activeFilter(undefined), "StandardStatus eq 'Active' and contains(ListOfficeName,'DANMAR')");
+  const jwt = "eyJ" + "a".repeat(40) + "." + "b".repeat(40) + "." + "c".repeat(40);
+  assert.equal(looksLikeToken(jwt), true);
+  assert.equal(looksLikeOfficeKey(jwt), false);
+  assert.equal(looksLikeOfficeKey("249200"), true);
+  assert.equal(activeFilter(jwt), "StandardStatus eq 'Active' and contains(ListOfficeName,'DANMAR')");
 });

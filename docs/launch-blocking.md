@@ -10,7 +10,7 @@ Set `RESEND_API_KEY` and `RESEND_FROM` in Vercel (every environment), and verify
 
 The Collection reads the brokerage's active listings from the PropTx (TRREB) feed. Nothing has been read from the live feed yet.
 
-- Paste `PROPTX_TOKEN` (and `PROPTX_OFFICE_KEY`) into Vercel for every environment; without them the Collection shows its empty state.
+- In Vercel, for every environment: `PROPTX_TOKEN` = the bearer token (the long value with two dots), `PROPTX_OFFICE_KEY` = `249200`. The code reads the token from `PROPTX_TOKEN` only; on 9 Oct 2026 the token was found in `PROPTX_OFFICE_KEY` with `PROPTX_TOKEN` still `X`, which is why production showed the empty state. Redeploy after saving, since a build made before the variables were saved does not see them.
 - Set `REVALIDATE_SECRET` in Vercel.
 - Run `docs/LIVE-CHECK.md` in a browser: the count, the addresses, the photographs, a withheld address, the revalidate route. A withheld listing showing a street is fixed before anything else.
 - Confirm with PropTx the read cadence (hourly, on demand) against the agreement's 24-hour replication clause, and the attribution wording (docs/CONFIRM.md).

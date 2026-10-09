@@ -62,7 +62,22 @@ export interface PropTxMedia {
 }
 
 const env = (k: string) => { const v = process.env[k]; return v && v !== "X" ? v : undefined; };
-export const feedEnabled = () => !!env("PROPTX_TOKEN");
+
+/** A bearer token is a long dot-separated JWT; a ListOfficeKey is a short plain
+ *  key (the brokerage's is six digits). Telling them apart catches the one
+ *  misconfiguration that leaves the Collection empty: the token pasted into
+ *  PROPTX_OFFICE_KEY with PROPTX_TOKEN left unset. */
+export const looksLikeToken = (v?: string) => !!v && v.length > 60 && v.split(".").length === 3;
+export const looksLikeOfficeKey = (v?: string) => !!v && /^[A-Za-z0-9_-]{1,40}$/.test(v);
+let warned = false;
+export function feedEnabled() {
+  const token = env("PROPTX_TOKEN");
+  if (!token && looksLikeToken(env("PROPTX_OFFICE_KEY")) && !warned) {
+    warned = true;
+    console.error("[proptx] PROPTX_TOKEN is not set, but PROPTX_OFFICE_KEY holds what looks like a bearer token. Move it to PROPTX_TOKEN and set PROPTX_OFFICE_KEY to the brokerage's ListOfficeKey.");
+  }
+  return !!token;
+}
 export const fixtureMode = () => process.env.PROPTX_FIXTURE === "1" && process.env.VERCEL_ENV !== "production";
 
 /* ── mapping ────────────────────────────────────────────────────────────── */
@@ -196,10 +211,20 @@ export function orderMedia(m: PropTxMedia[]) {
 
 const q = (s: string) => s.replace(/'/g, "''");
 
-function officeFilter() {
-  const key = env("PROPTX_OFFICE_KEY");
-  return key ? ` and ListOfficeKey eq '${q(key)}'` : " and contains(ListOfficeName,'DANMAR')";
+/** On-market means StandardStatus 'Active'. Checked against the live feed on
+ *  9 Oct 2026: 23 of the brokerage's 61 records, the same 23 whether or not the
+ *  office filter is added (the token is scoped to the brokerage). ContractStatus
+ *  'Available' counted 24, one record more, so it is not the test. */
+export const ACTIVE_FILTER = "StandardStatus eq 'Active'";
+export const isActive = (p: Pick<PropTxProperty, "StandardStatus">) => p.StandardStatus === "Active";
+
+/** The office clause: the ListOfficeKey when a plain key is configured, else the
+ *  office name. A value that is not a plain key (a token pasted in the wrong
+ *  variable, say) is ignored rather than sent. */
+export function officeFilter(key = env("PROPTX_OFFICE_KEY")) {
+  return looksLikeOfficeKey(key) ? ` and ListOfficeKey eq '${q(key!)}'` : " and contains(ListOfficeName,'DANMAR')";
 }
+export const activeFilter = (key?: string) => `${ACTIVE_FILTER}${officeFilter(key)}`;
 
 async function odata<T>(path: string): Promise<T[] | null> {
   const token = env("PROPTX_TOKEN");
@@ -229,8 +254,8 @@ export async function fetchMedia(listingKey: string, all = false): Promise<strin
 
 async function fetchProperties(): Promise<PropTxProperty[] | null> {
   if (fixtureMode()) { const { FIXTURE_PROPERTIES } = await import("./__fixtures__/proptx"); return FIXTURE_PROPERTIES; }
-  const filter = `StandardStatus eq 'Active'${officeFilter()}`;
-  return odata<PropTxProperty>(`Property?$filter=${encodeURIComponent(filter)}&$orderby=${encodeURIComponent("ModificationTimestamp desc")}&$top=200&$select=${PROPERTY_SELECT.join(",")}`);
+  // spaces must reach the server as %20: a '+' in $filter is read as arithmetic and answered 400
+  return odata<PropTxProperty>(`Property?$filter=${encodeURIComponent(activeFilter())}&$orderby=${encodeURIComponent("ModificationTimestamp desc")}&$top=200&$select=${PROPERTY_SELECT.join(",")}`);
 }
 
 /** Every active listing the brokerage may display, newest first, each with its
@@ -241,7 +266,7 @@ export async function fetchActiveListings(): Promise<Listing[]> {
   const taken = new Set<string>();
   const out: Listing[] = [];
   for (const p of rows) {
-    if (!displayAllowed(p)) continue;
+    if (!isActive(p) || !displayAllowed(p)) continue;
     const photos = await fetchMedia(p.ListingKey, false);
     const l = mapProperty(p, taken, photos);
     if (l) out.push(l);
