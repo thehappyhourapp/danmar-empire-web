@@ -12,3 +12,6 @@ next-env.d.ts
 shot*.mjs
 dbg.mjs
 verify.mjs
+
+# raw photography drop, processed into public/photos by prompt
+photos-inbox/
