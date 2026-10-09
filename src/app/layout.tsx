@@ -8,7 +8,10 @@ import { ORGANIZATION, SITE } from "@/lib/metadata";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
-  icons: { icon: "/favicon.svg" },
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }, { url: "/icon.png", sizes: "512x512", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export const viewport: Viewport = { themeColor: "#0F3B2F" };

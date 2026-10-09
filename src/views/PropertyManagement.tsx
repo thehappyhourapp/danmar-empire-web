@@ -1,3 +1,4 @@
+import { photo } from "@/lib/photos";
 import { href } from "@/lib/routes";
 import { Practice, PracticeLink } from "@/components/Practice";
 
@@ -25,6 +26,7 @@ export function PropertyManagement() {
       tone="cream"
       id="property"
       path={href("property")}
+      photo={photo("/photos/practices/property-management.jpg")}
       eyebrow="Property Management"
       headline={["The building, the tenants and the cheques."]}
       italic="Rent in, repairs done, one statement a month."

@@ -1,4 +1,5 @@
 import { PILLARS } from "@/lib/data";
+import { photo } from "@/lib/photos";
 import { href } from "@/lib/routes";
 import { Practice, PracticeLink } from "@/components/Practice";
 
@@ -18,6 +19,7 @@ export function Investments() {
       tone="forest"
       id="investments"
       path={href("investments")}
+      photo={photo("/photos/practices/investments.jpg")}
       eyebrow="Investment"
       headline={["Underwritten before it is listed."]}
       italic="Rent roll, zoning and pro forma, before you see it."
@@ -26,6 +28,7 @@ export function Investments() {
         "Rent rolls, estoppel certificates, environmental reports and building condition assessments are released under a confidentiality agreement, not published. Off-market mandates are not listed on this site at all. If you are looking for something specific, the fastest route is to tell us the return and the hold, and let us check the book.",
       ]}
       numbers={pillar.stats}
+      numbersNote={pillar.statsNote}
       sections={[{ heading: "Four steps, in this order, without exception.", items: PROCESS }]}
       close={{
         headline: "Tell us the return and the hold.",

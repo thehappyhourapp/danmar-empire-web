@@ -89,8 +89,8 @@ export function Track() {
           </div>
           <div className="col-span-12 mt-8 flex flex-col items-start gap-6 lg:col-span-5 lg:col-start-7 lg:mt-2">
             <p className="max-w-[46ch] text-[15px] leading-[1.8] text-ink/80">
-              Off-market files are not shown here at any price. If discretion matters more than exposure, that is
-              the conversation to have.
+              Roughly one file in four is off-market, and those are not shown here at any price. If discretion
+              matters more than exposure, that is the conversation to have.
             </p>
             <EnquireButton className={`${s.tlink} font-display text-[1.35rem] font-medium leading-tight text-forest`}>Speak privately</EnquireButton>
             <Link href={href("collection")} className={`${s.tlink} meta text-ink/70`}>The Collection</Link>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SITE } from "@/lib/metadata";
 import { Chapter, Lines } from "./Chapter";
 import { GRID, HEAD, delay } from "@/lib/layout";
+import { ImageFrame } from "./ImageFrame";
 import { MotionController } from "./MotionController";
 import { ClientAccessButton, EnquireButton } from "./SiteShell";
 import s from "./motion.module.css";
@@ -37,6 +38,8 @@ export interface PracticeProps {
   headline: string[];
   italic: string;
   intro: string[];
+  /** the opening photograph, /photos/practices/<route-slug>.jpg, through photo(); the frame stays flat until the file exists */
+  photo?: string;
   /** text links under the intro, for a page whose first screen points somewhere */
   heroLinks?: React.ReactNode;
   /** a titled row between the head and the intro: the definition a first-time reader needs */
@@ -133,6 +136,10 @@ export function Practice(p: PracticeProps) {
           </div>
         )}
 
+        {/* the opening photograph: a 16:10 frame in columns 1 to 5, flat until the file exists */}
+        <div className={`col-span-12 mt-10 lg:col-span-5 ${p.lead ? "lg:mt-12" : "lg:mt-16"}`}>
+          <ImageFrame src={p.photo} ratio="16/10" alt="" fallback="flat" ground={p.tone} />
+        </div>
         <div className={`col-span-12 mt-10 space-y-6 lg:col-span-6 lg:col-start-7 ${p.lead ? "lg:mt-12" : "lg:mt-16"} ${t.body}`}>
           {p.intro.map((x, i) => (
             <p key={i} data-reveal className={`${s.rise} max-w-[48ch] text-[16px] leading-[1.85]`} style={delay(i)}>{x}</p>

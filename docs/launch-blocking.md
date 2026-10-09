@@ -12,7 +12,7 @@ The Collection reads the brokerage's active listings from the PropTx (TRREB) fee
 
 - In Vercel, for every environment: `PROPTX_TOKEN` = the bearer token (the long value with two dots), `PROPTX_OFFICE_KEY` = `249200`. The code reads the token from `PROPTX_TOKEN` only; on 9 Oct 2026 the token was found in `PROPTX_OFFICE_KEY` with `PROPTX_TOKEN` still `X`, which is why production showed the empty state. Redeploy after saving, since a build made before the variables were saved does not see them.
 - Set `REVALIDATE_SECRET` in Vercel.
-- Run `docs/LIVE-CHECK.md` in a browser: the count, the addresses, the photographs, a withheld address, the revalidate route. A withheld listing showing a street is fixed before anything else.
+- Run `docs/LIVE-CHECK.md` in a browser, starting with step 0, `/api/feed-status?secret=...`, which says whether the build sees the token and what the live count is; then the count, the addresses, the photographs, a withheld address, the revalidate route. A withheld listing showing a street is fixed before anything else.
 - Confirm with PropTx the read cadence (hourly, on demand) against the agreement's 24-hour replication clause, and the attribution wording (docs/CONFIRM.md).
 
 ## 3. Vercel: the framework switch

@@ -7,6 +7,5 @@ export const NAV = [
   { id: "leasing", label: "Executive Leasing" },
   { id: "collection", label: "The Collection" },
   { id: "relocating", label: "Relocating" },
-  { id: "track", label: "Track Record" },
   { id: "firm", label: "The Firm" },
 ];

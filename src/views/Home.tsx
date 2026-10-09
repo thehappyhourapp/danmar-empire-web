@@ -240,6 +240,7 @@ export async function Home() {
                       </div>
                     ))}
                   </dl>}
+                  {p.stats.length >= 2 && p.statsNote && <p className="meta mt-4 max-w-[60ch] leading-[1.9] text-ink/70">{p.statsNote}</p>}
                 </div>
               </div>
             ))}

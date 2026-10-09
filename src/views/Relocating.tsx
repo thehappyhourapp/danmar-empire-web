@@ -1,7 +1,9 @@
 import { OWNERSHIP, RELOCATION } from "@/lib/data";
 import { href } from "@/lib/routes";
 import { SITE } from "@/lib/metadata";
+import { photo } from "@/lib/photos";
 import { Chapter, Lines } from "@/components/Chapter";
+import { ImageFrame } from "@/components/ImageFrame";
 import { GRID, HEAD, delay } from "@/lib/layout";
 import { MotionController } from "@/components/MotionController";
 import { EnquireButton } from "@/components/SiteShell";
@@ -65,6 +67,10 @@ export function Relocating() {
         <div className="col-span-12 lg:col-span-8">
           <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1.02] tracking-[-.01em]">You are moving a family, not buying a house.</h1>
           <p className="mt-4 font-display text-[clamp(1.35rem,2.4vw,2rem)] italic leading-[1.1] text-brass">Usually, that means a lease first.</p>
+        </div>
+        {/* the opening photograph: a 16:10 frame in columns 1 to 5, flat until the file exists */}
+        <div className="col-span-12 mt-10 lg:col-span-5 lg:mt-16">
+          <ImageFrame src={photo("/photos/practices/relocating.jpg")} ratio="16/10" alt="" fallback="flat" />
         </div>
         <p data-reveal className={`${s.rise} col-span-12 mt-10 max-w-[48ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-16`}>
           We advise high-net-worth and ultra-high-net-worth families relocating to the Greater Toronto Area

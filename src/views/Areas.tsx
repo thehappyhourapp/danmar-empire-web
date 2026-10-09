@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { AREAS } from "@/lib/data";
 import { getListings } from "@/lib/listings";
+import { photo } from "@/lib/photos";
 import { href } from "@/lib/routes";
 import { Chapter, Lines } from "@/components/Chapter";
 import { GRID, HEAD, delay } from "@/lib/layout";
+import { ImageFrame } from "@/components/ImageFrame";
 import { MotionController } from "@/components/MotionController";
 import { EnquireButton } from "@/components/SiteShell";
 import s from "@/components/motion.module.css";
@@ -29,7 +31,7 @@ export async function Areas() {
         </div>
         <p className="col-span-12 mt-10 max-w-[48ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-16">
           The firm keeps offices in Oakville and Vaughan and is licensed across Ontario. Oakville is where the
-          depth is: it is our home market and the town we know street by street. Beyond it we
+          depth is: it is our home market, with Vaughan our largest book, and the town we know street by street. Beyond it we
           act throughout the Greater Toronto Area and in the province&apos;s recreational and specialist markets.
         </p>
 
@@ -52,6 +54,10 @@ export async function Areas() {
                         <span className="block md:inline">{a.region}</span>
                         {count > 0 && <><span className="mx-2 hidden opacity-40 md:inline">/</span><Link href={href("collection")} className={`${s.tlink} block md:inline`}><span className="fig text-[14px] tracking-normal text-brass">{count}</span> in the Collection</Link></>}
                       </p>
+                      {/* the place, one 16:10 frame at the 800w export (the frame is at most 420px wide); flat until the file exists */}
+                      <div className="mt-6 max-w-[420px] md:mt-8">
+                        <ImageFrame src={photo(`/photos/places/${a.slug}-800.jpg`)} ratio="16/10" alt={photo(`/photos/places/${a.slug}-800.jpg`) ? a.name : ""} fallback="flat" />
+                      </div>
                     </div>
                     <div className="col-span-12 mt-4 md:col-span-6 md:col-start-7 md:mt-0">
                       <p className="max-w-[48ch] text-[15px] leading-[1.85] text-ink/80">{a.note}</p>

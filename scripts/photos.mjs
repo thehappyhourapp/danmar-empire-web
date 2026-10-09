@@ -10,6 +10,10 @@
                                   watermark and the tenant's sign, at the crop's own width)
    software/<name>.jpg          -> app/<name>.jpg (16:10 taken from the top so the header
                                   stays, 1400w at most, never upscaled)
+   places/<area>/<chosen file>  -> places/<slug>.jpg and <slug>-800.jpg (16:10, 1600w and
+                                  800w), plus <slug>-2.jpg where a strong second exists;
+                                  the choice per area is the PLACES table below
+   practices/<route-slug>/*     -> practices/<route-slug>.jpg (16:10, 1600w), first file
 
    sRGB, JPEG quality 82, metadata stripped. Run: node scripts/photos.mjs */
 
@@ -90,6 +94,56 @@ const OFFICES = { "Oakville.jpg": ["oakville"], "Vaughan.jpg": ["vaughan", { lef
 for (const [file, [name, crop]] of Object.entries(OFFICES)) {
   const src = join(IN, "offices", file);
   if (existsSync(src)) await office(src, name, crop); else console.log(`offices/${file}: missing, skipped`);
+}
+
+/** A 16:10 landscape export at the given widths, centre crop, never upscaled. */
+async function landscape(src, outBase, widths) {
+  const { width, height } = await sharp(src).rotate().metadata();
+  let cw = width, ch = Math.round(width * 0.625);
+  if (ch > height) { ch = height; cw = Math.round(height * 1.6); }
+  const region = { left: Math.round((width - cw) / 2), top: Math.round((height - ch) / 2), width: cw, height: ch };
+  for (const [suffix, w] of widths) {
+    await sharp(src).rotate().extract(region).resize({ width: Math.min(w, cw), withoutEnlargement: true })
+      .toColourspace("srgb").jpeg(JPEG).toFile(`${outBase}${suffix}.jpg`);
+  }
+  console.log(`${outBase.replace(OUT + "/", "")}.jpg  from ${basename(src)} ${width}x${height}, crop ${cw}x${ch}`);
+}
+
+/* Place photographs: the chosen frame per area, by judgement on 9 Oct 2026 (exterior,
+   daylight, no people, no plates, no other firm's signage, landscape, sharp). Vaughan has
+   no usable frame in the inbox (both are of a theme park), so it reuses the office crop. */
+const PLACES = {
+  oakville: ["oakville-dude-n09MJayeeWw-unsplash.jpg", "jason-ng-s9KUrz3wfxc-unsplash.jpg"],
+  toronto: ["marcin-skalij-AhmLdXl_azU-unsplash.jpg", "white-rainforest-5Sd2SUCaPWs-unsplash.jpg"],
+  niagara: ["wendy-shervington-QSVr4Gu1hFM-unsplash.jpg", "bianca-ackermann-KslJIer2IPA-unsplash.jpg"],
+  muskoka: ["alex-makarov-aewB2HOSL3g-unsplash.jpg", "april-barber-M4RVCkMpb1I-unsplash.jpg"],
+  mississauga: ["scott-webb-jAnIMsABjEA-unsplash.jpg", "mark-ashford-Rqth2xRNRyY-unsplash.jpg"],
+};
+mkdirSync(join(OUT, "places"), { recursive: true });
+for (const [slug, files] of Object.entries(PLACES)) {
+  for (const [i, f] of files.entries()) {
+    const src = join(IN, "places", slug, f);
+    if (!existsSync(src)) { console.log(`places/${slug}/${f}: missing, skipped`); continue; }
+    await landscape(src, join(OUT, "places", i === 0 ? slug : `${slug}-2`), i === 0 ? [["", 1600], ["-800", 800]] : [["", 1600]]);
+  }
+}
+{
+  const src = join(IN, "offices", "Vaughan.jpg");
+  if (existsSync(src)) {
+    const crop = { left: 640, top: 180, width: 1408, height: 880 };
+    for (const [suffix, w] of [["", 1600], ["-800", 800]]) await sharp(src).rotate().extract(crop).resize({ width: Math.min(w, crop.width), withoutEnlargement: true }).toColourspace("srgb").jpeg(JPEG).toFile(join(OUT, "places", `vaughan${suffix}.jpg`));
+    console.log("places/vaughan.jpg  from offices/Vaughan.jpg (the office crop)");
+  }
+}
+
+mkdirSync(join(OUT, "practices"), { recursive: true });
+const practicesDir = join(IN, "practices");
+if (existsSync(practicesDir)) {
+  for (const slug of readdirSync(practicesDir).filter((d) => !d.startsWith(".") && statSync(join(practicesDir, d)).isDirectory())) {
+    const files = readdirSync(join(practicesDir, slug)).filter(isImage).sort();
+    if (!files.length) { console.log(`practices/${slug}: no image, skipped`); continue; }
+    await landscape(join(practicesDir, slug, files[0]), join(OUT, "practices", slug), [["", 1600]]);
+  }
 }
 
 mkdirSync(join(OUT, "app"), { recursive: true });

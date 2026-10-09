@@ -186,19 +186,22 @@ export const PILLARS = [
     n: "02", title: "Investment",
     line: "Income property, land with approvals, and single-tenant net lease across Ontario.",
     detail: "Rent roll, stabilised pro forma, environmental and zoning, done before you see it. A buyer who discovers those things during conditions is a buyer who renegotiates.",
-    stats: [["Asset classes", "Multi-res · Net lease · Land"], ["Diligence", "Released under NDA"]],
+    stats: [["Going-in yield", "0.5% – 2%"], ["After repositioning", "6% – 24%"], ["Asset classes", "Multi-res · Net lease · Land"]],
+    statsNote: "Returns on capital invested across client mandates to date. Past results, not a forecast. Methodology on request.",
   },
   {
     n: "03", title: "Private Sales",
     line: "Freehold and estate residential from $1.5 million, including off-market inventory that is never syndicated to the portals.",
     detail: "Photographed and written before they are priced. Held off-market where discretion serves the seller. Taken to a shortlist, not a crowd.",
-    stats: [], // one confirmed cell (core markets) is not a strip
+    stats: [["Off-market share", "Roughly one in four"], ["Core markets", "Oakville · Toronto · Vaughan"]],
+    statsNote: "Share of the brokerage's private sales files held off-market, to date.",
   },
   {
     n: "04", title: "Executive Leasing",
     line: "Corporate and diplomatic relocation at $10,000 per month and above, placed against verified covenants.",
     detail: "We qualify the guarantee behind the tenant, not a personal credit file. Corporate undertakings, parent-company covenants, diplomatic notes. Delivered furnished where the brief calls for it.",
-    stats: [], // the $10,000 floor is in the hero line; one cell is not a strip
+    stats: [["Average lease", "$8,500 / month"], ["Furnishing", "+30% – 45% of base rent"]],
+    statsNote: "Across executive leases placed by the brokerage to date.",
   },
   {
     n: "05", title: "Corporate Real Estate Capital",
@@ -212,8 +215,9 @@ export const PILLARS = [
    as the sourcing route, never with logos and never implying a partnership or
    an affiliate arrangement that does not exist. */
 export const FURNISHING = {
+  uplift: "30% to 45%",
   sources: ["CB2", "Crate & Barrel", "Anthropologie", "RH"],
-  note: "Delivered fully furnished where the brief calls for it, at a furnishing charge set out in the lease. We specify and install it ourselves, through CB2, Crate & Barrel, Anthropologie and RH. A family arriving with suitcases needs nothing on day one.",
+  note: "Delivered fully furnished for an additional 30% to 45% of base rent. We specify and install it ourselves, through CB2, Crate & Barrel, Anthropologie and RH. A family arriving with suitcases needs nothing on day one.",
 };
 
 /* Tenant profile is described by covenant, not by employer logo.
@@ -235,16 +239,16 @@ export interface Area { slug: string; name: string; region: string; tier: 1 | 2 
 
 export const AREAS: Area[] = [
   { slug: "oakville", name: "Oakville", region: "Halton", tier: 1,
-    note: "Our home market. Lakefront, ravine and estate lots, and the executive-lease stock that serves the corporate corridor.",
+    note: "Our home market, and with Vaughan the firm's largest book; with Toronto, its most high-end. Lakefront, ravine and estate lots, and the executive-lease stock that serves the corporate corridor.",
     pockets: ["Old Oakville", "Bronte", "Joshua Creek", "Southwest Oakville", "Morrison", "Eastlake", "Glen Abbey"] },
   { slug: "toronto", name: "Toronto", region: "City of Toronto", tier: 1,
-    note: "Estate residential and the executive lease market. Central ravine neighbourhoods, and the downtown towers where corporate relocations land.",
+    note: "With Oakville, our most high-end market, and our assignment market. Estate residential and executive leasing in the central ravine neighbourhoods, and the downtown towers where corporate relocations land.",
     pockets: ["The Bridle Path", "Forest Hill", "Rosedale", "Yorkville", "Lawrence Park", "Hoggs Hollow", "The Kingsway", "King West"] },
   { slug: "vaughan", name: "Vaughan", region: "York", tier: 2,
-    note: "Our second office. Commercial and industrial property along the Keele and Highway 7 corridors, and estate residential concentrated in Kleinburg.",
+    note: "Our second office, and with Oakville the firm's largest book. Commercial and industrial property along the Keele and Highway 7 corridors, and estate residential concentrated in Kleinburg.",
     pockets: ["Kleinburg", "Woodbridge", "Vaughan Enterprise Zone"] },
   { slug: "king-city", name: "King City", region: "King Township", tier: 1,
-    note: "Ten-acre minimums, equestrian properties, the Oak Ridges Moraine.",
+    note: "Ten-acre minimums, equestrian properties, the Oak Ridges Moraine. The most acreage for residential property of any market we work in.",
     pockets: ["King City", "Nobleton", "Schomberg", "Oak Ridges Moraine"] },
   { slug: "mississauga", name: "Mississauga", region: "Peel", tier: 2,
     note: "Lorne Park and Mineola for estate residential; Airport Corporate and Cooksville for income property.",
@@ -256,7 +260,7 @@ export const AREAS: Area[] = [
     note: "Acreage, hobby farms and the estate subdivisions on the moraine.",
     pockets: ["Caledon East", "Palgrave", "Aurora Estates", "South Richvale"] },
   { slug: "muskoka", name: "Muskoka", region: "Cottage Country", tier: 3,
-    note: "The Big Three lakes. Boathouse frontage and shoreline road allowance, each with rules of its own.",
+    note: "The Big Three lakes. Boathouse frontage and shoreline road allowance, each with rules of its own. The most privately traded market we work in.",
     pockets: ["Lake Joseph", "Lake Rosseau", "Lake Muskoka", "Port Carling", "Windermere"] },
   { slug: "niagara", name: "Niagara & Prince Edward County", region: "Southern Ontario", tier: 3,
     note: "Estate wineries, agricultural land with severance potential, and the hospitality assets attached to both.",

@@ -1,5 +1,6 @@
 import { PILLARS } from "@/lib/data";
 import Image from "next/image";
+import { photo } from "@/lib/photos";
 import { href } from "@/lib/routes";
 import { GRID, delay } from "@/lib/layout";
 import { FaqRows } from "@/components/Faq";
@@ -111,6 +112,7 @@ export function Management() {
       tone="forest"
       id="management"
       path={href("management")}
+      photo={photo("/photos/practices/asset-management.jpg")}
       eyebrow="Asset & Portfolio Management"
       headline={["Someone has to hold the whole portfolio in view."]}
       italic="Maturities, expiries, capital and tax, on one calendar."

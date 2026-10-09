@@ -1,6 +1,7 @@
 import { TEAM } from "@/lib/data";
 import { estimate, money } from "@/lib/estimator";
 import { SITE } from "@/lib/metadata";
+import { photo } from "@/lib/photos";
 import { href } from "@/lib/routes";
 import { Lines } from "@/components/Chapter";
 import { GRID, HEAD, delay } from "@/lib/layout";
@@ -203,6 +204,7 @@ export function Capital() {
         tone="forest"
         id="capital"
         path={path}
+        photo={photo("/photos/practices/corporate-real-estate-capital.jpg")}
         eyebrow="Corporate Real Estate Capital"
         headline={["Unlock the capital in your buildings."]}
         italic="Keep the site. Release the equity."

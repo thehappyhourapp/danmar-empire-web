@@ -56,6 +56,15 @@ The feed is wired against the fixture only; nothing was read from the live Prope
 - **The empty state.** With no token (or no active listings) the Collection shows "No properties are listed publicly today." and the enquiry line. Confirm the wording.
 - **Photo URLs.** Media URLs are proxied through `/api/photo` and allow-listed to `ampre.ca` and `proptx.ca`; if the live URLs sit on another host, or carry an expiry signature, step 3 of the live check catches it.
 
+## Practice strips (Home, /investments, /executive-leasing)
+
+Restored on 9 Oct 2026 with Daniel's figures: going-in yield 0.5% to 2% and 6% to 24% after repositioning (basis line under the strip), off-market share roughly one in four, average lease $8,500 a month, furnishing +30% to 45% of base rent. Still out:
+
+- **"Median list $2.38M"** (Private Sales). Not shown; confirm the figure and its basis and it returns as a third cell.
+- **"Typical term 12 to 36 months"** (Executive Leasing). Not shown; the landlord row still says "Twelve to thirty-six months" as a description of how leases are structured. Confirm the figure and it returns as a cell.
+- **Average lease against the floor.** The strip now says "Average lease $8,500 / month" beside a hero that says "$10,000 per month and up". Both are Daniel's; read together they say the floor is aspirational. Confirm the pairing, or change one.
+- **Basis lines.** The private-sales and leasing basis lines ("Share of the brokerage's private sales files held off-market, to date." and "Across executive leases placed by the brokerage to date.") were written to state what the figures are; confirm the wording.
+
 ## /privacy
 - **The policy text.** A short standard policy written for the form's consent link, covering what is collected, why, who sees it, retention, the visitor's choices and the governing law (PIPEDA, CASL, RECO record-keeping). Review every line before launch; adjust the retention statement to the brokerage's actual record-keeping policy.
 
