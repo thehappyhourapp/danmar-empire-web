@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { FIXTURE_MEDIA, FIXTURE_PROPERTIES } from "./__fixtures__/proptx.ts";
-import { ACTIVE_FILTER, activeFilter, areaFrom, displayAllowed, featuresOf, isActive, kebab, kindOf, looksLikeOfficeKey, looksLikeToken, mapProperty, orderMedia, slugFor, tenureOf, yn } from "./proptx.ts";
+import { ACTIVE_FILTER, NOT_IN_SCHEMA, PROPERTY_SELECT, activeFilter, areaFrom, displayAllowed, featuresOf, isActive, kebab, kindOf, looksLikeOfficeKey, looksLikeToken, mapProperty, orderMedia, slugFor, tenureOf, yn } from "./proptx.ts";
 import type { PropTxProperty } from "./proptx.ts";
 
 const by = (key: string) => FIXTURE_PROPERTIES.find((p) => p.ListingKey === key)!;
@@ -105,4 +105,15 @@ test("the office clause uses a plain ListOfficeKey and ignores anything else", (
   assert.equal(looksLikeOfficeKey(jwt), false);
   assert.equal(looksLikeOfficeKey("249200"), true);
   assert.equal(activeFilter(jwt), "StandardStatus eq 'Active' and contains(ListOfficeName,'DANMAR')");
+});
+
+test("the Property query selects no field that AMPRE's schema lacks", () => {
+  for (const f of NOT_IN_SCHEMA) assert.equal((PROPERTY_SELECT as readonly string[]).includes(f), false, `${f} would fail the whole query with a 400`);
+});
+
+test("tenure falls back to the property type the feed does carry", () => {
+  const p = { ...FIXTURE_PROPERTIES[1], OwnershipType: undefined, PropertyType: "Residential Condo & Other" };
+  assert.equal(mapProperty(p, new Set())?.tenure, "Condominium");
+  const q = { ...FIXTURE_PROPERTIES[0], OwnershipType: undefined, PropertyType: "Residential Freehold" };
+  assert.equal(mapProperty(q, new Set())?.tenure, "Freehold");
 });

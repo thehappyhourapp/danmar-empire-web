@@ -188,7 +188,7 @@ export function CapitalForm() {
       <div className="col-span-12">
         <label className="flex items-start gap-3 text-[15px] leading-[1.6] text-paper/90">
           <input type="checkbox" name="consent" value="yes" className="mt-1.5 h-4 w-4 shrink-0 accent-paper" aria-required {...a11y("consent")} />
-          <span>I agree to be contacted by {BROKERAGE} about this enquiry. <Link href={href("privacy")} className={`${s.tlink} text-paper`}>How we handle what you send</Link>.</span>
+          <span>I agree to be contacted by {BROKERAGE} about this enquiry. <Link href={href("privacy")} className={`${s.tlink} text-paper`}>How we handle what you send</Link> and the <Link href={href("terms")} className={`${s.tlink} text-paper`}>terms of use</Link>.</span>
         </label>
         {err("consent")}
       </div>

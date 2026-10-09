@@ -101,6 +101,11 @@ export const SEO: Record<string, Meta> = {
     description: "How Danmar Empire Real Estate Corp., Brokerage handles what you send through this site: what is collected, why, who sees it and how to ask for it to be removed.",
     canonical: "/privacy",
   },
+  terms: {
+    title: `Terms of Use | ${SUFFIX}`,
+    description: "The terms on which Danmar Empire Real Estate Corp., Brokerage offers this website: information not advice, listing data under licence from TRREB, past results, ownership, permitted use and Ontario law.",
+    canonical: "/terms",
+  },
   notfound: {
     title: `Page Not Found | ${SUFFIX}`,
     description: "There is nothing at this address. The Collection and the rest of the site are a link away.",

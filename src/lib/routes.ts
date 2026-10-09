@@ -15,6 +15,7 @@ export const ROUTES: Record<string, string> = {
   property: "/property-management",
   capital: "/corporate-real-estate-capital",
   privacy: "/privacy",
+  terms: "/terms",
 };
 
 /** Which pages hold a forest ground for the whole page. The nav takes the ground of

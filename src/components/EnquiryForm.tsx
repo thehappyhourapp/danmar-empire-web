@@ -1,8 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { DESK_ADDRESS_CLASS, DESK_EMAIL, submitEnquiry } from "@/lib/enquire";
 import type { SubmitResult } from "@/lib/enquire";
+import { href } from "@/lib/routes";
+import s from "@/components/motion.module.css";
 
 export interface ListingRef { id: string; name: string }
 
@@ -82,7 +85,7 @@ export function EnquiryForm({ listing = null, className = "" }: { listing?: List
       )}
       <p className="meta mt-6 max-w-[60ch] leading-[1.8] text-ink/70">
         We use what you send to answer you. We do not sell or share it, and we do not add you to a list
-        without asking.
+        without asking. <Link href={href("privacy")} className={`${s.tlink} text-ink/80`}>Privacy</Link> and <Link href={href("terms")} className={`${s.tlink} text-ink/80`}>terms of use</Link>.
       </p>
     </form>
   );

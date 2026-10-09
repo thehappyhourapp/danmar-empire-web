@@ -20,6 +20,7 @@
 import { existsSync, mkdirSync, readdirSync, statSync } from "node:fs";
 import { basename, join } from "node:path";
 import sharp from "sharp";
+import { writePhotoManifest } from "./photo-manifest.mjs";
 
 const IN = "photos-inbox";
 const OUT = join("public", "photos");
@@ -151,4 +152,6 @@ for (const name of ["dashboard", "properties", "reports"]) {
   const src = join(IN, "software", `${name}.jpg`);
   if (existsSync(src)) await screen(src, name); else console.log(`software/${name}.jpg: missing, skipped`);
 }
+// the frames read this list, not the filesystem
+writePhotoManifest();
 console.log("done");

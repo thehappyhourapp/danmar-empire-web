@@ -118,12 +118,14 @@ export function Footer({ onEnquire, onAccess }: { onEnquire: () => void; onAcces
               associated logos are trademarks of The Canadian Real Estate Association. Listing data provided under licence by the Toronto
               Regional Real Estate Board (TRREB) through PropTx. Information deemed reliable but not guaranteed. Listing information is
               deemed reliable but is not guaranteed accurate. Prices shown are list prices and are subject to change
-              without notice. Not intended to solicit properties currently under contract.
+              without notice. Not intended to solicit properties currently under contract. Some photographs are
+              illustrative scenes and do not depict properties the brokerage has listed, sold or managed.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
               <span className="meta text-paper/60">© {YEAR} Danmar Empire Real Estate Corp., Brokerage</span>
               <span className="flex flex-wrap items-center gap-x-8 gap-y-2">
                 <Link href={href("privacy")} className={`${s.tlink} meta text-paper/60 hover:text-paper`}>Privacy</Link>
+                <Link href={href("terms")} className={`${s.tlink} meta text-paper/60 hover:text-paper`}>Terms</Link>
                 <span className="meta text-paper/60">Oakville · Vaughan · Toronto</span>
               </span>
             </div>

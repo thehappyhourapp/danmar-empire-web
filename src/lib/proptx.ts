@@ -20,18 +20,25 @@ export const BASE = "https://query.ampre.ca/odata/";
 export const REVALIDATE = 3600;
 export const TAG = "proptx";
 
-/** The fields read from Property. Nothing else is requested. */
+/** The fields read from Property. Nothing else is requested. Every name here must
+ *  exist in AMPRE's $metadata: one unknown field fails the whole query with a 400
+ *  ("The property 'X' ... is not defined in type 'Property'"), and the Collection
+ *  goes empty. Community, OwnershipType and CapRate are RESO names that this
+ *  schema does not carry (checked 9 Oct 2026); tenure comes from PropertyType. */
 export const PROPERTY_SELECT = [
   "ListingKey", "ListingId", "ModificationTimestamp", "StandardStatus", "MlsStatus", "ContractStatus",
   "ListOfficeKey", "ListOfficeName",
   "InternetEntireListingDisplayYN", "InternetAddressDisplayYN",
-  "UnparsedAddress", "StreetNumber", "StreetName", "StreetSuffix", "City", "CityRegion", "Community",
+  "UnparsedAddress", "StreetNumber", "StreetName", "StreetSuffix", "City", "CityRegion",
   "ListPrice", "TransactionType", "PropertyType", "PropertySubType",
-  "BedroomsTotal", "BathroomsTotalInteger", "LivingAreaRange", "BuildingAreaTotal", "OwnershipType",
+  "BedroomsTotal", "BathroomsTotalInteger", "LivingAreaRange", "BuildingAreaTotal",
   "ParkingTotal", "GarageType", "Basement", "HeatType", "Cooling", "PoolFeatures",
   "LotSizeArea", "LotSizeUnits", "TaxAnnualAmount", "TaxYear", "PublicRemarks",
-  "Latitude", "Longitude", "NetOperatingIncome", "CapRate",
+  "Latitude", "Longitude", "NetOperatingIncome",
 ] as const;
+
+/** RESO names absent from this schema. Never select them. */
+export const NOT_IN_SCHEMA = ["Community", "OwnershipType", "CapRate"] as const;
 
 type YN = boolean | string | null | undefined;
 
@@ -183,7 +190,7 @@ export function mapProperty(p: PropTxProperty, taken: Set<string>, photos: strin
     beds: p.BedroomsTotal ?? null,
     baths: p.BathroomsTotalInteger ?? null,
     sqft: areaFrom(p.LivingAreaRange, p.BuildingAreaTotal),
-    tenure: tenureOf(p.OwnershipType),
+    tenure: tenureOf(p.OwnershipType ?? p.PropertyType),
     tier: null,
     status: "Available",
     lat: p.Latitude ?? 0,

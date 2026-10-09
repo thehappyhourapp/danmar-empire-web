@@ -1,5 +1,8 @@
 import { Chapter } from "@/components/Chapter";
+import Link from "next/link";
 import { GRID } from "@/lib/layout";
+import { href } from "@/lib/routes";
+import s from "@/components/motion.module.css";
 
 /* A plain privacy page, cream, in the row pattern. Short and standard; marked
    for Daniel's review in docs/CONFIRM.md before launch. */
@@ -38,7 +41,7 @@ export function Privacy() {
           ))}
         </div>
         <p className="meta col-span-12 mt-10 max-w-[60ch] leading-[1.9] text-ink/70">
-          Questions about this page go to the desk: 905 901 5011, or the contact page. Last reviewed October 2026.
+          Questions about this page go to the desk: 905 901 5011, or the contact page. Last reviewed October 2026. See also the <Link href={href("terms")} className={`${s.tlink} text-ink/80`}>terms of use</Link>.
         </p>
       </Chapter>
     </div>

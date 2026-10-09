@@ -1,5 +1,17 @@
 # To confirm before launch
 
+## /terms is a draft for Daniel's review (9 Oct 2026)
+
+The Terms of Use page is live but drafted for review, not settled. Points I was unsure of:
+
+- **The listing disclaimer.** The page uses the same sentences as the footer ("deemed reliable but is not guaranteed accurate", "Not intended to solicit properties currently under contract", the CREA trademark lines). The feed brief does not quote the DLA's own display disclaimer, so the exact wording PropTx and TRREB require still needs checking against the agreement.
+- **The AI and scraping clause.** It restates the DLA's s.1.e prohibition (no listing data to an AI system) as a condition on visitors, and extends it to all site content. Confirm the extension to non-listing content is wanted.
+- **Exclusive jurisdiction.** The governing-law row gives the courts of Ontario exclusive jurisdiction. Say if non-exclusive is preferred.
+- **Indemnity and limitation of liability.** Conventional wording, to the extent Ontario law allows; consumer-protection limits on enforceability against individuals are not addressed.
+- **"Partners".** The liability and indemnity rows name "partners, brokers, salespersons and staff". Confirm "partners" is the right word for the corporation's principals.
+- **The illustrative-photographs sentence.** It is in the Terms and now in the footer disclosure block. Today it covers the Unsplash place photographs on /areas; the generated practice scenes (prompt q) have not arrived yet.
+- **Effective date.** 9 October 2026, the day it went up. Change it when the reviewed version replaces the draft.
+
 Lines marked [CONFIRM] in the briefs are never rendered. Each is listed here by
 page and section, with what the page shows in its place. Confirm or correct the
 fact and the line goes in; strike it and the entry goes.
