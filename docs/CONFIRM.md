@@ -68,6 +68,12 @@ The feed is wired against the fixture only; nothing was read from the live Prope
 - **The empty state.** With no token (or no active listings) the Collection shows "No properties are listed publicly today." and the enquiry line. Confirm the wording.
 - **Photo URLs.** Media URLs are proxied through `/api/photo` and allow-listed to `ampre.ca` and `proptx.ca`; if the live URLs sit on another host, or carry an expiry signature, step 3 of the live check catches it.
 
+## Photo credits
+
+- **Generated (AI illustrations, not photographs of any real property):** every file in `public/photos/practices/`: investments (retail plaza), asset-management (elevated block) and asset-management-2 (rental courtyard), executive-leasing (kitchen and dining) and executive-leasing-2 (living room), property-management (building entrance) and property-management-2 (rental courtyard), corporate-real-estate-capital (warehouse and truck court) and corporate-real-estate-capital-2 (office and industrial building), relocating (waterfront path). Sources and prompts: `photos-inbox/practices/image-catalog.json` and the three manifests beside it. Alt text on each begins "Illustrative:", and the footer and /terms carry the illustrative-photographs sentence.
+- **Unsplash (real places, not the brokerage's properties):** `public/photos/places/` except vaughan.
+- **The brokerage's own:** `public/photos/people/`, `public/photos/offices/`, `public/photos/app/` (screens of a sample account).
+
 ## Practice strips (Home, /investments, /executive-leasing)
 
 Restored on 9 Oct 2026 with Daniel's figures: going-in yield 0.5% to 2% and 6% to 24% after repositioning (basis line under the strip), off-market share roughly one in four, average lease $8,500 a month, furnishing +30% to 45% of base rent. Still out:

@@ -1,7 +1,7 @@
 import { OWNERSHIP, RELOCATION } from "@/lib/data";
 import { href } from "@/lib/routes";
 import { SITE } from "@/lib/metadata";
-import { photo } from "@/lib/photos";
+import { practiceImage } from "@/lib/photos";
 import { Chapter, Lines } from "@/components/Chapter";
 import { ImageFrame } from "@/components/ImageFrame";
 import { GRID, HEAD, delay } from "@/lib/layout";
@@ -39,6 +39,7 @@ function Rows({ items, number }: { items: [string, string][]; number: boolean })
 }
 
 export function Relocating() {
+  const scene = practiceImage("relocating");
   const service = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -70,7 +71,7 @@ export function Relocating() {
         </div>
         {/* the opening photograph: a 16:10 frame in columns 1 to 5, flat until the file exists */}
         <div className="col-span-12 mt-10 lg:col-span-5 lg:mt-16">
-          <ImageFrame src={photo("/photos/practices/relocating.jpg")} ratio="16/10" alt="" fallback="flat" />
+          <ImageFrame src={scene?.src} srcSet={scene?.srcSet} sizes="(min-width: 1024px) 40vw, 100vw" ratio="16/10" alt={scene?.alt ?? ""} fallback="flat" />
         </div>
         <p data-reveal className={`${s.rise} col-span-12 mt-10 max-w-[48ch] text-[16px] leading-[1.85] text-ink/80 lg:col-span-6 lg:col-start-7 lg:mt-16`}>
           We advise high-net-worth and ultra-high-net-worth families relocating to the Greater Toronto Area

@@ -1,7 +1,7 @@
 import { TEAM } from "@/lib/data";
 import { estimate, money } from "@/lib/estimator";
 import { SITE } from "@/lib/metadata";
-import { photo } from "@/lib/photos";
+import { practiceImage } from "@/lib/photos";
 import { href } from "@/lib/routes";
 import { Lines } from "@/components/Chapter";
 import { GRID, HEAD, delay } from "@/lib/layout";
@@ -204,7 +204,7 @@ export function Capital() {
         tone="forest"
         id="capital"
         path={path}
-        photo={photo("/photos/practices/corporate-real-estate-capital.jpg")}
+        photo={practiceImage("corporate-real-estate-capital")}
         eyebrow="Corporate Real Estate Capital"
         headline={["Unlock the capital in your buildings."]}
         italic="Keep the site. Release the equity."
@@ -222,6 +222,7 @@ export function Capital() {
         sections={[
           { heading: "When CFOs call us.", items: TRIGGERS, numbered: false },
           { node: <p className={`meta col-span-12 mt-6 ${t.meta}`}>Best fit: owner-occupied properties in Ontario.</p> },
+          { node: <div className="col-span-12 mt-12 md:col-span-5 lg:mt-16">{(() => { const img = practiceImage("corporate-real-estate-capital-2"); return <ImageFrame src={img?.src} srcSet={img?.srcSet} sizes="(min-width: 768px) 40vw, 100vw" ratio="16/10" alt={img?.alt ?? ""} fallback="flat" ground="forest" />; })()}</div> },
           { heading: "What we do.", items: SERVICES },
           { node: <Comparison /> },
           { node: <EstimatorSection /> },

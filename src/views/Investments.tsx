@@ -1,5 +1,5 @@
 import { PILLARS } from "@/lib/data";
-import { photo } from "@/lib/photos";
+import { practiceImage } from "@/lib/photos";
 import { href } from "@/lib/routes";
 import { Practice, PracticeLink } from "@/components/Practice";
 
@@ -19,7 +19,7 @@ export function Investments() {
       tone="forest"
       id="investments"
       path={href("investments")}
-      photo={photo("/photos/practices/investments.jpg")}
+      photo={practiceImage("investments")}
       eyebrow="Investment"
       headline={["Underwritten before it is listed."]}
       italic="Rent roll, zoning and pro forma, before you see it."

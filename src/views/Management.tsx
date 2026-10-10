@@ -1,6 +1,7 @@
 import { PILLARS } from "@/lib/data";
 import Image from "next/image";
-import { photo } from "@/lib/photos";
+import { practiceImage } from "@/lib/photos";
+import { ImageFrame } from "@/components/ImageFrame";
 import { href } from "@/lib/routes";
 import { GRID, delay } from "@/lib/layout";
 import { FaqRows } from "@/components/Faq";
@@ -65,6 +66,12 @@ function CapitalAtWork() {
   return (
     <div className="col-span-12 mt-20 lg:mt-28">
       <p className={`meta mb-6 ${t.brass}`}>Illustrative example, not a client transaction.</p>
+      {/* the row's scene: an illustration, like the example beneath it */}
+      <div className={`${GRID} mb-10`}>
+        <div className="col-span-12 md:col-span-5">
+          {(() => { const img = practiceImage("asset-management-2"); return <ImageFrame src={img?.src} srcSet={img?.srcSet} sizes="(min-width: 768px) 40vw, 100vw" ratio="16/10" alt={img?.alt ?? ""} fallback="flat" ground="forest" />; })()}
+        </div>
+      </div>
       <div>
         {CAPITAL.map(([k, text], i) => (
           <div key={k} data-reveal className={`${s.rise} ${GRID} border-t ${t.rule} py-8 last:border-b md:py-10`} style={delay(i)}>
@@ -112,7 +119,7 @@ export function Management() {
       tone="forest"
       id="management"
       path={href("management")}
-      photo={photo("/photos/practices/asset-management.jpg")}
+      photo={practiceImage("asset-management")}
       eyebrow="Asset & Portfolio Management"
       headline={["Someone has to hold the whole portfolio in view."]}
       italic="Maturities, expiries, capital and tax, on one calendar."

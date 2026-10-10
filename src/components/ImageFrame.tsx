@@ -9,9 +9,9 @@ import { emblemCream, emblemForest } from "@/lib/marks";
  * architectural field rather than a grey box, so the page never looks broken.
  */
 export function ImageFrame({
-  src, hue = 30, ratio = "4/3", className = "", alt = "", tone = "dark", fallback = "art", ground = "cream", filler, children,
+  src, srcSet, sizes, hue = 30, ratio = "4/3", className = "", alt = "", tone = "dark", fallback = "art", ground = "cream", filler, children,
 }: {
-  src?: string; hue?: number; ratio?: string; className?: string; alt?: string;
+  src?: string; srcSet?: string; sizes?: string; hue?: number; ratio?: string; className?: string; alt?: string;
   tone?: "dark" | "light";
   /** `flat` reserves the aspect ratio as a plain forest/10 block, with no generated art. */
   fallback?: "art" | "flat";
@@ -76,7 +76,7 @@ export function ImageFrame({
       )}
       {src && (
         <img
-          ref={img} src={src} alt={alt} loading="lazy" decoding="async"
+          ref={img} src={src} srcSet={srcSet} sizes={srcSet ? sizes : undefined} alt={alt} loading="lazy" decoding="async"
           className="absolute inset-0 h-full w-full object-cover transition-opacity [transition-duration:1200ms] motion-reduce:transition-none"
           style={state === "pending" || state === "failed" ? { opacity: 0 } : undefined}
         />

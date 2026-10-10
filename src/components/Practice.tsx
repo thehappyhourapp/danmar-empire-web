@@ -3,6 +3,7 @@ import { SITE } from "@/lib/metadata";
 import { Chapter, Lines } from "./Chapter";
 import { GRID, HEAD, delay } from "@/lib/layout";
 import { ImageFrame } from "./ImageFrame";
+import type { FrameImage } from "@/lib/photos";
 import { MotionController } from "./MotionController";
 import { ClientAccessButton, EnquireButton } from "./SiteShell";
 import s from "./motion.module.css";
@@ -38,8 +39,8 @@ export interface PracticeProps {
   headline: string[];
   italic: string;
   intro: string[];
-  /** the opening photograph, /photos/practices/<route-slug>.jpg, through photo(); the frame stays flat until the file exists */
-  photo?: string;
+  /** the opening photograph from practiceImage(); the frame stays flat until the file exists */
+  photo?: FrameImage;
   /** text links under the intro, for a page whose first screen points somewhere */
   heroLinks?: React.ReactNode;
   /** a titled row between the head and the intro: the definition a first-time reader needs */
@@ -138,7 +139,7 @@ export function Practice(p: PracticeProps) {
 
         {/* the opening photograph: a 16:10 frame in columns 1 to 5, flat until the file exists */}
         <div className={`col-span-12 mt-10 lg:col-span-5 ${p.lead ? "lg:mt-12" : "lg:mt-16"}`}>
-          <ImageFrame src={p.photo} ratio="16/10" alt="" fallback="flat" ground={p.tone} />
+          <ImageFrame src={p.photo?.src} srcSet={p.photo?.srcSet} sizes="(min-width: 1024px) 40vw, 100vw" ratio="16/10" alt={p.photo?.alt ?? ""} fallback="flat" ground={p.tone} />
         </div>
         <div className={`col-span-12 mt-10 space-y-6 lg:col-span-6 lg:col-start-7 ${p.lead ? "lg:mt-12" : "lg:mt-16"} ${t.body}`}>
           {p.intro.map((x, i) => (

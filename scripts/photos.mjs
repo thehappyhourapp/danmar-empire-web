@@ -13,7 +13,9 @@
    places/<area>/<chosen file>  -> places/<slug>.jpg and <slug>-800.jpg (16:10, 1600w and
                                   800w), plus <slug>-2.jpg where a strong second exists;
                                   the choice per area is the PLACES table below
-   practices/<route-slug>/*     -> practices/<route-slug>.jpg (16:10, 1600w), first file
+   practices/<folder>/<chosen>  -> practices/<slug>.jpg, <slug>-800.jpg and, for a second
+                                  frame, <slug>-2.jpg and <slug>-2-800.jpg (16:10); the
+                                  PRACTICE_PHOTOS table below
 
    sRGB, JPEG quality 82, metadata stripped. Run: node scripts/photos.mjs */
 
@@ -137,13 +139,26 @@ for (const [slug, files] of Object.entries(PLACES)) {
   }
 }
 
+/* Practice-page scenes: AI-generated illustrations Daniel supplied (image-catalog.json in
+   photos-inbox/practices/). The opening frame first, then the page's second frame where it
+   has one. Chosen for reading most like Ontario and least like a render; -v2 colour grades
+   preferred over their originals. Each becomes <slug>.jpg (the source's own width, at most
+   1600, never upscaled) and <slug>-800.jpg; a second image becomes <slug>-2.jpg and
+   <slug>-2-800.jpg. */
+const PRACTICE_PHOTOS = {
+  investments: ["investments/big-box-retail-plaza.png"],
+  "asset-management": ["asset-management/asset-management-v2.png", "asset-management/courtyard-rental-community.png"],
+  "executive-leasing": ["executive-leasing/executive-kitchen-and-dining.png", "executive-leasing/executive-leasing.png"],
+  "property-management": ["property-management/property-management-v2.png", "asset-management/courtyard-rental-community.png"],
+  "corporate-real-estate-capital": ["corporate-real-estate-capital/logistics-and-industrial.png", "corporate-real-estate-capital/corporate-real-estate-capital-v2.png"],
+  relocating: ["relocating/lakeside-neighbourhood.png"],
+};
 mkdirSync(join(OUT, "practices"), { recursive: true });
-const practicesDir = join(IN, "practices");
-if (existsSync(practicesDir)) {
-  for (const slug of readdirSync(practicesDir).filter((d) => !d.startsWith(".") && statSync(join(practicesDir, d)).isDirectory())) {
-    const files = readdirSync(join(practicesDir, slug)).filter(isImage).sort();
-    if (!files.length) { console.log(`practices/${slug}: no image, skipped`); continue; }
-    await landscape(join(practicesDir, slug, files[0]), join(OUT, "practices", slug), [["", 1600]]);
+for (const [slug, files] of Object.entries(PRACTICE_PHOTOS)) {
+  for (const [i, rel] of files.entries()) {
+    const src = join(IN, "practices", rel);
+    if (!existsSync(src)) { console.log(`practices/${rel}: missing, skipped`); continue; }
+    await landscape(src, join(OUT, "practices", i === 0 ? slug : `${slug}-2`), [["", 1600], ["-800", 800]]);
   }
 }
 

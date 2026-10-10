@@ -1,5 +1,6 @@
 import { COVENANTS, FURNISHING, PILLARS } from "@/lib/data";
-import { photo } from "@/lib/photos";
+import { practiceImage } from "@/lib/photos";
+import { ImageFrame } from "@/components/ImageFrame";
 import { href } from "@/lib/routes";
 import { Lines } from "@/components/Chapter";
 import { GRID, HEAD, delay } from "@/lib/layout";
@@ -45,6 +46,9 @@ function Extras() {
           <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">Furnished, where the brief calls for it</h3>
           <p className="fig mt-6 text-[clamp(1.6rem,2.6vw,2.4rem)] text-brass">+{FURNISHING.uplift}</p>
           <p className="meta mt-2 text-ink/70">of base rent, fully furnished and installed</p>
+          <div className="mt-8 max-w-[480px]">
+            {(() => { const img = practiceImage("executive-leasing-2"); return <ImageFrame src={img?.src} srcSet={img?.srcSet} sizes="(min-width: 768px) 40vw, 100vw" ratio="16/10" alt={img?.alt ?? ""} fallback="flat" />; })()}
+          </div>
         </div>
         <div className="col-span-12 mt-6 md:col-span-6 md:col-start-7 md:mt-0">
           <p className="max-w-[48ch] text-[15px] leading-[1.85] text-ink/80">{FURNISHING.note}</p>
@@ -63,7 +67,7 @@ export function Leasing() {
       tone="cream"
       id="leasing"
       path={href("leasing")}
-      photo={photo("/photos/practices/executive-leasing.jpg")}
+      photo={practiceImage("executive-leasing")}
       eyebrow="Executive Leasing"
       headline={["Ten thousand a month and up, placed against a verified covenant."]}
       italic="We qualify the guarantee, not a credit file."

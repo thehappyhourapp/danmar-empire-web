@@ -1,4 +1,5 @@
-import { photo } from "@/lib/photos";
+import { practiceImage } from "@/lib/photos";
+import { ImageFrame } from "@/components/ImageFrame";
 import { href } from "@/lib/routes";
 import { Practice, PracticeLink } from "@/components/Practice";
 
@@ -26,7 +27,7 @@ export function PropertyManagement() {
       tone="cream"
       id="property"
       path={href("property")}
-      photo={photo("/photos/practices/property-management.jpg")}
+      photo={practiceImage("property-management")}
       eyebrow="Property Management"
       headline={["The building, the tenants and the cheques."]}
       italic="Rent in, repairs done, one statement a month."
@@ -35,6 +36,7 @@ export function PropertyManagement() {
       ]}
       sections={[
         { heading: "What is included.", items: INCLUDED },
+        { node: <div className="col-span-12 mt-12 md:col-span-5 lg:mt-16">{(() => { const img = practiceImage("property-management-2"); return <ImageFrame src={img?.src} srcSet={img?.srcSet} sizes="(min-width: 768px) 40vw, 100vw" ratio="16/10" alt={img?.alt ?? ""} fallback="flat" />; })()}</div> },
         { items: TERMS, numbered: false },
       ]}
       close={{
