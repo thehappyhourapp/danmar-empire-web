@@ -137,9 +137,11 @@ export function Practice(p: PracticeProps) {
           </div>
         )}
 
-        {/* the opening photograph: a 16:10 frame in columns 1 to 5, flat until the file exists */}
-        <div className={`col-span-12 mt-10 lg:col-span-5 ${p.lead ? "lg:mt-12" : "lg:mt-16"}`}>
-          <ImageFrame src={p.photo?.src} srcSet={p.photo?.srcSet} sizes="(min-width: 1024px) 40vw, 100vw" ratio="16/10" alt={p.photo?.alt ?? ""} fallback="flat" ground={p.tone} />
+        {/* the opening photograph: a 16:10 frame in columns 1 to 5, flat until the file exists.
+            Two thirds of the width on a phone, so the lazy image is never larger than the
+            headline or the intro and never becomes the LCP element. */}
+        <div className={`col-span-8 mt-10 lg:col-span-5 ${p.lead ? "lg:mt-12" : "lg:mt-16"}`}>
+          <ImageFrame src={p.photo?.src} srcSet={p.photo?.srcSet} sizes="(min-width: 1024px) 40vw, 66vw" ratio="16/10" alt={p.photo?.alt ?? ""} fallback="flat" ground={p.tone} />
         </div>
         <div className={`col-span-12 mt-10 space-y-6 lg:col-span-6 lg:col-start-7 ${p.lead ? "lg:mt-12" : "lg:mt-16"} ${t.body}`}>
           {p.intro.map((x, i) => (
