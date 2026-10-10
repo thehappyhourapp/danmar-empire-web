@@ -9,6 +9,7 @@ import { Chapter } from "@/components/Chapter";
 import { GRID, delay } from "@/lib/layout";
 import { ListingRow } from "@/components/ListingRow";
 import { listingPhoto } from "@/lib/photos";
+import { cityLine } from "@/lib/listing-format";
 import { MotionController } from "@/components/MotionController";
 import { SaveLink } from "@/components/SaveLink";
 import { EnquireButton } from "@/components/SiteShell";
@@ -55,7 +56,7 @@ function jsonLd(l: Listing, photo?: string) {
         "@type": l.useClass === "residential" ? "SingleFamilyResidence" : "Place",
         name: l.name,
         // an address the seller has asked to withhold does not appear here either
-        ...(l.addressWithheld ? {} : { address: { "@type": "PostalAddress", streetAddress: l.address, addressLocality: l.city, addressRegion: "ON", addressCountry: "CA" } }),
+        ...(l.addressWithheld ? {} : { address: { "@type": "PostalAddress", streetAddress: l.address, addressLocality: l.city, addressRegion: "ON", ...(l.postal ? { postalCode: l.postal } : {}), addressCountry: "CA" } }),
       },
       price: l.price,
       priceCurrency: "CAD",
@@ -75,19 +76,24 @@ export function Property({ l, all }: { l: Listing; all: Listing[] }) {
   const rows = specs(l);
   const where = [l.region, l.city].filter(Boolean).join(", ");
   const heroAlt = l.addressWithheld ? `${l.kind} in ${where}` : `${l.address}, ${l.city}`;
+  const portrait = !!(photo && l.portrait);
 
   return (
     <div id="property">
       <MotionController rootId="property" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd(l, photo)).replace(/</g, "\\u003c") }} />
 
-      {/* ───────── Hero: full-bleed, the LCP element. Paints at full opacity and never animates. */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-forest/10 md:aspect-[21/10] lg:max-h-[62svh]">
-        {photo ? (
-          <Image src={photo} alt={heroAlt} fill priority sizes="100vw" className="object-cover" unoptimized={photo.startsWith("/api/")} />
-        ) : (
-          <span className="sr-only">Photography to follow</span>
-        )}
+      {/* ───────── Hero: the LCP element. Paints at full opacity and never animates. 3:2,
+          as house photography is, held to the height of the screen so it is never
+          cropped beyond 3:2; 4:5 when the photograph itself is portrait. */}
+      <div className="mx-auto w-full" style={{ maxWidth: portrait ? "calc(76svh * 0.8)" : "calc(82svh * 1.5)" }}>
+        <div className={`relative w-full overflow-hidden bg-forest/10 ${portrait ? "aspect-[4/5]" : "aspect-[3/2]"}`}>
+          {photo ? (
+            <Image src={photo} alt={heroAlt} fill priority sizes={portrait ? "(min-width: 768px) 61svh, 100vw" : "100vw"} className="object-cover" unoptimized={photo.startsWith("/api/")} />
+          ) : (
+            <span className="sr-only">Photography to follow</span>
+          )}
+        </div>
       </div>
 
       <Chapter inner="pb-20 pt-[calc(64px_-_49px)] lg:pb-28 lg:pt-[calc(96px_-_49px)]">
@@ -98,10 +104,10 @@ export function Property({ l, all }: { l: Listing; all: Listing[] }) {
         {/* the address as the title, or the city when the seller has asked for the address to be withheld */}
         <header className="col-span-12 mt-6 lg:col-span-8">
           <h1 className="max-w-[18ch] font-display text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[1] tracking-[-.015em]">{l.addressWithheld ? l.city : l.address}</h1>
-          <p className="meta mt-6 text-ink/70">
+          <p className="meta mt-5 font-semibold text-ink/85">{cityLine(l)}</p>
+          <p className="meta mt-3 text-ink/70">
             {l.addressWithheld ? <span className="block md:inline">Address available on enquiry</span> : <span className="block md:inline">{l.kind}</span>}
-            <span className="mx-2 hidden opacity-40 md:inline">/</span>
-            <span className="block md:inline">{where}</span>
+            {l.region && <><span className="mx-2 hidden opacity-40 md:inline">/</span><span className="block md:inline">{l.region}</span></>}
             {l.tier && <><span className="mx-2 hidden opacity-40 md:inline">/</span><span className="block text-brass md:inline">{l.tier}</span></>}
           </p>
         </header>

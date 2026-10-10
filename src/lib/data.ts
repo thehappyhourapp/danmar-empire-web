@@ -11,7 +11,10 @@ export interface Listing {
   name: string;
   address: string;
   city: string;
-  region: string;          // neighbourhood / submarket, "" when the feed has none
+  region: string;          // neighbourhood, TRREB code and abbreviation stripped; "" when the feed has none
+  province?: string;       // StateOrProvince, "ON"
+  postal?: string;         // PostalCode: JSON-LD and the page title only, never the heading or a card
+  acres?: string;          // lot size in acres, for land and commercial cards
   price: number;           // monthly if lease
   intent: Intent;
   kind: "Detached" | "Semi-Detached" | "Townhouse" | "Condominium" | "Multi-Residential" | "Commercial" | "Industrial" | "Land";
@@ -30,6 +33,7 @@ export interface Listing {
   body: string[];          // PublicRemarks, verbatim, as one paragraph
   photo: string;           // first photograph's URL, "" when there is none
   photos?: string[];       // the rest, for the detail page
+  portrait?: boolean;      // the hero photograph is taller than wide: its frame follows it at 4:5
   hue: number;             // seed for the flat placeholder's tone
   mls?: string;            // ListingId, the MLS® number
   key?: string;            // ListingKey
@@ -45,6 +49,8 @@ export interface Listing {
  *  docs/CONFIRM.md, not here. */
 export interface Person {
   slug: string; name: string; role: string;
+  /** degrees set beside the name, smaller and lighter; only what the person has confirmed */
+  postnominals?: string[];
   /** one line under the name in lists */
   line?: string;
   /** paragraphs, in the person's own words */
@@ -67,18 +73,18 @@ export interface Person {
 /* Order is the order on /firm. */
 export const TEAM: Person[] = [
   {
-    slug: "martin-sheikhan", name: "Martin Sheikhan, PMP", role: "Broker of Record · Real Estate Broker · Partner",
+    slug: "martin-sheikhan", name: "Martin Sheikhan", postnominals: ["BSc"], role: "Broker of Record · Real Estate Broker · Partner",
     tel: "647 273 5177", email: "martin@danmarempire.com",
     portrait: "/photos/people/martin-sheikhan.jpg",
     background: [
-      "Martin began about forty-five years ago in tablet formulation and went on to head multi-billion-dollar projects in the pharmaceutical industry. He is a Project Management Professional and a published author. The firm's habit of running every file like a capital project, with the numbers tested before anything is presented, is his.",
+      "Martin holds degrees in science and biochemistry. Before real estate he managed and led multi-billion-dollar projects in the pharmaceutical industry. He is a Project Management Professional and a published author. The firm's habit of running every file like a capital project, with the numbers tested before anything is presented, is his.",
     ],
     certifications: ["Broker of Record", "Project Management Professional (PMP)"],
-    experience: ["Headed multi-billion-dollar projects in the pharmaceutical industry"],
+    experience: ["Managed and led multi-billion-dollar projects in the pharmaceutical industry"],
     achievements: ["Published author"],
   },
   {
-    slug: "daniel-sheikhan", name: "Daniel Sheikhan, B.Comm., J.D.", role: "Partner · Barrister & Solicitor · Attorney · Real Estate Broker",
+    slug: "daniel-sheikhan", name: "Daniel Sheikhan", postnominals: ["BComm", "JD"], role: "Partner · Barrister & Solicitor · Attorney · Real Estate Broker",
     tel: "647 705 6476", email: "daniel@danmarempire.com",
     portrait: "/photos/people/daniel-sheikhan.jpg",
     bio: ["He acts for clients of the firm as a real estate broker, not as their solicitor."],
@@ -88,7 +94,7 @@ export const TEAM: Person[] = [
     links: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/danielsheikhan/" }],
   },
   {
-    slug: "sara-sheikhan", name: "Sara Sheikhan", role: "Real Estate Salesperson · Property Manager",
+    slug: "sara-sheikhan", name: "Sara Sheikhan", postnominals: ["BSc"], role: "Real Estate Salesperson · Property Manager",
     tel: "905 901 5011", email: "sara@danmarempire.com",
     certifications: ["Real Estate Salesperson"],
   },

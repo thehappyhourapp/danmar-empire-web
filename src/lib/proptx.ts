@@ -15,6 +15,7 @@
    could not be confirmed against $metadata this pass are listed in docs/CONFIRM.md. */
 
 import type { Listing } from "./data";
+import { cleanCommunity, isPortrait, jpegSize } from "./listing-format.ts";
 
 export const BASE = "https://query.ampre.ca/odata/";
 export const REVALIDATE = 3600;
@@ -29,11 +30,11 @@ export const PROPERTY_SELECT = [
   "ListingKey", "ListingId", "ModificationTimestamp", "StandardStatus", "MlsStatus", "ContractStatus",
   "ListOfficeKey", "ListOfficeName",
   "InternetEntireListingDisplayYN", "InternetAddressDisplayYN",
-  "UnparsedAddress", "StreetNumber", "StreetName", "StreetSuffix", "City", "CityRegion",
+  "UnparsedAddress", "StreetNumber", "StreetName", "StreetSuffix", "City", "CityRegion", "StateOrProvince", "PostalCode",
   "ListPrice", "TransactionType", "PropertyType", "PropertySubType",
   "BedroomsTotal", "BathroomsTotalInteger", "LivingAreaRange", "BuildingAreaTotal",
   "ParkingTotal", "GarageType", "Basement", "HeatType", "Cooling", "PoolFeatures",
-  "LotSizeArea", "LotSizeUnits", "TaxAnnualAmount", "TaxYear", "PublicRemarks",
+  "LotSizeArea", "LotSizeUnits", "LotSizeRangeAcres", "TaxAnnualAmount", "TaxYear", "PublicRemarks",
   "Latitude", "Longitude", "NetOperatingIncome",
 ] as const;
 
@@ -53,7 +54,7 @@ export interface PropTxProperty {
   /** PropTx legacy names for the same two permissions, if the schema carries them */
   perm_adv?: YN; disp_addr?: YN;
   UnparsedAddress?: string; StreetNumber?: string; StreetName?: string; StreetSuffix?: string;
-  City?: string; CityRegion?: string; Community?: string;
+  City?: string; CityRegion?: string; Community?: string; StateOrProvince?: string; PostalCode?: string; LotSizeRangeAcres?: string;
   ListPrice?: number; TransactionType?: string; PropertyType?: string; PropertySubType?: string;
   BedroomsTotal?: number; BathroomsTotalInteger?: number; LivingAreaRange?: string; BuildingAreaTotal?: number;
   OwnershipType?: string;
@@ -66,6 +67,8 @@ export interface PropTxProperty {
 export interface PropTxMedia {
   MediaKey: string; MediaURL: string; Order?: number; PreferredPhotoYN?: YN;
   ImageSizeDescription?: string; MediaCategory?: string; ModificationTimestamp?: string;
+  /** in the schema but empty on every Large photograph checked on 10 Oct 2026; used when present */
+  ImageWidth?: number; ImageHeight?: number;
 }
 
 const env = (k: string) => { const v = process.env[k]; return v && v !== "X" ? v : undefined; };
@@ -102,7 +105,16 @@ export const kebab = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[
 
 export function streetAddress(p: PropTxProperty) {
   const built = [p.StreetNumber, p.StreetName, p.StreetSuffix].filter(Boolean).join(" ").trim();
-  return (p.UnparsedAddress || built).replace(/\s+/g, " ").trim();
+  // UnparsedAddress can carry ", City, ON A1A 1A1": keep the street line only
+  const street = (p.UnparsedAddress || "").split(",")[0].replace(/\b[A-Z]\d[A-Z]\s?\d[A-Z]\d\b/gi, "");
+  return (street || built).replace(/\s+/g, " ").trim();
+}
+
+/** Lot size in acres, where the feed gives it. */
+export function acresOf(p: PropTxProperty): string | undefined {
+  if (p.LotSizeArea && p.LotSizeArea > 0 && /acre/i.test(p.LotSizeUnits || "")) return String(Math.round(p.LotSizeArea * 100) / 100);
+  const r = (p.LotSizeRangeAcres || "").trim();
+  return r && !/^<|not applicable|n\/a/i.test(r) ? r.replace(/\s*acres?$/i, "") : undefined;
 }
 
 /** The slug: address and city; listing-<mls> when the address is withheld; the
@@ -166,7 +178,7 @@ export function featuresOf(p: PropTxProperty): string[] {
 export function hueOf(key: string) { let h = 0; for (const c of key) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h % 360; }
 
 /** A Property record to a Listing, or null when it may not be displayed. */
-export function mapProperty(p: PropTxProperty, taken: Set<string>, photos: string[] = []): Listing | null {
+export function mapProperty(p: PropTxProperty, taken: Set<string>, photos: string[] = [], portrait = false): Listing | null {
   if (!displayAllowed(p)) return null;
   const withheld = !addressAllowed(p);
   const id = slugFor(p, taken);
@@ -182,7 +194,10 @@ export function mapProperty(p: PropTxProperty, taken: Set<string>, photos: strin
     name: withheld ? city : address,
     address,
     city,
-    region: p.CityRegion || p.Community || "",
+    region: cleanCommunity(p.CityRegion || p.Community),
+    province: p.StateOrProvince || "ON",
+    ...(p.PostalCode ? { postal: p.PostalCode.trim().toUpperCase() } : {}),
+    ...(acresOf(p) ? { acres: acresOf(p) } : {}),
     price: Math.round(p.ListPrice || 0),
     intent: lease ? "lease" : "sale",
     kind,
@@ -202,6 +217,7 @@ export function mapProperty(p: PropTxProperty, taken: Set<string>, photos: strin
     body: remarks ? [remarks] : [],
     photo: photos[0] || "",
     photos: photos.slice(1),
+    ...(portrait ? { portrait: true } : {}),
     hue: hueOf(p.ListingKey),
     mls: p.ListingId,
     key: p.ListingKey,
@@ -211,7 +227,10 @@ export function mapProperty(p: PropTxProperty, taken: Set<string>, photos: strin
 
 /** The preferred photograph first, then by Order. */
 export function orderMedia(m: PropTxMedia[]) {
-  return [...m].sort((a, b) => (Number(yn(b.PreferredPhotoYN) === true) - Number(yn(a.PreferredPhotoYN) === true)) || ((a.Order ?? 0) - (b.Order ?? 0)) || a.MediaKey.localeCompare(b.MediaKey)).map((x) => x.MediaURL).filter(Boolean);
+  return orderedMedia(m).map((x) => x.MediaURL).filter(Boolean);
+}
+function orderedMedia(m: PropTxMedia[]) {
+  return [...m].sort((a, b) => (Number(yn(b.PreferredPhotoYN) === true) - Number(yn(a.PreferredPhotoYN) === true)) || ((a.Order ?? 0) - (b.Order ?? 0)) || a.MediaKey.localeCompare(b.MediaKey));
 }
 
 /* ── the API ────────────────────────────────────────────────────────────── */
@@ -250,13 +269,40 @@ async function odata<T>(path: string): Promise<T[] | null> {
   }
 }
 
-/** The listing's photographs, preferred first. `all` false asks for one. */
-export async function fetchMedia(listingKey: string, all = false): Promise<string[]> {
-  if (fixtureMode()) { const { FIXTURE_MEDIA } = await import("./__fixtures__/proptx"); const m = orderMedia(FIXTURE_MEDIA[listingKey] ?? []); return all ? m : m.slice(0, 1); }
-  const filter = `ResourceRecordKey eq '${q(listingKey)}' and ResourceName eq 'Property' and ImageSizeDescription eq 'Large'`;
-  const rows = await odata<PropTxMedia>(`Media?$filter=${encodeURIComponent(filter)}&$orderby=${encodeURIComponent("Order,MediaKey")}&$top=${all ? 50 : 20}&$select=${["MediaKey", "MediaURL", "Order", "PreferredPhotoYN"].join(",")}`);
-  const m = orderMedia(rows ?? []);
-  return all ? m : m.slice(0, 1);
+/** The listing's photographs, preferred first, with the first one's size when the
+ *  Media record carries it. `all` false asks for a page's worth, not every photo. */
+export async function fetchMedia(listingKey: string, all = false): Promise<{ urls: string[]; first?: { width: number; height: number } }> {
+  let rows: PropTxMedia[];
+  if (fixtureMode()) { const { FIXTURE_MEDIA } = await import("./__fixtures__/proptx"); rows = FIXTURE_MEDIA[listingKey] ?? []; }
+  else {
+    const filter = `ResourceRecordKey eq '${q(listingKey)}' and ResourceName eq 'Property' and ImageSizeDescription eq 'Large'`;
+    rows = (await odata<PropTxMedia>(`Media?$filter=${encodeURIComponent(filter)}&$orderby=${encodeURIComponent("Order,MediaKey")}&$top=${all ? 50 : 20}&$select=${["MediaKey", "MediaURL", "Order", "PreferredPhotoYN", "ImageWidth", "ImageHeight"].join(",")}`)) ?? [];
+  }
+  const sorted = orderedMedia(rows);
+  const f = sorted[0];
+  const first = f?.ImageWidth && f?.ImageHeight ? { width: f.ImageWidth, height: f.ImageHeight } : undefined;
+  const urls = sorted.map((x) => x.MediaURL).filter(Boolean);
+  return { urls: all ? urls : urls.slice(0, 1), first };
+}
+
+const PHOTO_HOSTS = [/(^|\.)ampre\.ca$/i, /(^|\.)proptx\.ca$/i];
+/** A photograph's size from its JPEG header: the first 128 KB only (the host
+ *  answers range requests), on the same allow-list as the /api/photo proxy, cached
+ *  with the feed. Undefined when it cannot be read; the frame then stays 3:2. */
+export async function remoteJpegSize(url: string): Promise<{ width: number; height: number } | undefined> {
+  try {
+    const u = new URL(url);
+    if (u.protocol !== "https:" || !PHOTO_HOSTS.some((h) => h.test(u.hostname))) return undefined;
+    const res = await fetch(u, { headers: { Range: "bytes=0-131071" }, next: { revalidate: 86400, tags: [TAG] } });
+    if (!res.ok) return undefined;
+    return jpegSize(new Uint8Array(await res.arrayBuffer()));
+  } catch { return undefined; }
+}
+
+async function heroPortrait(urls: string[], first?: { width: number; height: number }) {
+  if (!urls[0]) return false;
+  if (first) return isPortrait(first);
+  return isPortrait(await remoteJpegSize(urls[0]));
 }
 
 async function fetchProperties(): Promise<PropTxProperty[] | null> {
@@ -274,8 +320,8 @@ export async function fetchActiveListings(): Promise<Listing[]> {
   const out: Listing[] = [];
   for (const p of rows) {
     if (!isActive(p) || !displayAllowed(p)) continue;
-    const photos = await fetchMedia(p.ListingKey, false);
-    const l = mapProperty(p, taken, photos);
+    const { urls, first } = await fetchMedia(p.ListingKey, false);
+    const l = mapProperty(p, taken, urls, await heroPortrait(urls, first));
     if (l) out.push(l);
   }
   return out;
@@ -286,6 +332,6 @@ export async function fetchListing(slug: string): Promise<Listing | null> {
   const all = await fetchActiveListings();
   const l = all.find((x) => x.id === slug);
   if (!l || !l.key) return l ?? null;
-  const photos = await fetchMedia(l.key, true);
-  return { ...l, photo: photos[0] || l.photo, photos: photos.slice(1) };
+  const { urls } = await fetchMedia(l.key, true);
+  return { ...l, photo: urls[0] || l.photo, photos: urls.slice(1) };
 }

@@ -12,7 +12,7 @@ export const FIXTURE_PROPERTIES: PropTxProperty[] = [
     StandardStatus: "Active", ListOfficeKey: "OFFICEFIX", ListOfficeName: "DANMAR EMPIRE REAL ESTATE CORP.",
     InternetEntireListingDisplayYN: true, InternetAddressDisplayYN: true,
     UnparsedAddress: "12 Example Crescent", StreetNumber: "12", StreetName: "Example", StreetSuffix: "Crescent",
-    City: "Oakville", CityRegion: "Fixture Park",
+    City: "Oakville", CityRegion: "1021 - FP Fixture Park", StateOrProvince: "ON", PostalCode: "L0L 0L0",
     ListPrice: 2450000, TransactionType: "For Sale", PropertyType: "Residential Freehold", PropertySubType: "Detached",
     BedroomsTotal: 4, BathroomsTotalInteger: 4, LivingAreaRange: "3000-3500", OwnershipType: "Freehold",
     ParkingTotal: 6, GarageType: "Attached", Basement: ["Finished", "Walk-Out"], HeatType: "Forced Air", Cooling: "Central Air",
@@ -81,10 +81,10 @@ export const FIXTURE_PROPERTIES: PropTxProperty[] = [
 export const FIXTURE_MEDIA: Record<string, PropTxMedia[]> = {
   FIX0001: [
     { MediaKey: "M1B", MediaURL: "/photos/fixture/b.jpg", Order: 2, PreferredPhotoYN: false, ImageSizeDescription: "Large" },
-    { MediaKey: "M1A", MediaURL: "/photos/fixture/a.jpg", Order: 1, PreferredPhotoYN: true, ImageSizeDescription: "Large" },
+    { MediaKey: "M1A", MediaURL: "/photos/fixture/a.jpg", Order: 1, PreferredPhotoYN: true, ImageSizeDescription: "Large", ImageWidth: 1600, ImageHeight: 1000 },
     { MediaKey: "M1C", MediaURL: "/photos/fixture/c.jpg", Order: 3, PreferredPhotoYN: false, ImageSizeDescription: "Large" },
   ],
   FIX0002: [{ MediaKey: "M2A", MediaURL: "/photos/fixture/b.jpg", Order: 1, PreferredPhotoYN: true, ImageSizeDescription: "Large" }],
-  FIX0003: [{ MediaKey: "M3A", MediaURL: "/photos/fixture/c.jpg", Order: 1, PreferredPhotoYN: true, ImageSizeDescription: "Large" }],
+  FIX0003: [{ MediaKey: "M3A", MediaURL: "/photos/fixture/p.jpg", Order: 1, PreferredPhotoYN: true, ImageSizeDescription: "Large", ImageWidth: 800, ImageHeight: 1000 }],
   FIX0004: [{ MediaKey: "M4A", MediaURL: "/photos/fixture/a.jpg", Order: 1, PreferredPhotoYN: true, ImageSizeDescription: "Large" }],
 };

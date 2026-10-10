@@ -113,6 +113,7 @@ Deleted as unconfirmed on 7 Oct 2026. Nothing below is on the site; each line re
 - Role is now "Real Estate Salesperson · Property Manager"; /property-management names her as Property Manager. No portrait yet (emblem filler, temporary).
 
 ### Anita Tayi
+- **Credentials.** Anita may hold a recent master's degree. Not shown: her name carries no post-nominals until the degree and its abbreviation are confirmed (Daniel, Sara and Martin's are set beside their names on /firm and their pages).
 - "Residential resale across Oakville, Burlington and Milton." (line)
 - "Anita runs the firm's Halton residential desk. She works a small number of files at a time and is known for knowing which street a family actually wants before they do." (bio)
 - Focus "Residential resale, First-time and move-up buyers, Halton region"; areas "Oakville · Burlington · Milton".

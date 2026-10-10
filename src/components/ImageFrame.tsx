@@ -22,7 +22,10 @@ export function ImageFrame({
   filler?: "emblem";
   children?: React.ReactNode;
 }) {
-  const [ok, setOk] = useState(false);
+  // "ssr": as rendered on the server, visible, so a photograph never depends on
+  // JavaScript to appear. After mount: "loaded" if the browser already has it,
+  // "pending" (hidden, then faded in on load) only if it is still on its way.
+  const [state, setState] = useState<"ssr" | "pending" | "loaded" | "failed">("ssr");
   const dark = tone === "dark";
   const flat = fallback === "flat";
   // pull every seed toward the forest family so placeholder art reads as one palette
@@ -35,8 +38,18 @@ export function ImageFrame({
   // useId, not Math.random: the id has to match between the server render and hydration
   const uid = "g" + useId().replace(/[^a-zA-Z0-9]/g, "");
   const img = useRef<HTMLImageElement>(null);
-  // a photograph that finished loading before hydration never fires onLoad
-  useEffect(() => { const el = img.current; if (el?.complete && el.naturalWidth) setOk(true); }, [src]);
+  useEffect(() => {
+    const el = img.current;
+    if (!el) return;
+    // a photograph that finished loading before hydration never fires its load event
+    if (el.complete) { setState(el.naturalWidth > 0 ? "loaded" : "failed"); return; }
+    setState("pending");
+    const done = () => setState(el.naturalWidth > 0 ? "loaded" : "failed");
+    const fail = () => setState("failed");
+    el.addEventListener("load", done, { once: true });
+    el.addEventListener("error", fail, { once: true });
+    return () => { el.removeEventListener("load", done); el.removeEventListener("error", fail); };
+  }, [src]);
 
   return (
     <div className={`relative overflow-hidden ${flat ? (ground === "forest" ? "bg-paper/5" : "bg-forest/10") : "bg-forest-deep grain"} ${className}`} style={{ aspectRatio: ratio }}>
@@ -64,9 +77,8 @@ export function ImageFrame({
       {src && (
         <img
           ref={img} src={src} alt={alt} loading="lazy" decoding="async"
-          onLoad={() => setOk(true)} onError={() => setOk(false)}
-          className="absolute inset-0 h-full w-full object-cover transition-opacity [transition-duration:1200ms]"
-          style={{ opacity: ok ? 1 : 0 }}
+          className="absolute inset-0 h-full w-full object-cover transition-opacity [transition-duration:1200ms] motion-reduce:transition-none"
+          style={state === "pending" || state === "failed" ? { opacity: 0 } : undefined}
         />
       )}
       {children}

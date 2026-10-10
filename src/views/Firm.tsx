@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PRACTICES, TEAM, TESTIMONIALS } from "@/lib/data";
 import { splitName } from "@/lib/people";
+import { PostNominals } from "@/components/PostNominals";
 import { href, personHref } from "@/lib/routes";
 import { Chapter, Lines } from "@/components/Chapter";
 import { GRID, HEAD, delay } from "@/lib/layout";
@@ -42,9 +43,9 @@ export function Firm() {
             The name is the founders. Dan is Daniel Sheikhan. Mar is Martin Sheikhan, his father.
           </p>
           <p data-reveal className={`${s.rise} max-w-[48ch] text-[16px] leading-[1.85]`} style={delay(1)}>
-            Martin came to real estate from a career running large capital projects. He began about forty-five
-            years ago in tablet formulation and went on to head multi-billion-dollar projects in the
-            pharmaceutical industry. Daniel is a lawyer, called to the bar in Ontario and admitted in New York
+            Martin came to real estate from a career running large capital projects. He holds degrees in
+            science and biochemistry, and before real estate he managed and led multi-billion-dollar projects
+            in the pharmaceutical industry. Daniel is a lawyer, called to the bar in Ontario and admitted in New York
             and Minnesota, and a real estate broker.
           </p>
           <p data-reveal className={`${s.rise} max-w-[48ch] text-[16px] leading-[1.85]`} style={delay(2)}>
@@ -81,7 +82,7 @@ export function Firm() {
           <Lines lines={["The people who answer", "for the advice."]} className={`${HEAD} mb-10 lg:mb-14`} />
           <div>
             {TEAM.map((p, i) => {
-              const { name, designations } = splitName(p.name);
+              const { name } = splitName(p.name);
               return (
                 <div key={p.slug} data-reveal className={`${s.rise} ${s.row} ${GRID} border-t ${rule} py-8 last:border-b md:py-10`} style={delay(i)}>
                   <Link href={personHref(p.slug)} aria-label={name} className="col-span-4 self-center md:col-span-2">
@@ -96,11 +97,9 @@ export function Firm() {
                   <div className="col-span-8 self-center md:col-span-6 md:col-start-4">
                     <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">
                       <Link href={personHref(p.slug)} className={s.rowlink}>{name}</Link>
+                      <PostNominals p={p} className="text-paper/60" />
                     </h3>
-                    <p className="meta mt-4 text-paper/70">
-                      <span className="block md:inline">{p.role}</span>
-                      {designations && <><span className="mx-2 hidden opacity-40 md:inline">/</span><span className="block md:inline">{designations}</span></>}
-                    </p>
+                    <p className="meta mt-4 text-paper/70">{p.role}</p>
                   </div>
                   <div className="col-span-12 mt-4 md:col-span-2 md:col-start-11 md:row-start-1 md:mt-0 md:self-center md:text-right">
                     <Link href={personHref(p.slug)} className={`${s.tlink} meta text-paper/70 hover:text-paper`}>Profile</Link>

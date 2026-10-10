@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const l = await getListing(slug);
   if (!l) return {};
   const where = [l.region, l.city].filter(Boolean).join(", ");
-  const base = detailMetadata("collection", l.addressWithheld ? `${l.kind} in ${where}` : `${l.name}, ${where}`, (l.standfirst || l.body[0] || "").slice(0, 160), propertyHref(l.id));
+  const base = detailMetadata("collection", l.addressWithheld ? `${l.kind} in ${where}` : `${l.name}, ${where}${l.postal ? `, ON ${l.postal}` : ""}`, (l.standfirst || l.body[0] || "").slice(0, 160), propertyHref(l.id));
   // the feed's licence forbids providing its data to AI systems
   return { ...base, other: { robots: "noai, noimageai" } };
 }

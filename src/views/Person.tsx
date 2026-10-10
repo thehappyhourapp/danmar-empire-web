@@ -4,6 +4,7 @@ import { TEAM, TESTIMONIALS } from "@/lib/data";
 import type { Person as P } from "@/lib/data";
 import { ORG_ID, SITE } from "@/lib/metadata";
 import { splitName } from "@/lib/people";
+import { PostNominals } from "@/components/PostNominals";
 import { href, personHref } from "@/lib/routes";
 import { Chapter, Lines } from "@/components/Chapter";
 import { GRID, HEAD, delay } from "@/lib/layout";
@@ -24,7 +25,7 @@ const BROKERAGE = "Danmar Empire Real Estate Corp., Brokerage";
 const firstTwo = (q: string) => q.split(/(?<=[.!?]['"]?)\s+/).slice(0, 2).join(" ");
 
 export function Person({ p }: { p: P }) {
-  const { name, designations } = splitName(p.name);
+  const { name } = splitName(p.name);
   const others = TEAM.filter((t) => t.slug !== p.slug);
   const telHref = p.tel ? `tel:+1${p.tel.replace(/\D/g, "")}` : null;
   const certifications = p.certifications ?? p.creds;
@@ -35,7 +36,7 @@ export function Person({ p }: { p: P }) {
     "@context": "https://schema.org",
     "@type": "Person",
     name,
-    ...(designations ? { honorificSuffix: designations } : {}),
+    ...(p.postnominals?.length ? { honorificSuffix: p.postnominals.join(" ") } : {}),
     // RECO category Broker, registered as Broker of Record
     jobTitle: p.slug === "martin-sheikhan" ? "Broker of Record" : p.role,
     url: `${SITE}${personHref(p.slug)}`,
@@ -67,10 +68,9 @@ export function Person({ p }: { p: P }) {
 
         {/* the name leads at 390; from md the portrait takes the left of the same row */}
         <header className="col-span-12 mt-6 md:col-span-7 md:col-start-6 md:row-start-2 lg:col-span-6 lg:col-start-5">
-          <h1 className="max-w-[16ch] font-display text-[clamp(2.1rem,4.6vw,3.6rem)] font-medium leading-[1.04] tracking-[-.01em]">{name}</h1>
+          <h1 className="max-w-[16ch] font-display text-[clamp(2.1rem,4.6vw,3.6rem)] font-medium leading-[1.04] tracking-[-.01em]">{name}<PostNominals p={p} className="text-ink/60" /></h1>
           <p className="meta mt-4 text-ink/70">
             <span className="block md:inline">{p.role}</span>
-            {designations && <><span className="mx-2 hidden opacity-40 md:inline">/</span><span className="block md:inline">{designations}</span></>}
           </p>
           {p.bio?.length ? (
             <div className="mt-8 space-y-6">
@@ -149,7 +149,7 @@ export function Person({ p }: { p: P }) {
                   <h3 className="col-span-12 font-display text-[1.2rem] font-medium leading-[1.15] md:col-span-5">
                     <Link href={personHref(o.slug)} className={s.rowlink}>{n.name}</Link>
                   </h3>
-                  <p className="meta col-span-12 mt-2 text-ink/70 md:col-span-6 md:col-start-7 md:mt-0">{o.role}{n.designations ? ` · ${n.designations}` : ""}</p>
+                  <p className="meta col-span-12 mt-2 text-ink/70 md:col-span-6 md:col-start-7 md:mt-0">{o.role}{o.postnominals?.length ? ` · ${o.postnominals.join(" ")}` : ""}</p>
                 </div>
               );
             })}

@@ -4,6 +4,7 @@ import { EnquireButton } from "@/components/SiteShell";
 import { getListings } from "@/lib/listings";
 import { money } from "@/lib/parse";
 import { listingPhoto } from "@/lib/photos";
+import { cityLine, specLine } from "@/lib/listing-format";
 import { href, propertyHref } from "@/lib/routes";
 import { ImageFrame } from "@/components/ImageFrame";
 import { MotionController } from "@/components/MotionController";
@@ -59,8 +60,8 @@ function Chapter({ tone, wipeFrom, className = "", inner = "", children }: {
 }
 
 export async function Home() {
-  // the three highest-priced active listings; an empty feed shows one line instead
-  const featured = [...(await getListings())].sort((a, b) => b.price - a.price).slice(0, 3);
+  // the first three of the Collection's order (listing-format.ts); an empty feed shows one line instead
+  const featured = (await getListings()).slice(0, 3);
 
   return (
     <div id="home">
@@ -130,8 +131,11 @@ export async function Home() {
         </div>
       </Chapter>
 
-      {/* ───────── 3. The Collection: cream continues. Own listings as rows. */}
-      <Chapter tone="cream" className="lg:min-h-[100svh]">
+      {/* ───────── 3. The Collection: cream continues. Own listings as rows. Half the top
+          padding: the Ownership chapter's bottom padding already opens the seam, and
+          two full paddings stacked read as one oversized hole. This lands the gap at
+          about the hero-to-cream seam (240px at 1440). */}
+      <Chapter tone="cream" className="lg:min-h-[100svh]" inner="pt-12 lg:pt-20">
         <div data-reveal-group className={`col-span-12 ${GRID}`}>
           <div className="col-span-12 lg:col-span-7">
             <Lines lines={["From the Collection."]} className={HEAD} />
@@ -154,32 +158,31 @@ export async function Home() {
           )}
           {featured.map((l, i) => {
             const lease = l.intent === "lease";
+            const photo = listingPhoto(l.id, l.photo);
+            const portrait = !!(photo && l.portrait);
             return (
               <Link key={l.id} href={propertyHref(l.id)} data-reveal
                 className={`${s.reveal} ${m.row} group ${GRID} border-t border-forest/14 py-8 last:border-b md:py-10`}
                 style={delay(i)}>
-                {/* alternate rows take the taller frame and step one column in, so the
-                    list reads as offset portrait frames rather than an even stack */}
-                <div className={`col-span-5 self-center md:col-span-3 md:row-span-2 ${i % 2 ? "md:col-start-2" : ""}`}>
+                {/* landscape 3:2, as house photography is; 4:5 only when the hero is itself portrait */}
+                <div className={`self-center md:row-span-2 ${portrait ? "col-span-8 md:col-span-3" : "col-span-12 md:col-span-4"}`}>
                   <div className="overflow-hidden">
                     <div className={s.plx} data-parallax>
-                      <ImageFrame src={listingPhoto(l.id, l.photo)} hue={l.hue} ratio={i % 2 ? "3/4" : "4/5"} alt={l.name} fallback="flat" />
+                      <ImageFrame src={photo} hue={l.hue} ratio={portrait ? "4/5" : "3/2"} alt={l.name} fallback="flat" />
                     </div>
                   </div>
                 </div>
-                <div className="col-span-12 mt-6 md:col-span-6 md:col-start-5 md:mt-0 md:self-end md:pb-2">
+                <div className="col-span-12 mt-6 md:col-span-5 md:col-start-6 md:mt-0 md:self-end md:pb-2">
                   <h3 className="font-display text-[clamp(1.4rem,2.2vw,1.9rem)] font-medium leading-[1.1]">
                     <span className={m.rowlink}>{l.name}</span>
                   </h3>
-                  <p className="meta mt-4 text-ink/70">
-                    {(l.addressWithheld || l.address !== l.name) && <>{l.addressWithheld ? "Address available on enquiry" : l.address} <span className="mx-2 opacity-40">/</span> </>}{[l.region, l.city].filter(Boolean).join(", ")}
-                  </p>
+                  <p className="meta mt-3 font-semibold text-ink/85">{cityLine(l)}</p>
                 </div>
-                <div className="col-span-12 mt-4 max-w-[48ch] md:col-span-6 md:col-start-5 md:mt-0 md:self-start md:pt-2">
-                  {l.standfirst && <p className="text-[15px] leading-[1.8] text-ink/75">{l.standfirst}</p>}
-                  <p className={`meta text-ink/70 ${l.standfirst ? "mt-3" : ""}`}>{l.mls ? `MLS\u00ae ${l.mls} · ` : ""}Listed by Danmar Empire Real Estate Corp., Brokerage</p>
+                <div className="col-span-12 mt-3 md:col-span-5 md:col-start-6 md:mt-0 md:self-start md:pt-2">
+                  {(l.addressWithheld || l.region) && <p className="meta text-ink/70">{[l.addressWithheld ? "Address available on enquiry" : "", l.region].filter(Boolean).join(" · ")}</p>}
+                  {specLine(l) && <p className="meta mt-2 text-ink/70">{specLine(l)}</p>}
                 </div>
-                <div className="col-span-12 mt-6 flex items-baseline justify-between md:col-span-8 md:col-start-5 lg:col-span-2 lg:col-start-11 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:block lg:self-center lg:text-right">
+                <div className="col-span-12 mt-6 flex items-baseline justify-between md:col-span-7 md:col-start-6 lg:col-span-2 lg:col-start-11 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:block lg:self-center lg:text-right">
                   <span className="fig block text-[clamp(1.5rem,1.8vw,1.7rem)] text-brass">{money(l.price, lease)}</span>
                   <span className="meta mt-2 block text-ink/70">{lease ? "To lease" : "For sale"} · {l.kind}</span>
                 </div>
